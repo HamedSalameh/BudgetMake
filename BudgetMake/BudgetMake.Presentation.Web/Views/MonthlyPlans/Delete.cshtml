@@ -1,0 +1,72 @@
+﻿@model BudgetMake.Presentation.Web.ViewModel.MonthlyPlanViewModel
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>MonthlyPlanViewModel</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.MonthlyBudgetId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MonthlyBudgetId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CalculatedFields.AllocatedBudget)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CalculatedFields.AllocatedBudget)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BudgetForAllocation)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BudgetForAllocation)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CalculatedFields.UnallocatedBudget)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CalculatedFields.UnallocatedBudget)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Comments)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Comments)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AnnualBudgetId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AnnualBudgetId)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "GetMonthlyPlans", new { AnnualPlanID = Model.AnnualBudgetId })
+        </div>
+    }
+</div>

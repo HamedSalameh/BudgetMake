@@ -1,0 +1,92 @@
+﻿@using BudgetMake.Presentation.Web.Helpers
+@model IEnumerable<BudgetMake.Presentation.Web.ViewModel.ExpenseViewModel>
+
+<style>
+    .item-display {
+        display: normal;
+    }
+
+    .item-field {
+        display: none;
+    }
+</style>
+
+<div id="expensesListAlertBox">
+
+</div>
+
+@{
+    if (Model != null)
+    {
+        <table class="table" id="expensesList">
+
+            @Html.AntiForgeryToken()
+
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Amount)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.AmountUsed)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Comments)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr data="@item.BudgetItemId" >
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        <span class="item-display">
+                            @Html.DisplayFor(modelItem => item.Amount)
+                        </span>
+                        <span class="item-field" ov=@item.Amount propertyName="Amount">
+                            @Html.EditorFor(modelItem => item.Amount)
+                        </span>
+
+                    </td>
+                    <td>
+                        <span class="item-display">
+                            @Html.DisplayFor(modelItem => item.AmountUsed)
+                        </span>
+                        <span class="item-field" ov=@item.AmountUsed propertyName="AmountUsed">
+                            @Html.EditorFor(modelItem => item.AmountUsed)
+                        </span>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Comments)
+                    </td>
+                    <td>
+                        <a href="#" budgetitemid=@item.BudgetItemId action="edit">Edit</a>
+                        <a href="#" budgetitemid=@item.BudgetItemId action="delete">Delete</a>
+                        <a href="#" budgetitemid=@item.BudgetItemId action="history">Show History</a>
+                    </td>
+                </tr>
+            }
+
+        </table>
+    }
+    else
+    {
+        <span>
+            No expenses data was found for this month plan
+        </span>
+    }
+}
+
+
+
+@Html.Hidden("BaseResultData", TempData["OperationResult"])
+
+@Html.bsModal("edit", "Edit")
+
+<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc=" crossorigin="anonymous"></script>
+<script src="~/Scripts/pages/expense/pv_expenses.js"></script>

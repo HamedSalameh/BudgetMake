@@ -1,0 +1,34 @@
+﻿
+@model IEnumerable<BudgetMake.Presentation.Web.ViewModel.AnnualPlanViewModel>
+
+<p>
+    @Html.ActionLink("Create New", "CreatePlan")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.AnnualBudgetId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AnnualBudgetName)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.AnnualBudgetId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AnnualBudgetName)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { AnnualPlandId = item.AnnualBudgetId }) |
+            @Html.ActionLink("Delete", "Delete", new { AnnualPlanId = item.AnnualBudgetId }) |
+            @Html.ActionLink("Expand", "GetMonthlyPlans", "MonthlyPlans", new { AnnualPlanID = item.AnnualBudgetId}, null)
+        </td>
+    </tr>
+}
+
+</table>

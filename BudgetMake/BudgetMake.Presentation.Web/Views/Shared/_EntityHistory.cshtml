@@ -1,0 +1,60 @@
+﻿@model IEnumerable<BudgetMake.Presentation.Web.ViewModel.HistoryLogViewModel>
+
+@{
+
+    if (Model != null && Model.Count() > 0)
+    {
+        <table class="table" id="historyData">
+
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CRUDType)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ActionUserID)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach(var item in Model)
+            {
+                <tr data="@item.HistoryLogID" data-toggle="collapse" data-target="#hlID_@item.HistoryLogID" class="accordion-toggle">
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CRUDType)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ActionUserID)
+                    </td>
+                </tr>
+                <tr id="historyDetails_@item.HistoryLogID" >
+                    <td colspan="3" >
+                        <div id="hlID_@item.HistoryLogID" class="accordian-body collapse">
+                            <table class="table table-condensed">
+                                
+                            </table>
+                        </div>
+                            
+                    </td>
+                    
+                </tr>
+            }
+
+        </table>
+    }
+    else
+    {
+        <span>
+            No history data found
+        </span>
+    }
+
+}
+
+<script src="~/Scripts/shared/historyHandler.js"></script>

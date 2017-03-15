@@ -1,0 +1,50 @@
+﻿@using BudgetMake.Presentation.Web.Helpers
+@model IEnumerable<BudgetMake.Presentation.Web.ViewModel.SalaryViewModel>
+
+<table class="table" id="salariesList">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Amount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PaymentDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Comments)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelteim => item.PaymentDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Comments)
+            </td>
+            <td>
+                <a href="#" budgetitemid=@item.SalaryId action="edit">Edit</a>
+            </td>
+        </tr>
+    }
+
+</table>
+
+@Html.Hidden("BaseResultData", TempData["OperationResult"])
+
+@Html.bsModal("edit", "Edit")
+
+
+<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc=" crossorigin="anonymous"></script>
+<script src="~/Scripts/pages/salary/pv_salaries.js"></script>
