@@ -334,7 +334,5 @@ namespace BudgetMake.Presentation.Web.Controllers
 
             return Json(results, JsonRequestBehavior.AllowGet);
         }
-
-        
     }
 }
