@@ -20,6 +20,7 @@ namespace BudgetMake.Presentation.Web.Controllers
 
         protected string partialViewNameFor_ItemsList { get; set; }
         protected string partialViewNameFor_EditItem { get; set; }
+        protected string partialViewNameFor_DeleteItem { get; set; }
 
         public abstract IList<ViewModel> GetViewModelsList(int MonthlyPlanId = 0);
         public abstract ViewModel GetViewModel(Model model);
@@ -127,15 +128,47 @@ namespace BudgetMake.Presentation.Web.Controllers
         public PartialViewResult DeleteBudgetItem(int? budgetItemId = 0)
         {
             List<BaseResult> results = new List<BaseResult>();
-            ExpenseViewModel viewModel = null;
+            ViewModel viewModel = default(ViewModel);
 
             if (budgetItemId != null)
             {
-
+                try
+                {
+                    Model model = application.GetById<Model>(budgetItemId.Value);
+                    if (model != null)
+                    {
+                        viewModel = GetViewModel(model);
+                    }
+                    else
+                    {
+                        results.Add(new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
+                        {
+                            Message = Shared.Common.Resources.Errors.Http_404_NotFound_404,
+                            Value = HttpStatusCode.NotFound
+                        });
+                    }
+                }
+                catch (Exception Ex)
+                {
+                    handleException(Ex);
+                    results.Add(new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
+                    {
+                        Message = Ex.Message,
+                        Value = HttpStatusCode.InternalServerError
+                    });
+                }
+            }
+            else
+            {
+                results.Add(new ValidationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
+                {
+                    Message = Shared.Common.Resources.Errors.Http_400_BadRequest,
+                    Value = HttpStatusCode.BadRequest
+                });
             }
 
             TempData[Consts.OPERATION_RESULT] = JsonConvert.SerializeObject(results);
-            return PartialView(viewModel);
+            return PartialView(partialViewNameFor_DeleteItem, viewModel);
         }
 
         [HttpGet]

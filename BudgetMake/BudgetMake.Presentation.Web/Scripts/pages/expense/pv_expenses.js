@@ -25,7 +25,7 @@
         $("#expensesList").on('click', 'a[action="delete"]', function () {
 
             var BudgetItemId = this.getAttribute("budgetItemId");
-            var url = "/Expense/DeleteExpenseItem";
+            var url = "/Expense/DeleteBudgetItem";
             var data = { budgetItemId: BudgetItemId };
             var id = "edit";
 
