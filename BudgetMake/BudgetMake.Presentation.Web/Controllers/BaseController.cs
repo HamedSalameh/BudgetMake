@@ -124,6 +124,12 @@ namespace BudgetMake.Presentation.Web.Controllers
         }
 
         [HttpGet]
+        public PartialViewResult DeleteBudgetItem(int? budgetItemId = 0)
+        {
+            return null;
+        }
+
+        [HttpGet]
         public PartialViewResult EntityHistory(int? budgetItemId)
         {
             List<BaseResult> results = new List<BaseResult>();
