@@ -126,7 +126,16 @@ namespace BudgetMake.Presentation.Web.Controllers
         [HttpGet]
         public PartialViewResult DeleteBudgetItem(int? budgetItemId = 0)
         {
-            return null;
+            List<BaseResult> results = new List<BaseResult>();
+            ExpenseViewModel viewModel = null;
+
+            if (budgetItemId != null)
+            {
+
+            }
+
+            TempData[Consts.OPERATION_RESULT] = JsonConvert.SerializeObject(results);
+            return PartialView(viewModel);
         }
 
         [HttpGet]
