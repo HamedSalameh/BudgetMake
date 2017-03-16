@@ -13,6 +13,9 @@ namespace BudgetMake.Presentation.Web
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
 
+            // Logging
+            log4net.Config.XmlConfigurator.Configure();
+            // Plugins
             var connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["BudgetMakeDB"].ConnectionString;
             Plugins.InitDomainMapping(connectionString, "BudgetMake.Shared.DomainModel");
             Plugins.InitHistoryService(connectionString);
