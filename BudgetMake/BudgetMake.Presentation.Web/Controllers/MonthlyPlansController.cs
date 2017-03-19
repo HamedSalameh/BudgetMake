@@ -46,7 +46,7 @@ namespace BudgetMake.Presentation.Web.Controllers
                 }
                 catch (Exception Ex)
                 {
-                    handleException(Ex);
+                    HandleException(Ex);
                     return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
                 }
                 return View("MonthlyPlans", monthlyPlans); 
@@ -97,7 +97,7 @@ namespace BudgetMake.Presentation.Web.Controllers
                         }
                         catch (Exception Ex)
                         {
-                            handleException(Ex);
+                            HandleException(Ex);
                             return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
                         }
                     }
@@ -137,7 +137,7 @@ namespace BudgetMake.Presentation.Web.Controllers
                 }
                 catch (Exception Ex)
                 {
-                    handleException(Ex);
+                    HandleException(Ex);
                     return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
                 }
             }
@@ -165,7 +165,7 @@ namespace BudgetMake.Presentation.Web.Controllers
                         }
                         catch (Exception Ex)
                         {
-                            handleException(Ex);
+                            HandleException(Ex);
                             return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
                         }
                     }
@@ -205,7 +205,7 @@ namespace BudgetMake.Presentation.Web.Controllers
                 }
                 catch (Exception Ex)
                 {
-                    handleException(Ex);
+                    HandleException(Ex);
                     return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
                 }
             }
@@ -239,7 +239,7 @@ namespace BudgetMake.Presentation.Web.Controllers
                         }
                         catch (Exception Ex)
                         {
-                            handleException(Ex);
+                            HandleException(Ex);
                             return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
                         }
                     }

@@ -12,8 +12,8 @@ namespace BudgetMake.Presentation.Web.Controllers
     {
         public SalaryController(IApplication Application, ILocalLogger Logger) : base(Application, Logger)
         {
-            partialViewNameFor_ItemsList = "Salaries";
-            partialViewNameFor_EditItem = "EditSalaryItem";
+            PartialViewNameFor_ItemsList = "Salaries";
+            PartialViewNameFor_EditItem = "EditSalaryItem";
         }
 
         public override SalaryViewModel GetViewModel(Salary model)

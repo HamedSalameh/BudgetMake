@@ -27,7 +27,7 @@ namespace BudgetMake.Presentation.Web.Controllers
             }
             catch (Exception Ex)
             {
-                handleException(Ex);
+                HandleException(Ex);
             }
 
             return View(annualBudgets);
@@ -45,7 +45,7 @@ namespace BudgetMake.Presentation.Web.Controllers
             }
             catch (Exception Ex)
             {
-                handleException(Ex);
+                HandleException(Ex);
                 return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
             }
             return View("AnnualPlans", annualPlanCardViewModel);
@@ -75,7 +75,7 @@ namespace BudgetMake.Presentation.Web.Controllers
                         }
                         catch (Exception Ex)
                         {
-                            handleException(Ex);
+                            HandleException(Ex);
                             return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
                         }
                     }
@@ -115,7 +115,7 @@ namespace BudgetMake.Presentation.Web.Controllers
                 }
                 catch (Exception Ex)
                 {
-                    handleException(Ex);
+                    HandleException(Ex);
                     return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
                 }
             }
@@ -143,7 +143,7 @@ namespace BudgetMake.Presentation.Web.Controllers
                         }
                         catch (Exception Ex)
                         {
-                            handleException(Ex);
+                            HandleException(Ex);
                             return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
                         }
                     }
@@ -183,7 +183,7 @@ namespace BudgetMake.Presentation.Web.Controllers
                 }
                 catch (Exception Ex)
                 {
-                    handleException(Ex);
+                    HandleException(Ex);
                     return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
                 }
             }
@@ -211,7 +211,7 @@ namespace BudgetMake.Presentation.Web.Controllers
                         }
                         catch (Exception Ex)
                         {
-                            handleException(Ex);
+                            HandleException(Ex);
                             return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
                         }
                     }

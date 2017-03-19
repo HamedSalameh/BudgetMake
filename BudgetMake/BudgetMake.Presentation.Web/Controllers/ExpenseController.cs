@@ -19,9 +19,9 @@ namespace BudgetMake.Presentation.Web.Controllers
     {
         public ExpenseController(IApplication Application, ILocalLogger Log) : base(Application, Log)
         {
-            partialViewNameFor_ItemsList = "Expenses";
-            partialViewNameFor_EditItem = "EditExpenseItem";
-            partialViewNameFor_DeleteItem = "DeleteExpenseItem";
+            PartialViewNameFor_ItemsList = "Expenses";
+            PartialViewNameFor_EditItem = "EditExpenseItem";
+            PartialViewNameFor_DeleteItem = "DeleteExpenseItem";
         }
 
         public override IList<ExpenseViewModel> GetViewModelsList(int MonthlyPlanId)
@@ -53,7 +53,7 @@ namespace BudgetMake.Presentation.Web.Controllers
                         }
                         catch (Exception Ex)
                         {
-                            handleException(Ex);
+                            HandleException(Ex);
                             result = new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
                             {
                                 Message = Ex.Message,
@@ -119,7 +119,7 @@ namespace BudgetMake.Presentation.Web.Controllers
                                     }
                                     catch (Exception Ex)
                                     {
-                                        handleException(Ex);
+                                        HandleException(Ex);
                                         result = new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
                                         {
                                             Message = Ex.Message,
@@ -153,7 +153,7 @@ namespace BudgetMake.Presentation.Web.Controllers
                 }
                 catch (Exception Ex)
                 {
-                    handleException(Ex);
+                    HandleException(Ex);
                     results.Add(new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
                     {
                         Message = Ex.Message,
@@ -207,7 +207,7 @@ namespace BudgetMake.Presentation.Web.Controllers
                         }
                         catch (Exception Ex)
                         {
-                            handleException(Ex);
+                            HandleException(Ex);
                             result = new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
                             {
                                 Message = Ex.Message,
@@ -272,7 +272,7 @@ namespace BudgetMake.Presentation.Web.Controllers
                 }
                 catch (Exception Ex)
                 {
-                    handleException(Ex);
+                    HandleException(Ex);
                     results.Add(new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
                     {
                         Message = Ex.Message,

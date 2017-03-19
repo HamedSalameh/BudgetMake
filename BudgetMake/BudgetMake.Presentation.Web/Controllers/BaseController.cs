@@ -18,9 +18,43 @@ namespace BudgetMake.Presentation.Web.Controllers
         protected IApplication application { get; set; }
         protected static ILocalLogger _log { get; set; }
 
-        protected string partialViewNameFor_ItemsList { get; set; }
-        protected string partialViewNameFor_EditItem { get; set; }
-        protected string partialViewNameFor_DeleteItem { get; set; }
+        private string partialViewNameFor_ItemsList { get; set; }
+        private string partialViewNameFor_EditItem { get; set; }
+        private string partialViewNameFor_DeleteItem { get; set; }
+
+        public string PartialViewNameFor_ItemsList
+        {
+            get
+            {
+                return partialViewNameFor_ItemsList;
+            }
+            set
+            {
+                partialViewNameFor_ItemsList = value;
+            }
+        }
+        public string PartialViewNameFor_EditItem
+        {
+            get
+            {
+                return partialViewNameFor_EditItem;
+            }
+            set
+            {
+                partialViewNameFor_EditItem = value;
+            }
+        }
+        public string PartialViewNameFor_DeleteItem
+        {
+            get
+            {
+                return partialViewNameFor_DeleteItem;
+            }
+            set
+            {
+                partialViewNameFor_DeleteItem = value;
+            }
+        }
 
         public abstract IList<ViewModel> GetViewModelsList(int MonthlyPlanId = 0);
         public abstract ViewModel GetViewModel(Model model);
@@ -34,9 +68,9 @@ namespace BudgetMake.Presentation.Web.Controllers
             _log = Log.SetType(typeof(Model));
         }
 
-        protected void handleException(Exception Ex)
+        protected void HandleException(Exception Ex)
         {
-            ExceptionHelpers.handleException(Ex, _log);
+            ExceptionHelpers.HandleException(Ex, _log);
         }
 
         [HttpGet]
@@ -52,7 +86,7 @@ namespace BudgetMake.Presentation.Web.Controllers
                 }
                 catch (Exception Ex)
                 {
-                    handleException(Ex);
+                    HandleException(Ex);
                     results.Add(
                         new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
                         {
@@ -103,7 +137,7 @@ namespace BudgetMake.Presentation.Web.Controllers
                 }
                 catch (Exception Ex)
                 {
-                    handleException(Ex);
+                    HandleException(Ex);
                     results.Add(new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
                     {
                         Message = Ex.Message,
@@ -150,7 +184,7 @@ namespace BudgetMake.Presentation.Web.Controllers
                 }
                 catch (Exception Ex)
                 {
-                    handleException(Ex);
+                    HandleException(Ex);
                     results.Add(new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
                     {
                         Message = Ex.Message,
