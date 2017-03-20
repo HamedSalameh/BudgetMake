@@ -15,7 +15,7 @@
 
             var asyncCreate = function () {
                 return $.ajax({
-                    url: "/Expense/EditExpenseItem",
+                    url: "/Expense/EditBudgetItem",
                     data: formData,
                     type: "POST"
                 });

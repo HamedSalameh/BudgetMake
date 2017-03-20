@@ -34,6 +34,16 @@ namespace BudgetMake.Presentation.Web.Controllers
             return model.MapToViewModel();
         }
 
+        public override Expense GetModel(ExpenseViewModel ViewModel)
+        {
+            return ViewModel.MapToModel();
+        }
+
+        public override BaseResult UpdateModel(Expense model)
+        {
+            return application.UpdateBudget(model);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public JsonResult EditExpenseItem(ExpenseViewModel expenseViewModel)

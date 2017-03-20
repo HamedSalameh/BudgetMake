@@ -58,6 +58,8 @@ namespace BudgetMake.Presentation.Web.Controllers
 
         public abstract IList<ViewModel> GetViewModelsList(int MonthlyPlanId = 0);
         public abstract ViewModel GetViewModel(Model model);
+        public virtual Model GetModel(ViewModel ViewModel) { return null; }
+        public virtual BaseResult UpdateModel(Model model) { return null; }
 
         public BaseController(IApplication ApplicaionLayer, ILocalLogger Log)
         {
@@ -156,6 +158,64 @@ namespace BudgetMake.Presentation.Web.Controllers
 
             TempData[Consts.OPERATION_RESULT] = JsonConvert.SerializeObject(results);
             return PartialView(partialViewNameFor_EditItem, viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public virtual JsonResult EditBudgetItem(ViewModel expenseViewModel)
+        {
+            List<BaseResult> results = new List<BaseResult>();
+            BaseResult result = null;
+            if (expenseViewModel != null)
+            {
+                if (ModelState.IsValid)
+                {
+                    Model budget = GetModel(expenseViewModel);
+                    if (budget != null)
+                    {
+                        try
+                        {
+                            result = UpdateModel(budget);
+                        }
+                        catch (Exception Ex)
+                        {
+                            HandleException(Ex);
+                            result = new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
+                            {
+                                Message = Ex.Message,
+                                Value = HttpStatusCode.InternalServerError
+                            };
+                        }
+                    }
+                    else
+                    {
+                        result = new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
+                        {
+                            Message = Shared.Common.Resources.Errors.General_UnableToMapToModel,
+                            Value = HttpStatusCode.InternalServerError
+                        };
+                    }
+                }
+                else
+                {
+                    results = BaseResultHelper.GetModelErrors(ModelState);
+                }
+            }
+            else
+            {
+                result = new ValidationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
+                {
+                    Message = Shared.Common.Resources.Errors.Http_400_BadRequest,
+                    Value = HttpStatusCode.BadRequest
+                };
+            }
+
+            if (result != null)
+            {
+                results.Add(result);
+            }
+
+            return Json(results, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
