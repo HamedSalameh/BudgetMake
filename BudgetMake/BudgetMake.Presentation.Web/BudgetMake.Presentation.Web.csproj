@@ -58,7 +58,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="GeneralServices">
-      <HintPath>..\..\..\Shared\GeneralServices.dll</HintPath>
+      <HintPath>..\..\..\..\Shared\GeneralServices.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
@@ -308,6 +308,7 @@
     <Content Include="Scripts\pages\expense\pv_editexpenseitem.js" />
     <Content Include="Scripts\pages\expense\pv_expenses.js" />
     <Content Include="Scripts\pages\month\monthlyplans.js" />
+    <Content Include="Scripts\pages\salary\pv_editsalaryitem.js" />
     <Content Include="Scripts\pages\salary\pv_salaries.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
