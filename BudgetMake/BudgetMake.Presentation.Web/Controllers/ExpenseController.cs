@@ -6,7 +6,6 @@ using BudgetMake.Shared.Contracts.Infra;
 using BudgetMake.Shared.DomainModel;
 using GeneralServices;
 using GeneralServices.Helpers;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net;

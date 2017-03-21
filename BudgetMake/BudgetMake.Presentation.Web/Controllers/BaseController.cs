@@ -1,15 +1,10 @@
 ﻿using BudgetMake.Presentation.Web.Helpers;
-using BudgetMake.Presentation.Web.ViewModel;
 using BudgetMake.Shared.Contracts.Domain;
 using BudgetMake.Shared.Contracts.Infra;
 using GeneralServices;
-using GeneralServices.Helpers;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Web.Mvc;
-using static GeneralServices.Enums;
 
 namespace BudgetMake.Presentation.Web.Controllers
 {

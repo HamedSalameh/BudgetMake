@@ -20,7 +20,7 @@
 
     @foreach (var item in Model)
     {
-        <tr>
+        <tr data="@item.SalaryId">
             <td>
                 @Html.DisplayFor(modelItem => item.Description)
             </td>

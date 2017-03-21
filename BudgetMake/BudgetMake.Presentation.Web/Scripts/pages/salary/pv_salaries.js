@@ -53,7 +53,7 @@
             // handle the save event
             modules.ui.ToggleDisplayEdit(event, 'span', 'item-display');
             // Get anti forgery token from page
-            var token = modules.security.GetAntiForgeryToken("expensesList");
+            var token = modules.security.GetAntiForgeryToken("salariesList");
 
             var _biAmount = $display.html();
             var _biId = $display.parent().parent().attr('data');
