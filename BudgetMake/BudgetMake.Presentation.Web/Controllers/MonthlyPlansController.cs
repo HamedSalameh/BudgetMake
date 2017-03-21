@@ -315,5 +315,15 @@ namespace BudgetMake.Presentation.Web.Controllers
         {
             throw new NotImplementedException();
         }
+
+        public override MonthlyBudget GetModel(MonthlyPlanViewModel ViewModel)
+        {
+            return ViewModel.MapToModel();
+        }
+
+        public override BaseResult UpdateModel(MonthlyBudget model)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -58,8 +58,8 @@ namespace BudgetMake.Presentation.Web.Controllers
 
         public abstract IList<ViewModel> GetViewModelsList(int MonthlyPlanId = 0);
         public abstract ViewModel GetViewModel(Model model);
-        public virtual Model GetModel(ViewModel ViewModel) { return null; }
-        public virtual BaseResult UpdateModel(Model model) { return null; }
+        public abstract Model GetModel(ViewModel ViewModel);
+        public abstract BaseResult UpdateModel(Model model);
 
         public BaseController(IApplication ApplicaionLayer, ILocalLogger Log)
         {
@@ -162,15 +162,15 @@ namespace BudgetMake.Presentation.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public virtual JsonResult EditBudgetItem(ViewModel expenseViewModel)
+        public virtual JsonResult EditBudgetItem(ViewModel viewModel)
         {
             List<BaseResult> results = new List<BaseResult>();
             BaseResult result = null;
-            if (expenseViewModel != null)
+            if (viewModel != null)
             {
                 if (ModelState.IsValid)
                 {
-                    Model budget = GetModel(expenseViewModel);
+                    Model budget = GetModel(viewModel);
                     if (budget != null)
                     {
                         try
@@ -189,7 +189,7 @@ namespace BudgetMake.Presentation.Web.Controllers
                     }
                     else
                     {
-                        result = new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
+                        result = new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
                         {
                             Message = Shared.Common.Resources.Errors.General_UnableToMapToModel,
                             Value = HttpStatusCode.InternalServerError

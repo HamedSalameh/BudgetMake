@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Web.Mvc;
+using GeneralServices;
 
 namespace BudgetMake.Presentation.Web.Controllers
 {
@@ -237,6 +238,16 @@ namespace BudgetMake.Presentation.Web.Controllers
         }
 
         public override AnnualPlanViewModel GetViewModel(AnnualBudget model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override AnnualBudget GetModel(AnnualPlanViewModel ViewModel)
+        {
+            return ViewModel.MapToModel();
+        }
+
+        public override BaseResult UpdateModel(AnnualBudget model)
         {
             throw new NotImplementedException();
         }
