@@ -9,7 +9,7 @@ using GeneralServices;
 
 namespace BudgetMake.Presentation.Web.Controllers
 {
-    public class SalaryController : BaseController<Salary, SalaryViewModel>
+    public class SalaryController : BudgetItemBaseController<Salary, SalaryViewModel>
     {
         public SalaryController(IApplication Application, ILocalLogger Logger) : base(Application, Logger)
         {
@@ -17,22 +17,22 @@ namespace BudgetMake.Presentation.Web.Controllers
             PartialViewNameFor_EditItem = "EditSalaryItem";
         }
 
-        public override SalaryViewModel GetViewModel(Salary model)
+        protected override SalaryViewModel GetViewModel(Salary model)
         {
             return model.MapToViewModel();
         }
 
-        public override IList<SalaryViewModel> GetViewModelsList(int MonthlyPlanId = 0)
+        protected override IList<SalaryViewModel> GetViewModelsList(int MonthlyPlanId = 0)
         {
             return application.GetEntities<Salary>(s => s.MonthlyBudgetId == MonthlyPlanId).MapToSalaryViewModelList();
         }
 
-        public override Salary GetModel(SalaryViewModel ViewModel)
+        protected override Salary GetModel(SalaryViewModel ViewModel)
         {
             return ViewModel.MapToModel();
         }
 
-        public override BaseResult UpdateModel(Salary model)
+        protected override BaseResult UpdateModel(Salary model)
         {
             throw new NotImplementedException();
         }

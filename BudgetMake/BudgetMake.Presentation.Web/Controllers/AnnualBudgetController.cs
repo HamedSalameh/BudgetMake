@@ -232,22 +232,22 @@ namespace BudgetMake.Presentation.Web.Controllers
             }
         }
 
-        public override IList<AnnualPlanViewModel> GetViewModelsList(int MonthlyPlanId = 0)
+        protected override IList<AnnualPlanViewModel> GetViewModelsList(int MonthlyPlanId = 0)
         {
             throw new NotImplementedException();
         }
 
-        public override AnnualPlanViewModel GetViewModel(AnnualBudget model)
+        protected override AnnualPlanViewModel GetViewModel(AnnualBudget model)
         {
             throw new NotImplementedException();
         }
 
-        public override AnnualBudget GetModel(AnnualPlanViewModel ViewModel)
+        protected override AnnualBudget GetModel(AnnualPlanViewModel ViewModel)
         {
             return ViewModel.MapToModel();
         }
 
-        public override BaseResult UpdateModel(AnnualBudget model)
+        protected override BaseResult UpdateModel(AnnualBudget model)
         {
             throw new NotImplementedException();
         }

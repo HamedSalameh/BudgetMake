@@ -15,7 +15,7 @@ using static GeneralServices.Enums;
 
 namespace BudgetMake.Presentation.Web.Controllers
 {
-    public class ExpenseController : BaseController<Expense, ExpenseViewModel>
+    public class ExpenseController : BudgetItemBaseController<Expense, ExpenseViewModel>
     {
         public ExpenseController(IApplication Application, ILocalLogger Log) : base(Application, Log)
         {
@@ -24,22 +24,22 @@ namespace BudgetMake.Presentation.Web.Controllers
             PartialViewNameFor_DeleteItem = "DeleteExpenseItem";
         }
 
-        public override IList<ExpenseViewModel> GetViewModelsList(int MonthlyPlanId)
+        protected override IList<ExpenseViewModel> GetViewModelsList(int MonthlyPlanId)
         {
             return application.GetEntities<Expense>(e => e.MonthlyBudgetId == MonthlyPlanId).MapToViewModelsList();
         }
 
-        public override ExpenseViewModel GetViewModel(Expense model)
+        protected override ExpenseViewModel GetViewModel(Expense model)
         {
             return model.MapToViewModel();
         }
 
-        public override Expense GetModel(ExpenseViewModel ViewModel)
+        protected override Expense GetModel(ExpenseViewModel ViewModel)
         {
             return ViewModel.MapToModel();
         }
 
-        public override BaseResult UpdateModel(Expense model)
+        protected override BaseResult UpdateModel(Expense model)
         {
             return application.UpdateBudget(model);
         }

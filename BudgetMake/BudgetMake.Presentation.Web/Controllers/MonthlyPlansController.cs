@@ -306,22 +306,22 @@ namespace BudgetMake.Presentation.Web.Controllers
             return CreateFromTemplate(templateInfo.PlanId);
         }
 
-        public override IList<MonthlyPlanViewModel> GetViewModelsList(int MonthlyPlanId = 0)
+        protected override IList<MonthlyPlanViewModel> GetViewModelsList(int MonthlyPlanId = 0)
         {
             throw new NotImplementedException();
         }
 
-        public override MonthlyPlanViewModel GetViewModel(MonthlyBudget model)
+        protected override MonthlyPlanViewModel GetViewModel(MonthlyBudget model)
         {
             throw new NotImplementedException();
         }
 
-        public override MonthlyBudget GetModel(MonthlyPlanViewModel ViewModel)
+        protected override MonthlyBudget GetModel(MonthlyPlanViewModel ViewModel)
         {
             return ViewModel.MapToModel();
         }
 
-        public override BaseResult UpdateModel(MonthlyBudget model)
+        protected override BaseResult UpdateModel(MonthlyBudget model)
         {
             throw new NotImplementedException();
         }

@@ -248,22 +248,22 @@ namespace BudgetMake.Presentation.Web.Controllers
             }
         }
 
-        public override IList<ExpenseViewModel> GetViewModelsList(int MonthlyPlanId = 0)
+        protected override IList<ExpenseViewModel> GetViewModelsList(int MonthlyPlanId = 0)
         {
             throw new NotImplementedException();
         }
 
-        public override ExpenseViewModel GetViewModel(Expense model)
+        protected override ExpenseViewModel GetViewModel(Expense model)
         {
             throw new NotImplementedException();
         }
 
-        public override Expense GetModel(ExpenseViewModel ViewModel)
+        protected override Expense GetModel(ExpenseViewModel ViewModel)
         {
             throw new NotImplementedException();
         }
 
-        public override BaseResult UpdateModel(Expense model)
+        protected override BaseResult UpdateModel(Expense model)
         {
             throw new NotImplementedException();
         }
