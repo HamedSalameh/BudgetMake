@@ -89,7 +89,7 @@
             // Create data object with XSRF token included
             var xDataObj = new xdataObject(token, formData);
             // Call server with xDataObj
-            modules.network.ServerCall("/Expense/QuickEditExpenseItem", "POST", xDataObj, redirect, showAlert);
+            modules.network.ServerCall("/Expense/QuickEditBudgetItem", "POST", xDataObj, redirect, showAlert);
         });
 
         var redirect = function (url) {

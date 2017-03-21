@@ -44,141 +44,141 @@ namespace BudgetMake.Presentation.Web.Controllers
             return application.UpdateBudget(model);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public JsonResult EditExpenseItem(ExpenseViewModel expenseViewModel)
-        {
-            List<BaseResult> results = new List<BaseResult>();
-            BaseResult result = null;
-            if (expenseViewModel != null)
-            {
-                if (ModelState.IsValid)
-                {
-                    Expense budget = expenseViewModel.MapToModel();
-                    if (budget != null)
-                    {
-                        try
-                        {
-                            result = application.UpdateBudget(budget);
-                        }
-                        catch (Exception Ex)
-                        {
-                            HandleException(Ex);
-                            result = new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
-                            {
-                                Message = Ex.Message,
-                                Value = HttpStatusCode.InternalServerError
-                            };
-                        }
-                    }
-                    else
-                    {
-                        result = new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
-                        {
-                            Message = Shared.Common.Resources.Errors.General_UnableToMapToModel,
-                            Value = HttpStatusCode.InternalServerError
-                        };
-                    }
-                }
-                else
-                {
-                    results = BaseResultHelper.GetModelErrors(ModelState);
-                }
-            }
-            else
-            {
-                result = new ValidationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
-                {
-                    Message = Shared.Common.Resources.Errors.Http_400_BadRequest,
-                    Value = HttpStatusCode.BadRequest
-                };
-            }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public JsonResult EditExpenseItem(ExpenseViewModel expenseViewModel)
+        //{
+        //    List<BaseResult> results = new List<BaseResult>();
+        //    BaseResult result = null;
+        //    if (expenseViewModel != null)
+        //    {
+        //        if (ModelState.IsValid)
+        //        {
+        //            Expense budget = expenseViewModel.MapToModel();
+        //            if (budget != null)
+        //            {
+        //                try
+        //                {
+        //                    result = application.UpdateBudget(budget);
+        //                }
+        //                catch (Exception Ex)
+        //                {
+        //                    HandleException(Ex);
+        //                    result = new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
+        //                    {
+        //                        Message = Ex.Message,
+        //                        Value = HttpStatusCode.InternalServerError
+        //                    };
+        //                }
+        //            }
+        //            else
+        //            {
+        //                result = new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
+        //                {
+        //                    Message = Shared.Common.Resources.Errors.General_UnableToMapToModel,
+        //                    Value = HttpStatusCode.InternalServerError
+        //                };
+        //            }
+        //        }
+        //        else
+        //        {
+        //            results = BaseResultHelper.GetModelErrors(ModelState);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        result = new ValidationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
+        //        {
+        //            Message = Shared.Common.Resources.Errors.Http_400_BadRequest,
+        //            Value = HttpStatusCode.BadRequest
+        //        };
+        //    }
 
-            if (result != null)
-            {
-                results.Add(result);
-            }
+        //    if (result != null)
+        //    {
+        //        results.Add(result);
+        //    }
 
-            return Json(results, JsonRequestBehavior.AllowGet);
-        }
+        //    return Json(results, JsonRequestBehavior.AllowGet);
+        //}
 
-        [HttpPost]
-        public JsonResult QuickEditExpenseItem(int? budgetItemId, string PropName, string PropValue)
-        {
-            List<BaseResult> results = new List<BaseResult>();
-            BaseResult result = null;
-            if (budgetItemId != null)
-            {
-                try
-                {
-                    Expense model = application.GetById<Expense>(budgetItemId.Value);
-                    if (model != null)
-                    {
-                        if (!string.IsNullOrEmpty(PropName))
-                        {
-                            bool updateResult = Reflection.UpdateObjectProperty(model, PropName, PropValue);
-                            if (updateResult)
-                            {
-                                ExpenseViewModel viewModel = model.MapToViewModel();
-                                TryValidateModel(viewModel);
-                                if (ModelState.IsValid)
-                                {
-                                    try
-                                    {
-                                        result = application.UpdateBudget(model);
-                                    }
-                                    catch (Exception Ex)
-                                    {
-                                        HandleException(Ex);
-                                        result = new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
-                                        {
-                                            Message = Ex.Message,
-                                            Value = HttpStatusCode.InternalServerError
-                                        };
-                                    }
-                                }
-                                else
-                                {
-                                    results = BaseResultHelper.GetModelErrors(ModelState);
-                                }
-                            }
-                            else
-                            {
-                                result = new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
-                                {
-                                    Message = "Unable to update value",
-                                    Value = PropValue
-                                };
-                            }
-                        }
-                    }
-                    else
-                    {
-                        results.Add(new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
-                        {
-                            Message = Shared.Common.Resources.Errors.Http_404_NotFound_404,
-                            Value = HttpStatusCode.NotFound
-                        });
-                    }
-                }
-                catch (Exception Ex)
-                {
-                    HandleException(Ex);
-                    results.Add(new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
-                    {
-                        Message = Ex.Message,
-                        Value = HttpStatusCode.InternalServerError
-                    });
-                }
-            }
+        //[HttpPost]
+        //public JsonResult QuickEditExpenseItem(int? budgetItemId, string PropName, string PropValue)
+        //{
+        //    List<BaseResult> results = new List<BaseResult>();
+        //    BaseResult result = null;
+        //    if (budgetItemId != null)
+        //    {
+        //        try
+        //        {
+        //            Expense model = application.GetById<Expense>(budgetItemId.Value);
+        //            if (model != null)
+        //            {
+        //                if (!string.IsNullOrEmpty(PropName))
+        //                {
+        //                    bool updateResult = Reflection.UpdateObjectProperty(model, PropName, PropValue);
+        //                    if (updateResult)
+        //                    {
+        //                        ExpenseViewModel viewModel = model.MapToViewModel();
+        //                        TryValidateModel(viewModel);
+        //                        if (ModelState.IsValid)
+        //                        {
+        //                            try
+        //                            {
+        //                                result = application.UpdateBudget(model);
+        //                            }
+        //                            catch (Exception Ex)
+        //                            {
+        //                                HandleException(Ex);
+        //                                result = new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
+        //                                {
+        //                                    Message = Ex.Message,
+        //                                    Value = HttpStatusCode.InternalServerError
+        //                                };
+        //                            }
+        //                        }
+        //                        else
+        //                        {
+        //                            results = BaseResultHelper.GetModelErrors(ModelState);
+        //                        }
+        //                    }
+        //                    else
+        //                    {
+        //                        result = new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
+        //                        {
+        //                            Message = "Unable to update value",
+        //                            Value = PropValue
+        //                        };
+        //                    }
+        //                }
+        //            }
+        //            else
+        //            {
+        //                results.Add(new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
+        //                {
+        //                    Message = Shared.Common.Resources.Errors.Http_404_NotFound_404,
+        //                    Value = HttpStatusCode.NotFound
+        //                });
+        //            }
+        //        }
+        //        catch (Exception Ex)
+        //        {
+        //            HandleException(Ex);
+        //            results.Add(new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
+        //            {
+        //                Message = Ex.Message,
+        //                Value = HttpStatusCode.InternalServerError
+        //            });
+        //        }
+        //    }
 
-            if (result != null)
-            {
-                results.Add(result);
-            }
+        //    if (result != null)
+        //    {
+        //        results.Add(result);
+        //    }
 
-            return Json(results, JsonRequestBehavior.AllowGet);
-        }
+        //    return Json(results, JsonRequestBehavior.AllowGet);
+        //}
 
         [HttpGet]
         public PartialViewResult CreateExpenseItem(string MonthlyPlanId)

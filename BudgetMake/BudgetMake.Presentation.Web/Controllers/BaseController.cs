@@ -218,6 +218,84 @@ namespace BudgetMake.Presentation.Web.Controllers
             return Json(results, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        public JsonResult QuickEditBudgetItem(int? budgetItemId, string PropName, string PropValue)
+        {
+            List<BaseResult> results = new List<BaseResult>();
+            BaseResult result = null;
+            if (budgetItemId != null)
+            {
+                try
+                {
+                    Model model = application.GetById<Model>(budgetItemId.Value);
+                    if (model != null)
+                    {
+                        if (!string.IsNullOrEmpty(PropName))
+                        {
+                            bool updateResult = Reflection.UpdateObjectProperty(model, PropName, PropValue);
+                            if (updateResult)
+                            {
+                                ViewModel viewModel = GetViewModel(model);
+                                TryValidateModel(viewModel);
+                                if (ModelState.IsValid)
+                                {
+                                    try
+                                    {
+                                        result = UpdateModel(model);
+                                    }
+                                    catch (Exception Ex)
+                                    {
+                                        HandleException(Ex);
+                                        result = new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
+                                        {
+                                            Message = Ex.Message,
+                                            Value = HttpStatusCode.InternalServerError
+                                        };
+                                    }
+                                }
+                                else
+                                {
+                                    results = BaseResultHelper.GetModelErrors(ModelState);
+                                }
+                            }
+                            else
+                            {
+                                result = new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
+                                {
+                                    Message = "Unable to update value",
+                                    Value = PropValue
+                                };
+                            }
+                        }
+                    }
+                    else
+                    {
+                        results.Add(new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
+                        {
+                            Message = Shared.Common.Resources.Errors.Http_404_NotFound_404,
+                            Value = HttpStatusCode.NotFound
+                        });
+                    }
+                }
+                catch (Exception Ex)
+                {
+                    HandleException(Ex);
+                    results.Add(new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
+                    {
+                        Message = Ex.Message,
+                        Value = HttpStatusCode.InternalServerError
+                    });
+                }
+            }
+
+            if (result != null)
+            {
+                results.Add(result);
+            }
+
+            return Json(results, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpGet]
         public PartialViewResult DeleteBudgetItem(int? budgetItemId = 0)
         {
