@@ -19,8 +19,9 @@ namespace BudgetMake.Presentation.Web.Controllers
     {
         public ExpenseController(IApplication Application, ILocalLogger Log) : base(Application, Log)
         {
-            partialViewNameFor_ItemsList = "Expenses";
-            partialViewNameFor_EditItem = "EditExpenseItem";
+            PartialViewNameFor_ItemsList = "Expenses";
+            PartialViewNameFor_EditItem = "EditExpenseItem";
+            PartialViewNameFor_DeleteItem = "DeleteExpenseItem";
         }
 
         public override IList<ExpenseViewModel> GetViewModelsList(int MonthlyPlanId)
@@ -31,6 +32,16 @@ namespace BudgetMake.Presentation.Web.Controllers
         public override ExpenseViewModel GetViewModel(Expense model)
         {
             return model.MapToViewModel();
+        }
+
+        public override Expense GetModel(ExpenseViewModel ViewModel)
+        {
+            return ViewModel.MapToModel();
+        }
+
+        public override BaseResult UpdateModel(Expense model)
+        {
+            return application.UpdateBudget(model);
         }
 
         [HttpPost]
@@ -52,7 +63,7 @@ namespace BudgetMake.Presentation.Web.Controllers
                         }
                         catch (Exception Ex)
                         {
-                            handleException(Ex);
+                            HandleException(Ex);
                             result = new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
                             {
                                 Message = Ex.Message,
@@ -118,7 +129,7 @@ namespace BudgetMake.Presentation.Web.Controllers
                                     }
                                     catch (Exception Ex)
                                     {
-                                        handleException(Ex);
+                                        HandleException(Ex);
                                         result = new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
                                         {
                                             Message = Ex.Message,
@@ -152,7 +163,7 @@ namespace BudgetMake.Presentation.Web.Controllers
                 }
                 catch (Exception Ex)
                 {
-                    handleException(Ex);
+                    HandleException(Ex);
                     results.Add(new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
                     {
                         Message = Ex.Message,
@@ -206,7 +217,7 @@ namespace BudgetMake.Presentation.Web.Controllers
                         }
                         catch (Exception Ex)
                         {
-                            handleException(Ex);
+                            HandleException(Ex);
                             result = new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
                             {
                                 Message = Ex.Message,
@@ -245,53 +256,6 @@ namespace BudgetMake.Presentation.Web.Controllers
             return Json(results, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpGet]
-        public PartialViewResult DeleteExpenseItem(int? budgetItemId = 0)
-        {
-            List<BaseResult> results = new List<BaseResult>();
-            ExpenseViewModel viewModel = null;
-
-            if (budgetItemId != null)
-            {
-                try
-                {
-                    Expense model = application.GetById<Expense>(budgetItemId.Value);
-                    if (model != null)
-                    {
-                        viewModel = model.MapToViewModel();
-                    }
-                    else
-                    {
-                        results.Add(new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
-                        {
-                            Message = Shared.Common.Resources.Errors.Http_404_NotFound_404,
-                            Value = HttpStatusCode.NotFound
-                        });
-                    }
-                }
-                catch (Exception Ex)
-                {
-                    handleException(Ex);
-                    results.Add(new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
-                    {
-                        Message = Ex.Message,
-                        Value = HttpStatusCode.InternalServerError
-                    });
-                }
-            }
-            else
-            {
-                results.Add(new ValidationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
-                {
-                    Message = Shared.Common.Resources.Errors.Http_400_BadRequest,
-                    Value = HttpStatusCode.BadRequest
-                });
-            }
-
-            TempData[Consts.OPERATION_RESULT] = JsonConvert.SerializeObject(results);
-            return PartialView(viewModel);
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public JsonResult DeleteExpense(int? budgetItemId)
@@ -318,7 +282,7 @@ namespace BudgetMake.Presentation.Web.Controllers
                 }
                 catch (Exception Ex)
                 {
-                    handleException(Ex);
+                    HandleException(Ex);
                     results.Add(new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
                     {
                         Message = Ex.Message,

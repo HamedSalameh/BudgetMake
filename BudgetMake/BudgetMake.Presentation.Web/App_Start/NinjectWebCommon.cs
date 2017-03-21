@@ -68,7 +68,9 @@ namespace BudgetMake.Presentation.Web.App_Start
             {
                 new InfraModule(),
                 new DomainModule(),
-                new GeneralModule()
+                new GeneralModule(),
+
+                new LoggingModule()
             };
 
             kernel.Load(applicationModules);

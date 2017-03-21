@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Web.Mvc;
+using GeneralServices;
 
 namespace BudgetMake.Presentation.Web.Controllers
 {
@@ -27,7 +28,7 @@ namespace BudgetMake.Presentation.Web.Controllers
             }
             catch (Exception Ex)
             {
-                handleException(Ex);
+                HandleException(Ex);
             }
 
             return View(annualBudgets);
@@ -45,7 +46,7 @@ namespace BudgetMake.Presentation.Web.Controllers
             }
             catch (Exception Ex)
             {
-                handleException(Ex);
+                HandleException(Ex);
                 return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
             }
             return View("AnnualPlans", annualPlanCardViewModel);
@@ -75,7 +76,7 @@ namespace BudgetMake.Presentation.Web.Controllers
                         }
                         catch (Exception Ex)
                         {
-                            handleException(Ex);
+                            HandleException(Ex);
                             return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
                         }
                     }
@@ -115,7 +116,7 @@ namespace BudgetMake.Presentation.Web.Controllers
                 }
                 catch (Exception Ex)
                 {
-                    handleException(Ex);
+                    HandleException(Ex);
                     return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
                 }
             }
@@ -143,7 +144,7 @@ namespace BudgetMake.Presentation.Web.Controllers
                         }
                         catch (Exception Ex)
                         {
-                            handleException(Ex);
+                            HandleException(Ex);
                             return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
                         }
                     }
@@ -183,7 +184,7 @@ namespace BudgetMake.Presentation.Web.Controllers
                 }
                 catch (Exception Ex)
                 {
-                    handleException(Ex);
+                    HandleException(Ex);
                     return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
                 }
             }
@@ -211,7 +212,7 @@ namespace BudgetMake.Presentation.Web.Controllers
                         }
                         catch (Exception Ex)
                         {
-                            handleException(Ex);
+                            HandleException(Ex);
                             return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
                         }
                     }
@@ -237,6 +238,16 @@ namespace BudgetMake.Presentation.Web.Controllers
         }
 
         public override AnnualPlanViewModel GetViewModel(AnnualBudget model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override AnnualBudget GetModel(AnnualPlanViewModel ViewModel)
+        {
+            return ViewModel.MapToModel();
+        }
+
+        public override BaseResult UpdateModel(AnnualBudget model)
         {
             throw new NotImplementedException();
         }

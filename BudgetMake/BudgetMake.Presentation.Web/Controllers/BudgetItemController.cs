@@ -32,7 +32,7 @@ namespace BudgetMake.Presentation.Web.Controllers
                 }
                 catch (Exception Ex)
                 {
-                    handleException(Ex);
+                    HandleException(Ex);
                 }
             }
             return PartialView("_ChequesDetails", Cheques); ;
@@ -50,7 +50,7 @@ namespace BudgetMake.Presentation.Web.Controllers
                 }
                 catch (Exception Ex)
                 {
-                    handleException(Ex);
+                    HandleException(Ex);
                 }
             }
             return PartialView("_CreditCardDetails", CreditCards);
@@ -68,7 +68,7 @@ namespace BudgetMake.Presentation.Web.Controllers
                 }
                 catch (Exception Ex)
                 {
-                    handleException(Ex);
+                    HandleException(Ex);
                 }
             }
             return PartialView("_LoanPaymentsDetails", loanPayments);
@@ -92,7 +92,7 @@ namespace BudgetMake.Presentation.Web.Controllers
                 }
                 catch (Exception Ex)
                 {
-                    handleException(Ex);
+                    HandleException(Ex);
                     return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
                 }
             }
@@ -130,7 +130,7 @@ namespace BudgetMake.Presentation.Web.Controllers
                         }
                         catch (Exception Ex)
                         {
-                            handleException(Ex);
+                            HandleException(Ex);
                             return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
                         }
                     }
@@ -167,7 +167,7 @@ namespace BudgetMake.Presentation.Web.Controllers
                 }
                 catch (Exception Ex)
                 {
-                    handleException(Ex);
+                    HandleException(Ex);
                     return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
                 }
             }
@@ -194,7 +194,7 @@ namespace BudgetMake.Presentation.Web.Controllers
                 }
                 catch (Exception Ex)
                 {
-                    handleException(Ex);
+                    HandleException(Ex);
                     return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
                 }
             }
@@ -228,7 +228,7 @@ namespace BudgetMake.Presentation.Web.Controllers
                         }
                         catch (Exception Ex)
                         {
-                            handleException(Ex);
+                            HandleException(Ex);
                             return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
                         }
                     }
@@ -254,6 +254,16 @@ namespace BudgetMake.Presentation.Web.Controllers
         }
 
         public override ExpenseViewModel GetViewModel(Expense model)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override Expense GetModel(ExpenseViewModel ViewModel)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override BaseResult UpdateModel(Expense model)
         {
             throw new NotImplementedException();
         }
