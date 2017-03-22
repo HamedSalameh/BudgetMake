@@ -34,7 +34,7 @@ namespace BudgetMake.Presentation.Web.Controllers
 
         protected override BaseResult UpdateModel(Salary model)
         {
-            throw new NotImplementedException();
+            return application.UpdateBudgetItem<Salary>(model);
         }
     }
 }

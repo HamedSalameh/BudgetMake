@@ -522,15 +522,17 @@ namespace BudgetMake.Domain.Application
             return result;
         }
 
-        public BaseResult UpdateBudget(Expense budgetItem)
+        public BaseResult UpdateBudgetItem<Model>(dynamic budgetItem)
         {
             BaseResult result = null;
+            Type type = typeof(Model);
             if (budgetItem != null)
             {
                 try
                 {
+                    dynamic businessLayer = businessLayers[type];
                     // Load entity from DB to get old values
-                    Expense _oldBudget = expenseBL.GetById(budgetItem.Id);
+                    BudgetItemBase _oldBudget = businessLayer.GetById(budgetItem.Id);
                     if (_oldBudget != null)
                     {
                         double budget = _oldBudget.Amount;
@@ -538,10 +540,17 @@ namespace BudgetMake.Domain.Application
                         budgetItem.LastModifited = DateTime.Now;
                         budgetItem.EntityState = EntityState.Modified;
                         // save the budget item entity
-                        expenseBL.Update(budgetItem);
+                        businessLayer.Update(budgetItem);
                         // update the monthly plan relevant fields
                         MonthlyBudget monthly = null;
-                        monthly = monthlyBudgetBL.GetById(budgetItem.MonthlyBudgetId);
+                        monthly = monthlyBudgetBL.GetById((budgetItem as BudgetItemBase).MonthlyBudgetId,
+                                m => m.Expenses,
+                                m => m.Cheques,
+                                m => m.CreditCards,
+                                m => m.LoansPayments,
+                                m => m.Salaries,
+                                m => m.AdditionalIncome
+                                );
                         if (monthly != null)
                         {
                             monthlyBudgetBL.Update(monthly);
@@ -564,7 +573,7 @@ namespace BudgetMake.Domain.Application
                     {
                         result = new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
                         {
-                            Message = "Unable to load old budget",
+                            Message = "Unable to load old budget item",
                             Value = budgetItem.Id
                         };
                     }

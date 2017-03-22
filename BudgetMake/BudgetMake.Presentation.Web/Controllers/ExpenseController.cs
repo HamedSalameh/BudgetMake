@@ -40,7 +40,7 @@ namespace BudgetMake.Presentation.Web.Controllers
 
         protected override BaseResult UpdateModel(Expense model)
         {
-            return application.UpdateBudget(model);
+            return application.UpdateBudgetItem<Expense>(model);
         }
 
         //[HttpPost]
