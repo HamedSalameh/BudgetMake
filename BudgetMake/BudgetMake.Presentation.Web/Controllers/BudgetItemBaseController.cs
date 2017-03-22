@@ -16,6 +16,7 @@ namespace BudgetMake.Presentation.Web.Controllers
     public abstract class BudgetItemBaseController<Model, ViewModel> : BaseController<Model, ViewModel> where Model : class
     {
         private string partialViewNameFor_ItemsList { get; set; }
+        private string partialViewNameFor_CreateItem { get; set; }
         private string partialViewNameFor_EditItem { get; set; }
         private string partialViewNameFor_DeleteItem { get; set; }
 
@@ -28,6 +29,17 @@ namespace BudgetMake.Presentation.Web.Controllers
             set
             {
                 partialViewNameFor_ItemsList = value;
+            }
+        }
+        public string PartialViewNameFor_CreateItem
+        {
+            get
+            {
+                return partialViewNameFor_CreateItem;
+            }
+            set
+            {
+                partialViewNameFor_CreateItem = value;
             }
         }
         public string PartialViewNameFor_EditItem
@@ -94,6 +106,24 @@ namespace BudgetMake.Presentation.Web.Controllers
             }
             TempData[Consts.OPERATION_RESULT] = JsonConvert.SerializeObject(results);
             return PartialView(partialViewNameFor_ItemsList, Expenses);
+        }
+
+        [HttpGet]
+        public PartialViewResult CreateBudgetItem(string MonthlyPlanId)
+        {
+            int monthlyPlanId = 0;
+            int.TryParse(MonthlyPlanId, out monthlyPlanId);
+
+            if (monthlyPlanId != 0)
+            {
+                ExpenseViewModel viewModel = new ExpenseViewModel();
+                viewModel.MonthlyBudgetId = monthlyPlanId;
+                return PartialView(PartialViewNameFor_CreateItem, viewModel);
+            }
+            else
+            {
+                return PartialView("_badRequest");
+            }
         }
 
         [HttpGet]

@@ -19,6 +19,7 @@ namespace BudgetMake.Presentation.Web.Controllers
         public ExpenseController(IApplication Application, ILocalLogger Log) : base(Application, Log)
         {
             PartialViewNameFor_ItemsList = "Expenses";
+            PartialViewNameFor_CreateItem = "CreateExpenseItem";
             PartialViewNameFor_EditItem = "EditExpenseItem";
             PartialViewNameFor_DeleteItem = "DeleteExpenseItem";
         }
@@ -179,24 +180,6 @@ namespace BudgetMake.Presentation.Web.Controllers
         //    return Json(results, JsonRequestBehavior.AllowGet);
         //}
 
-        [HttpGet]
-        public PartialViewResult CreateExpenseItem(string MonthlyPlanId)
-        {
-            int monthlyPlanId = 0;
-            int.TryParse(MonthlyPlanId, out monthlyPlanId);
-
-            if (monthlyPlanId != 0)
-            {
-                ExpenseViewModel viewModel = new ExpenseViewModel();
-                viewModel.MonthlyBudgetId = monthlyPlanId;
-                return PartialView(viewModel);
-            }
-            else
-            {
-                return PartialView("_badRequest");
-            }
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public JsonResult CreateExpenseItem(ExpenseViewModel expenseViewModel)
@@ -212,7 +195,7 @@ namespace BudgetMake.Presentation.Web.Controllers
                     {
                         try
                         {
-                            result = application.CreateBudget(budgetItem);
+                            result = application.CreateBudgetItem<Expense>(budgetItem);
                         }
                         catch (Exception Ex)
                         {

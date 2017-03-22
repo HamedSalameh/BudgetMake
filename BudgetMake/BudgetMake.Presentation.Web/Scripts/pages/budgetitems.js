@@ -7,7 +7,7 @@
             var monthlyPlanId = $("#MonthlyPlan").val();
 
             $.ajax({
-                url: "/Expense/CreateExpenseItem",
+                url: "/Expense/CreateBudgetItem",
                 data: { MonthlyPlanId: monthlyPlanId },
                 type: "GET",
                 success: function (response) {

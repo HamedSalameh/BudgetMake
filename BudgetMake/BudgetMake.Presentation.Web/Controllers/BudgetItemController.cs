@@ -120,7 +120,8 @@ namespace BudgetMake.Presentation.Web.Controllers
                     {
                         try
                         {
-                            result = application.CreateBudget(budgetItem);
+                            //result = application.CreateBudget(budgetItem);
+                            result = application.CreateBudgetItem<Expense>(budgetItem);
                             if (result.Status != ResultStatus.Success)
                             {
                                 ViewBag[Consts.OPERATION_RESULT] = JsonConvert.SerializeObject(result);

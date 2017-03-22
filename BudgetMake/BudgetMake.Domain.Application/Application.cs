@@ -473,22 +473,33 @@ namespace BudgetMake.Domain.Application
             return result;
         }
 
-        public BaseResult CreateBudget(Expense budgetItem)
+        public BaseResult CreateBudgetItem<Model>(dynamic budgetItem)
         {
             BaseResult result = null;
-            if (budgetItem != null)
+            Type type = typeof(Model);
+            if (budgetItem != null && budgetItem is BudgetItemBase)
             {
                 try
                 {
+                    // try load the relevant business layer
+                    dynamic businessLayer = businessLayers[type];
+                    // update budget item fields
                     budgetItem.EntityState = EntityState.Added;
                     // save the budget item entity
                     budgetItem.CreationDate = DateTime.Now;
                     budgetItem.LastModifited = DateTime.Now;
 
-                    expenseBL.Add(budgetItem);
+                    businessLayer.Add(budgetItem);
                     // update the monthly plan relevant fields
                     MonthlyBudget monthly = null;
-                    monthly = monthlyBudgetBL.GetById(budgetItem.MonthlyBudgetId);
+                    monthly = monthlyBudgetBL.GetById((budgetItem as BudgetItemBase).MonthlyBudgetId,
+                                m => m.Expenses,
+                                m => m.Cheques,
+                                m => m.CreditCards,
+                                m => m.LoansPayments,
+                                m => m.Salaries,
+                                m => m.AdditionalIncome
+                                );
                     if (monthly != null)
                     {
                         monthlyBudgetBL.Update(monthly);
@@ -519,6 +530,14 @@ namespace BudgetMake.Domain.Application
                 }
 
             }
+            else
+            {
+                result = new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
+                {
+                    Message = "Budget item was not created",
+                    Value = null
+                };
+            }
             return result;
         }
 
@@ -526,7 +545,7 @@ namespace BudgetMake.Domain.Application
         {
             BaseResult result = null;
             Type type = typeof(Model);
-            if (budgetItem != null)
+            if (budgetItem != null && budgetItem is BudgetItemBase)
             {
                 try
                 {
@@ -587,7 +606,14 @@ namespace BudgetMake.Domain.Application
                         Value = Ex.Message
                     };
                 }
-
+            }
+            else
+            {
+                result = new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
+                {
+                    Message = "Budget item was not updated",
+                    Value = null
+                };
             }
             return result;
         }
