@@ -251,5 +251,10 @@ namespace BudgetMake.Presentation.Web.Controllers
         {
             throw new NotImplementedException();
         }
+
+        protected override BaseResult CreateModel(AnnualBudget model)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

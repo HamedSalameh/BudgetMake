@@ -126,6 +126,64 @@ namespace BudgetMake.Presentation.Web.Controllers
             }
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult CreateBudgetItem(ViewModel viewModel)
+        {
+            List<BaseResult> results = new List<BaseResult>();
+            BaseResult result = null;
+            if (viewModel != null)
+            {
+                if (ModelState.IsValid)
+                {
+                    Model budgetItem = GetModel(viewModel);
+                    if (budgetItem != null)
+                    {
+                        try
+                        {
+                            result = CreateModel(budgetItem);
+                        }
+                        catch (Exception Ex)
+                        {
+                            HandleException(Ex);
+                            result = new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
+                            {
+                                Message = Ex.Message,
+                                Value = HttpStatusCode.InternalServerError
+                            };
+                        }
+                    }
+                    else
+                    {
+                        result = new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
+                        {
+                            Message = Shared.Common.Resources.Errors.General_UnableToMapToModel,
+                            Value = HttpStatusCode.InternalServerError
+                        };
+                    }
+                }
+                else
+                {
+                    results = BaseResultHelper.GetModelErrors(ModelState);
+                }
+            }
+            else
+            {
+                result = new ValidationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
+                {
+                    Message = Shared.Common.Resources.Errors.Http_400_BadRequest,
+                    Value = HttpStatusCode.BadRequest
+                };
+            }
+
+            if (result != null)
+            {
+                results.Add(result);
+            }
+
+            return Json(results, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpGet]
         public PartialViewResult EditBudgetItem(int? budgetItemId)
         {

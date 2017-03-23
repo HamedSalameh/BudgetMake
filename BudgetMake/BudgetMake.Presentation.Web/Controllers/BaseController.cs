@@ -17,6 +17,7 @@ namespace BudgetMake.Presentation.Web.Controllers
         protected abstract ViewModel GetViewModel(Model model);
         protected abstract Model GetModel(ViewModel ViewModel);
         protected abstract BaseResult UpdateModel(Model model);
+        protected abstract BaseResult CreateModel(Model model);
 
         public BaseController(IApplication ApplicaionLayer, ILocalLogger Log)
         {

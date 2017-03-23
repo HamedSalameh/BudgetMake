@@ -12,11 +12,11 @@
             debugger;
             var formData = $("#_InnerForm_CreateExpenseItem").serialize();
             var monthlyPlanId = $("#hdnMonthlyPlanId").val();
-            
+
 
             var asyncCreate = function () {
                 return $.ajax({
-                    url: "/Expense/CreateExpenseItem",
+                    url: "/Expense/CreateBudgetItem",
                     data: formData,
                     type: "POST"
                 });
@@ -24,13 +24,13 @@
 
             asyncCreate().done(function (result) {
                 var res = modules.network.ServerResponse.IsSuccess(result);
-                if (res == true) {
+                if (res === true) {
                     // all went ok!
                     location.href = "/Monthly/" + monthlyPlanId;
                 } else {
                     // something went wrong
-                    var res = modules.network.ServerResponse.IsFailure(result);
-                    if (res == true) {
+                    res = modules.network.ServerResponse.IsFailure(result);
+                    if (res === true) {
                         alerts.warning(alertBoxName, result);
                     } else {
                         alerts.danger(alertBoxName, result);
@@ -43,7 +43,7 @@
             });
 
         });
-    }
+    };
 
     bindEvents();
 
