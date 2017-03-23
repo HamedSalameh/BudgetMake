@@ -426,53 +426,6 @@ namespace BudgetMake.Domain.Application
 
         #region Budget Items
 
-        public BaseResult DeleteBudget(Expense budgetItem)
-        {
-            BaseResult result = null;
-            if (budgetItem != null)
-            {
-                try
-                {
-                    int id = budgetItem.Id;
-                    budgetItem.EntityState = EntityState.Deleted;
-
-                    expenseBL.Remove(budgetItem);
-
-                    // update the monthly plan relevant fields
-                    MonthlyBudget monthly = null;
-                    monthly = monthlyBudgetBL.GetById(budgetItem.MonthlyBudgetId);
-                    if (monthly != null)
-                    {
-                        monthlyBudgetBL.Update(monthly);
-
-                        result = new OperationResult(ResultStatus.Success, Reflection.GetCurrentMethodName())
-                        {
-                            Value = id
-                        };
-                    }
-                    else
-                    {
-                        result = new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
-                        {
-                            Message = "Unable to update monthly plan",
-                            Value = monthly.Id
-                        };
-                    }
-                }
-                catch (Exception Ex)
-                {
-                    _log.ErrorFormat("Cannot fully delete budget item.\r\n{0}", Ex.Message);
-                    result = new OperationResult(ResultStatus.Exception, "DeleteBudget")
-                    {
-                        Message = "Cannot delete budget item.",
-                        Value = Ex.Message
-                    };
-                }
-
-            }
-            return result;
-        }
-
         public BaseResult DeleteBudget(dynamic budgetItem)
         {
             BaseResult result = null;
@@ -482,47 +435,21 @@ namespace BudgetMake.Domain.Application
             {
                 if (budgetItem != null)
                 {
+                    int id = budgetItem.Id;
+                    budgetItem.EntityState = EntityState.Deleted;
+                    // Delete the budget item
                     try
                     {
-                        int id = budgetItem.Id;
-                        budgetItem.EntityState = EntityState.Deleted;
-
                         businessLayer.Remove(budgetItem);
-
                         // update the monthly plan relevant fields
-                        MonthlyBudget monthly = null;
-                        monthly = monthlyBudgetBL.GetById((budgetItem as BudgetItemBase).MonthlyBudgetId,
-                                    m => m.Expenses,
-                                    m => m.Cheques,
-                                    m => m.CreditCards,
-                                    m => m.LoansPayments,
-                                    m => m.Salaries,
-                                    m => m.AdditionalIncome
-                                    );
-                        if (monthly != null)
-                        {
-                            monthlyBudgetBL.Update(monthly);
-
-                            result = new OperationResult(ResultStatus.Success, Reflection.GetCurrentMethodName())
-                            {
-                                Value = id
-                            };
-                        }
-                        else
-                        {
-                            result = new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
-                            {
-                                Message = "Unable to update monthly plan",
-                                Value = monthly.Id
-                            };
-                        }
+                        result = monthlyBudgetBL.updateMonthlyPlanPerBudgetItemUpdates(budgetItem, id);
                     }
                     catch (Exception Ex)
                     {
-                        _log.ErrorFormat("Cannot fully delete budget item.\r\n{0}", Ex.Message);
-                        result = new OperationResult(ResultStatus.Exception, "DeleteBudget")
+                        _log.Error(String.Format("Cannot delete budget item.\r\n{0}", Ex.Message), Ex);
+                        result = new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
                         {
-                            Message = "Cannot delete budget item.",
+                            Message = "Unable to remove budget item",
                             Value = Ex.Message
                         };
                     }
@@ -535,7 +462,6 @@ namespace BudgetMake.Domain.Application
                         Value = null
                     };
                 }
-
             }
             else
             {
