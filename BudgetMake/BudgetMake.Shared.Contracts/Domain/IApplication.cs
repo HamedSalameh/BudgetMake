@@ -23,7 +23,7 @@ namespace BudgetMake.Shared.Contracts.Domain
         BaseResult DeleteMonthlyBudget(MonthlyBudget monthlyBudget);
         BaseResult CreateMonthlyBudget(MonthlyBudget monthlyBudget);
 
-        BaseResult DeleteBudget(Expense budgetItem);
+        BaseResult DeleteBudget(dynamic budgetItem);
         BaseResult CreateBudgetItem<Model>(dynamic budgetItem);
         BaseResult UpdateBudgetItem<Model>(dynamic budgetItem);
 

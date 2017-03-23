@@ -414,6 +414,49 @@ namespace BudgetMake.Presentation.Web.Controllers
             return PartialView(partialViewNameFor_DeleteItem, viewModel);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public JsonResult DeleteBudget(int? budgetItemId)
+        {
+            List<BaseResult> results = new List<BaseResult>();
+            BaseResult result = null;
+            if (budgetItemId != null)
+            {
+                try
+                {
+                    Model model = application.GetById<Model>(budgetItemId.Value);
+                    if (model != null)
+                    {
+                        result = application.DeleteBudget(model);
+                    }
+                    else
+                    {
+                        results.Add(new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
+                        {
+                            Message = Shared.Common.Resources.Errors.Http_404_NotFound_404,
+                            Value = HttpStatusCode.NotFound
+                        });
+                    }
+                }
+                catch (Exception Ex)
+                {
+                    HandleException(Ex);
+                    results.Add(new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
+                    {
+                        Message = Ex.Message,
+                        Value = HttpStatusCode.InternalServerError
+                    });
+                }
+            }
+
+            if (result != null)
+            {
+                results.Add(result);
+            }
+
+            return Json(results, JsonRequestBehavior.AllowGet);
+        }
+
         [HttpGet]
         public PartialViewResult EntityHistory(int? budgetItemId)
         {

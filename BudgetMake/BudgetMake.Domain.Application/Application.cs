@@ -473,6 +473,81 @@ namespace BudgetMake.Domain.Application
             return result;
         }
 
+        public BaseResult DeleteBudget(dynamic budgetItem)
+        {
+            BaseResult result = null;
+            Type type = budgetItem.GetType();
+            dynamic businessLayer = businessLayers[type];
+            if (businessLayer != null)
+            {
+                if (budgetItem != null)
+                {
+                    try
+                    {
+                        int id = budgetItem.Id;
+                        budgetItem.EntityState = EntityState.Deleted;
+
+                        businessLayer.Remove(budgetItem);
+
+                        // update the monthly plan relevant fields
+                        MonthlyBudget monthly = null;
+                        monthly = monthlyBudgetBL.GetById((budgetItem as BudgetItemBase).MonthlyBudgetId,
+                                    m => m.Expenses,
+                                    m => m.Cheques,
+                                    m => m.CreditCards,
+                                    m => m.LoansPayments,
+                                    m => m.Salaries,
+                                    m => m.AdditionalIncome
+                                    );
+                        if (monthly != null)
+                        {
+                            monthlyBudgetBL.Update(monthly);
+
+                            result = new OperationResult(ResultStatus.Success, Reflection.GetCurrentMethodName())
+                            {
+                                Value = id
+                            };
+                        }
+                        else
+                        {
+                            result = new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
+                            {
+                                Message = "Unable to update monthly plan",
+                                Value = monthly.Id
+                            };
+                        }
+                    }
+                    catch (Exception Ex)
+                    {
+                        _log.ErrorFormat("Cannot fully delete budget item.\r\n{0}", Ex.Message);
+                        result = new OperationResult(ResultStatus.Exception, "DeleteBudget")
+                        {
+                            Message = "Cannot delete budget item.",
+                            Value = Ex.Message
+                        };
+                    }
+                }
+                else
+                {
+                    result = new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
+                    {
+                        Message = "Budget item must not be null",
+                        Value = null
+                    };
+                }
+
+            }
+            else
+            {
+                result = new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
+                {
+                    Message = "Unable to delete budget item due to missing business logic layer",
+                    Value = budgetItem.Id
+                };
+            }
+            return result;
+        }
+
         public BaseResult CreateBudgetItem<Model>(dynamic budgetItem)
         {
             BaseResult result = null;

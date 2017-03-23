@@ -18,7 +18,7 @@
 
             var asyncCreate = function () {
                 return $.ajax({
-                    url: "/Expense/DeleteExpense",
+                    url: "/Expense/DeleteBudget",
                     data: {
                         __RequestVerificationToken: token,
                         budgetItemId: BudgetItemId
