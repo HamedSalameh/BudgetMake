@@ -492,33 +492,7 @@ namespace BudgetMake.Domain.Application
 
                     businessLayer.Add(budgetItem);
                     // update the monthly plan relevant fields
-                    MonthlyBudget monthly = null;
-                    monthly = monthlyBudgetBL.GetById((budgetItem as BudgetItemBase).MonthlyBudgetId,
-                                m => m.Expenses,
-                                m => m.Cheques,
-                                m => m.CreditCards,
-                                m => m.LoansPayments,
-                                m => m.Salaries,
-                                m => m.AdditionalIncome
-                                );
-                    if (monthly != null)
-                    {
-                        monthlyBudgetBL.Update(monthly);
-
-                        result = new OperationResult(ResultStatus.Success, Reflection.GetCurrentMethodName())
-                        {
-                            Value = budgetItem.Id
-                        };
-                    }
-                    else
-                    {
-                        result = new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
-                        {
-                            Message = "Unable to update monthly plan",
-                            Value = monthly.Id
-                        };
-                    }
-
+                    result = monthlyBudgetBL.updateMonthlyPlanPerBudgetItemUpdates(budgetItem, budgetItem.Id);
                 }
                 catch (Exception Ex)
                 {
@@ -562,32 +536,7 @@ namespace BudgetMake.Domain.Application
                         // save the budget item entity
                         businessLayer.Update(budgetItem);
                         // update the monthly plan relevant fields
-                        MonthlyBudget monthly = null;
-                        monthly = monthlyBudgetBL.GetById((budgetItem as BudgetItemBase).MonthlyBudgetId,
-                                m => m.Expenses,
-                                m => m.Cheques,
-                                m => m.CreditCards,
-                                m => m.LoansPayments,
-                                m => m.Salaries,
-                                m => m.AdditionalIncome
-                                );
-                        if (monthly != null)
-                        {
-                            monthlyBudgetBL.Update(monthly);
-
-                            result = new OperationResult(ResultStatus.Success, Reflection.GetCurrentMethodName())
-                            {
-                                Value = budgetItem.Id
-                            };
-                        }
-                        else
-                        {
-                            result = new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
-                            {
-                                Message = "Unable to update monthly plan",
-                                Value = monthly.Id
-                            };
-                        }
+                        result = monthlyBudgetBL.updateMonthlyPlanPerBudgetItemUpdates(budgetItem, budgetItem.Id);
                     }
                     else
                     {
