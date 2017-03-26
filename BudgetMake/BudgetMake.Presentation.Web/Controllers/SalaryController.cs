@@ -31,15 +31,5 @@ namespace BudgetMake.Presentation.Web.Controllers
         {
             return ViewModel.MapToModel();
         }
-
-        protected override BaseResult UpdateModel(Salary model)
-        {
-            return application.UpdateBudgetItem<Salary>(model);
-        }
-
-        protected override BaseResult CreateModel(Salary model)
-        {
-            return application.CreateBudgetItem<Salary>(model);
-        }
     }
 }

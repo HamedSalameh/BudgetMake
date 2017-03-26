@@ -70,6 +70,16 @@ namespace BudgetMake.Presentation.Web.Controllers
             
         }
 
+        protected override BaseResult CreateModel(Model model)
+        {
+            return application.CreateBudgetItem(model);
+        }
+
+        protected override BaseResult UpdateModel(Model model)
+        {
+            return application.UpdateBudgetItem(model);
+        }
+
         [HttpGet]
         public PartialViewResult GetBudgetItemsList(int MonthlyPlanId = 0)
         {
