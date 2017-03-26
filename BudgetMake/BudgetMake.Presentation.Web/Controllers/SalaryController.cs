@@ -17,7 +17,7 @@ namespace BudgetMake.Presentation.Web.Controllers
             PartialViewNameFor_EditItem = "EditSalaryItem";
         }
 
-        protected override SalaryViewModel GetViewModel(Salary model)
+        protected override SalaryViewModel MapToViewModel(Salary model)
         {
             return model.MapToViewModel();
         }
@@ -27,7 +27,7 @@ namespace BudgetMake.Presentation.Web.Controllers
             return application.GetEntities<Salary>(s => s.MonthlyBudgetId == MonthlyPlanId).MapToSalaryViewModelList();
         }
 
-        protected override Salary GetModel(SalaryViewModel ViewModel)
+        protected override Salary MapToModel(SalaryViewModel ViewModel)
         {
             return ViewModel.MapToModel();
         }

@@ -84,12 +84,12 @@ namespace BudgetMake.Presentation.Web.Controllers
         public PartialViewResult GetBudgetItemsList(int MonthlyPlanId = 0)
         {
             List<BaseResult> results = new List<BaseResult>();
-            IList<ViewModel> Expenses = new List<ViewModel>();
+            IList<ViewModel> viewModel = new List<ViewModel>();
             if (MonthlyPlanId != 0)
             {
                 try
                 {
-                    Expenses = GetViewModelsList(MonthlyPlanId);
+                    viewModel = GetViewModelsList(MonthlyPlanId);
                 }
                 catch (Exception Ex)
                 {
@@ -115,7 +115,7 @@ namespace BudgetMake.Presentation.Web.Controllers
 
             }
             TempData[Consts.OPERATION_RESULT] = JsonConvert.SerializeObject(results);
-            return PartialView(partialViewNameFor_ItemsList, Expenses);
+            return PartialView(partialViewNameFor_ItemsList, viewModel);
         }
 
         [HttpGet]
@@ -146,7 +146,7 @@ namespace BudgetMake.Presentation.Web.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    Model budgetItem = GetModel(viewModel);
+                    Model budgetItem = MapToModel(viewModel);
                     if (budgetItem != null)
                     {
                         try
@@ -207,7 +207,7 @@ namespace BudgetMake.Presentation.Web.Controllers
                     Model model = application.GetById<Model>(budgetItemId.Value);
                     if (model != null)
                     {
-                        viewModel = GetViewModel(model);
+                        viewModel = MapToViewModel(model);
                     }
                     else
                     {
@@ -251,7 +251,7 @@ namespace BudgetMake.Presentation.Web.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    Model budget = GetModel(viewModel);
+                    Model budget = MapToModel(viewModel);
                     if (budget != null)
                     {
                         try
@@ -316,7 +316,7 @@ namespace BudgetMake.Presentation.Web.Controllers
                             bool updateResult = Reflection.UpdateObjectProperty(model, PropName, PropValue);
                             if (updateResult)
                             {
-                                ViewModel viewModel = GetViewModel(model);
+                                ViewModel viewModel = MapToViewModel(model);
                                 TryValidateModel(viewModel);
                                 if (ModelState.IsValid)
                                 {
@@ -390,7 +390,7 @@ namespace BudgetMake.Presentation.Web.Controllers
                     Model model = application.GetById<Model>(budgetItemId.Value);
                     if (model != null)
                     {
-                        viewModel = GetViewModel(model);
+                        viewModel = MapToViewModel(model);
                     }
                     else
                     {

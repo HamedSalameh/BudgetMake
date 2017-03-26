@@ -1,16 +1,9 @@
 ﻿using BudgetMake.Presentation.Web.Extentions;
-using BudgetMake.Presentation.Web.Helpers;
 using BudgetMake.Presentation.Web.ViewModel;
 using BudgetMake.Shared.Contracts.Domain;
 using BudgetMake.Shared.Contracts.Infra;
 using BudgetMake.Shared.DomainModel;
-using GeneralServices;
-using GeneralServices.Helpers;
-using System;
 using System.Collections.Generic;
-using System.Net;
-using System.Web.Mvc;
-using static GeneralServices.Enums;
 
 namespace BudgetMake.Presentation.Web.Controllers
 {
@@ -29,12 +22,12 @@ namespace BudgetMake.Presentation.Web.Controllers
             return application.GetEntities<Expense>(e => e.MonthlyBudgetId == MonthlyPlanId).MapToViewModelsList();
         }
 
-        protected override ExpenseViewModel GetViewModel(Expense model)
+        protected override ExpenseViewModel MapToViewModel(Expense model)
         {
             return model.MapToViewModel();
         }
 
-        protected override Expense GetModel(ExpenseViewModel ViewModel)
+        protected override Expense MapToModel(ExpenseViewModel ViewModel)
         {
             return ViewModel.MapToModel();
         }

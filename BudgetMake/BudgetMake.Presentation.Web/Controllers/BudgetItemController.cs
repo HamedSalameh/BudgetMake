@@ -254,12 +254,12 @@ namespace BudgetMake.Presentation.Web.Controllers
             throw new NotImplementedException();
         }
 
-        protected override ExpenseViewModel GetViewModel(Expense model)
+        protected override ExpenseViewModel MapToViewModel(Expense model)
         {
             throw new NotImplementedException();
         }
 
-        protected override Expense GetModel(ExpenseViewModel ViewModel)
+        protected override Expense MapToModel(ExpenseViewModel ViewModel)
         {
             throw new NotImplementedException();
         }

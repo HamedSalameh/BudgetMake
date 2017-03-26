@@ -311,12 +311,12 @@ namespace BudgetMake.Presentation.Web.Controllers
             throw new NotImplementedException();
         }
 
-        protected override MonthlyPlanViewModel GetViewModel(MonthlyBudget model)
+        protected override MonthlyPlanViewModel MapToViewModel(MonthlyBudget model)
         {
             throw new NotImplementedException();
         }
 
-        protected override MonthlyBudget GetModel(MonthlyPlanViewModel ViewModel)
+        protected override MonthlyBudget MapToModel(MonthlyPlanViewModel ViewModel)
         {
             return ViewModel.MapToModel();
         }

@@ -237,12 +237,12 @@ namespace BudgetMake.Presentation.Web.Controllers
             throw new NotImplementedException();
         }
 
-        protected override AnnualPlanViewModel GetViewModel(AnnualBudget model)
+        protected override AnnualPlanViewModel MapToViewModel(AnnualBudget model)
         {
             throw new NotImplementedException();
         }
 
-        protected override AnnualBudget GetModel(AnnualPlanViewModel ViewModel)
+        protected override AnnualBudget MapToModel(AnnualPlanViewModel ViewModel)
         {
             return ViewModel.MapToModel();
         }

@@ -14,8 +14,8 @@ namespace BudgetMake.Presentation.Web.Controllers
         protected static ILocalLogger _log { get; set; }
 
         protected abstract IList<ViewModel> GetViewModelsList(int MonthlyPlanId = 0);
-        protected abstract ViewModel GetViewModel(Model model);
-        protected abstract Model GetModel(ViewModel ViewModel);
+        protected abstract ViewModel MapToViewModel(Model model);
+        protected abstract Model MapToModel(ViewModel ViewModel);
         protected abstract BaseResult UpdateModel(Model model);
         protected abstract BaseResult CreateModel(Model model);
 
