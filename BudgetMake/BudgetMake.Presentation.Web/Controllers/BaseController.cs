@@ -10,8 +10,29 @@ namespace BudgetMake.Presentation.Web.Controllers
 {
     public abstract class BaseController<Model, ViewModel> : Controller where Model : class
     {
+        private string _viewName;
+
         protected IApplication application { get; set; }
         protected static ILocalLogger _log { get; set; }
+
+        protected readonly string sharedView_BadRequest = "_badRequest";
+        protected readonly string sharedView_InternalServerError = "_internalError";
+        protected readonly string sharedView_PageOrResourceNotFound = "_notFound";
+
+        protected string ViewName
+        {
+            get
+            {
+                return _viewName;
+            }
+            set
+            {
+                if (string.IsNullOrEmpty(value) == false)
+                {
+                    _viewName = value;
+                }
+            }
+        }
 
         protected abstract IList<ViewModel> GetViewModelsList(int MonthlyPlanId = 0);
         protected abstract ViewModel MapToViewModel(Model model);
