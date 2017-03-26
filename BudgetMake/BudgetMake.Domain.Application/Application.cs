@@ -74,7 +74,10 @@ namespace BudgetMake.Domain.Application
             }
             catch (Exception Ex)
             {
-                _log.FatalFormat("Application: cannot build business layers hash table.\r\n{0}", Ex.Message);
+                string errMessage = "Business layers hashtable creation was failed.";
+                _log.Error(string.Format("{0} : {1} {2}", this.GetType().Name, errMessage + Environment.NewLine, Ex.Message), Ex);
+
+                
                 throw;
             }
         }
@@ -122,7 +125,8 @@ namespace BudgetMake.Domain.Application
                 }
                 catch (Exception Ex)
                 {
-                    _log.ErrorFormat("Unable to save new entity.\r\n", Ex);
+                    string errMessage = "Save new entity failed.";
+                    _log.Error(string.Format("{0} : {1} {2}", this.GetType().Name, errMessage + Environment.NewLine, Ex.Message), Ex);
                 }
             }
             return actionResult;
@@ -159,7 +163,8 @@ namespace BudgetMake.Domain.Application
                 }
                 catch (Exception Ex)
                 {
-                    _log.ErrorFormat("Unable to save new entity.\r\n", Ex);
+                    string errMessage = "Save new entity failed.";
+                    _log.Error(string.Format("{0} : {1} {2}", this.GetType().Name, errMessage + Environment.NewLine, Ex.Message), Ex);
                 }
             }
             return actionResult;
@@ -181,7 +186,7 @@ namespace BudgetMake.Domain.Application
                 }
                 catch (Exception Ex)
                 {
-                    _log.ErrorFormat("{0} : GetById failed to get item, item ID: {1}. {2}", Reflection.GetCallingMethodName(), modelId, Ex.Message);
+                    _log.Error(string.Format("{0} : GetById() failed to get item, item ID: {1}. {2}", this.GetType().Name, modelId, Ex.Message), Ex);
                     throw;
                 }
             }
@@ -204,7 +209,7 @@ namespace BudgetMake.Domain.Application
                 }
                 catch (Exception Ex)
                 {
-                    _log.ErrorFormat("{0} : GetEntities failed. {1}", Reflection.GetCallingMethodName(), Ex.Message);
+                    _log.Error(string.Format("{0} : GetEntities failed. {1}", this.GetType().Name, Ex.Message), Ex);
                     throw;
                 }
             }
@@ -227,7 +232,7 @@ namespace BudgetMake.Domain.Application
                 }
                 catch (Exception Ex)
                 {
-                    _log.ErrorFormat("{0} : GetEntities failed. {1}", Reflection.GetCallingMethodName(), Ex.Message);
+                    _log.Error(string.Format("{0} : GetEntities failed. {1}", this.GetType().Name, Ex.Message), Ex);
                     throw;
                 }
             }
@@ -446,7 +451,7 @@ namespace BudgetMake.Domain.Application
                     }
                     catch (Exception Ex)
                     {
-                        _log.Error(String.Format("Cannot delete budget item.\r\n{0}", Ex.Message), Ex);
+                        _log.Error(string.Format("{0} : Delete budget item failed.\r\n{1}", this.GetType().Name, Ex.Message), Ex);
                         result = new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
                         {
                             Message = "Unable to remove budget item",
@@ -496,7 +501,7 @@ namespace BudgetMake.Domain.Application
                 }
                 catch (Exception Ex)
                 {
-                    _log.ErrorFormat("Cannot save new budget item.\r\n{0}", Ex.Message);
+                    _log.Error(string.Format("{0} : Cannot save new budget item.\r\n{1}", this.GetType().Name, Ex.Message), Ex);
                     result = new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
                     {
                         Message = "Cannot save new budget item.",
@@ -549,7 +554,7 @@ namespace BudgetMake.Domain.Application
                 }
                 catch (Exception Ex)
                 {
-                    _log.ErrorFormat("Cannot update budget item.\r\n{0}", Ex.Message);
+                    _log.Error(string.Format("{0} : Cannot update budget item.\r\n{1}", this.GetType().Name, Ex.Message), Ex);
                     result = new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
                     {
                         Message = "Cannot update budget item.",
