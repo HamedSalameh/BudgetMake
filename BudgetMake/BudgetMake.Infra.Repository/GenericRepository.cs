@@ -34,7 +34,7 @@ namespace BudgetMake.Infra.Repository
             }
             catch (Exception Ex)
             {
-                _log.ErrorFormat("{0} : Unable to get entites from data base.\r\n{1}", Reflection.GetCurrentMethodName(), Ex.Message);
+                _log.Error(string.Format("{0} : Unable to get entites from data base.\r\n{1}", Reflection.GetCurrentMethodName(), Ex.Message), Ex);
                 throw;
             }
 
@@ -53,7 +53,7 @@ namespace BudgetMake.Infra.Repository
             }
             catch (Exception Ex)
             {
-                _log.ErrorFormat("{0} : Unable to get entites from data base.\r\n{1}", Reflection.GetCurrentMethodName(), Ex.Message);
+                _log.Error(string.Format("{0} : Unable to get entites from data base.\r\n{1}", Reflection.GetCurrentMethodName(), Ex.Message), Ex);
                 throw;
             }
 
@@ -72,7 +72,7 @@ namespace BudgetMake.Infra.Repository
             }
             catch (Exception Ex)
             {
-                _log.ErrorFormat("Exception in GetSingle for {0} : \r\n {1}", typeof(T).Name, Ex);
+                _log.Error(string.Format("Exception in GetSingle for {0} : \r\n {1}", typeof(T).Name, Ex), Ex);
                 throw;
             }
 
@@ -99,7 +99,7 @@ namespace BudgetMake.Infra.Repository
             }
             catch (Exception Ex)
             {
-                _log.ErrorFormat("{0} : Unable to add item(s) to database. {1}", Reflection.GetCurrentMethodName(), Environment.NewLine + Ex.Message);
+                _log.Error(string.Format("{0} : Unable to add item(s) to database. {1}", Reflection.GetCurrentMethodName(), Environment.NewLine + Ex.Message), Ex);
                 throw;
             }
         }
@@ -125,7 +125,7 @@ namespace BudgetMake.Infra.Repository
             }
             catch (Exception Ex)
             {
-                _log.ErrorFormat("{0} : Unable to remove item(s) from database. {1}", Reflection.GetCurrentMethodName(), Environment.NewLine + Ex.Message); 
+                _log.Error(string.Format("{0} : Unable to remove item(s) from database. {1}", Reflection.GetCurrentMethodName(), Environment.NewLine + Ex.Message), Ex); 
                 throw;
             }
         }
@@ -151,7 +151,7 @@ namespace BudgetMake.Infra.Repository
             }
             catch (Exception Ex)
             {
-                _log.ErrorFormat("{0} : Update item(s) failed. {1}", Reflection.GetCurrentMethodName(), Environment.NewLine + Ex.Message);
+                _log.Error(string.Format("{0} : Update item(s) failed. {1}", Reflection.GetCurrentMethodName(), Environment.NewLine + Ex.Message), Ex);
                 throw;
             }
         }        
