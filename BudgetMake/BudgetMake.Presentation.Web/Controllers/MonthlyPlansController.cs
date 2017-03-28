@@ -208,33 +208,51 @@ namespace BudgetMake.Presentation.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult Delete(int MonthlyPlanId = 0)
+        public PartialViewResult Delete(int MonthlyPlanId = 0)
         {
+            List<BaseResult> results = new List<BaseResult>();
+            MonthlyPlanViewModel viewModel = null;
+
             if (MonthlyPlanId != 0)
             {
-                MonthlyPlanViewModel viewModel = null;
+                MonthlyBudget model = null;
                 try
                 {
-                    viewModel = application.GetMonthlyBudget(MonthlyPlanId).MapToViewModel();
-                    if (viewModel != null)
+                    model = application.GetMonthlyBudget(MonthlyPlanId);
+                    if (model != null)
                     {
-                        return View(viewModel);
+                        viewModel = MapToViewModel(model);
                     }
                     else
                     {
-                        return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+                        results.Add(new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
+                        {
+                            Message = Shared.Common.Resources.Errors.Http_404_NotFound_404,
+                            Value = HttpStatusCode.NotFound
+                        });
                     }
                 }
                 catch (Exception Ex)
                 {
                     HandleException(Ex);
-                    return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
+                    results.Add(new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
+                    {
+                        Message = Ex.Message,
+                        Value = HttpStatusCode.InternalServerError
+                    });
                 }
             }
             else
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                results.Add(new ValidationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
+                {
+                    Message = Shared.Common.Resources.Errors.Http_400_BadRequest,
+                    Value = HttpStatusCode.BadRequest
+                });
             }
+
+            TempData[Consts.OPERATION_RESULT] = JsonConvert.SerializeObject(results);
+            return PartialView("DeleteMonthlyPlan", viewModel);
         }
 
         [HttpPost]

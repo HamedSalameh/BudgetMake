@@ -68,15 +68,10 @@
         </td>
 
         <td>
-            <a href="#" monthlyPlanId=@item.MonthlyBudgetId action="edit">Edit</a>
-            <a href="#" monthlyPlanId=@item.MonthlyBudgetId action="details">Details</a>
-            <a href="#" monthlyPlanId=@item.MonthlyBudgetId action="delete">Delete</a>
+            <a href="#" monthlyPlanId=@item.MonthlyBudgetId action="edit">Edit</a> |
+            <a href="#" monthlyPlanId=@item.MonthlyBudgetId action="delete">Delete</a> |
             <a href="#SaveAsTemplate" id="mp_@item.MonthlyBudgetId" action="savetemplate">Save As Template</a> |
             @Html.ActionLink("Expand", "GetBudgetItems", "BudgetItem", new { MonthlyPlanId = item.MonthlyBudgetId }, null)
-            *****
-            @Html.ActionLink("Details", "Details", new { MonthlyPlanId = item.MonthlyBudgetId }) |
-            @Html.ActionLink("Delete", "Delete", new { MonthlyPlanId = item.MonthlyBudgetId }) |
-
 
         </td>
     </tr>

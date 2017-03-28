@@ -309,6 +309,7 @@
     <Content Include="Scripts\pages\expense\pv_editexpenseitem.js" />
     <Content Include="Scripts\pages\expense\pv_expenses.js" />
     <Content Include="Scripts\pages\month\monthlyplans.js" />
+    <Content Include="Scripts\pages\month\pv_deletemonthlyplan.js" />
     <Content Include="Scripts\pages\month\pv_editmonthlyplan.js" />
     <Content Include="Scripts\pages\salary\pv_editsalaryitem.js" />
     <Content Include="Scripts\pages\salary\pv_salaries.js" />
@@ -356,7 +357,7 @@
     <Content Include="Views\BudgetItem\Delete.cshtml" />
     <Content Include="Views\BudgetItem\Edit.cshtml" />
     <Content Include="Views\MonthlyPlans\CreatePlan.cshtml" />
-    <Content Include="Views\MonthlyPlans\Delete.cshtml" />
+    <Content Include="Views\MonthlyPlans\DeleteMonthlyPlan.cshtml" />
     <Content Include="Views\MonthlyPlans\EditMonthlyPlan.cshtml" />
     <Content Include="Views\MonthlyPlans\MonthlyPlans.cshtml" />
     <Content Include="Views\Salary\Salaries.cshtml" />

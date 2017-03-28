@@ -18,6 +18,17 @@
 
         });
 
+        $("#plansList").on('click', 'a[action="delete"]', function () {
+
+            var monthlyPlanId = this.getAttribute("monthlyPlanId");
+            var url = "/MonthlyPlans/Delete";
+            var data = { MonthlyPlanId: monthlyPlanId };
+            var id = "edit";
+
+            modules.ui.OpenPartialViewModal(url, data, id);
+
+        });
+
         $("#plansList").on('click', 'a[action="savetemplate"]', function () {
             var monthlyPlanId = this.getAttribute("id");
             document.getElementById("planId").value = monthlyPlanId;

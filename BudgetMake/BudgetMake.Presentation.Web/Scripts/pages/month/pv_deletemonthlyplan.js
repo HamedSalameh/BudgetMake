@@ -8,20 +8,20 @@
             $("#editModal").modal('toggle');
         });
 
-        $("#btnDeleteExpenseItem").on('click', function () {
+        $("#btnDeleteMonthlyPlan").on('click', function () {
             debugger;
-            var BudgetItemId = $("#BudgetItemId").val();
-            var MonthlyPlanId = $("#MonthlyPlanId").val();
+            var MonthlyPlanId = $("#hdnMonthlyPlanId").val();
+            var annualPlanId = $("#hdnAnnualPlanId").val();
 
             var form = $('#__deleteExpenseForm');
             var token = $('input[name="__RequestVerificationToken"]', form).val();
 
             var asyncCreate = function () {
                 return $.ajax({
-                    url: "/Expense/DeleteBudget",
+                    url: "/MonthlyPlans/Delete",
                     data: {
                         __RequestVerificationToken: token,
-                        budgetItemId: BudgetItemId
+                        monthlyPlanId: MonthlyPlanId
                     },
                     type: "POST"
                 });
@@ -31,12 +31,12 @@
                 var res = modules.network.ServerResponse.IsSuccess(result);
                 if (res == true) {
                     // all went ok!
-                    location.href = "/Monthly/" + MonthlyPlanId;
+                    location.href = "/Annual/" + annualPlanId;
                 } else {
                     // something went wrong
                     var res = modules.network.ServerResponse.IsFailure(result);
                     if (res == true) {
-                        modules.alerts.warning(alertBoxName, result);
+                        modules.alerts.Warning(alertBoxName, result);
                     } else {
                         modules.alerts.Danger(alertBoxName, result);
                     }
