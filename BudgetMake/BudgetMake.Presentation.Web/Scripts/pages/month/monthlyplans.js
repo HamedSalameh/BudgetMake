@@ -2,6 +2,22 @@
 
     var bindEvents = function () {
 
+        $(document).ready(function () {
+            // check for errors from server
+            modules.network.ServerData.CheckServerData("BaseResultData");
+        });
+
+        $("#plansList").on('click', 'a[action="edit"]', function () {
+
+            var monthlyPlanId = this.getAttribute("monthlyPlanId");
+            var url = "/MonthlyPlans/Edit";
+            var data = { MonthlyPlanId: monthlyPlanId };
+            var id = "edit";
+
+            modules.ui.OpenPartialViewModal(url, data, id);
+
+        });
+
         $("#plansList").on('click', 'a[action="savetemplate"]', function () {
             var monthlyPlanId = this.getAttribute("id");
             document.getElementById("planId").value = monthlyPlanId;

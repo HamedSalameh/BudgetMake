@@ -309,6 +309,7 @@
     <Content Include="Scripts\pages\expense\pv_editexpenseitem.js" />
     <Content Include="Scripts\pages\expense\pv_expenses.js" />
     <Content Include="Scripts\pages\month\monthlyplans.js" />
+    <Content Include="Scripts\pages\month\pv_editmonthlyplan.js" />
     <Content Include="Scripts\pages\salary\pv_editsalaryitem.js" />
     <Content Include="Scripts\pages\salary\pv_salaries.js" />
     <Content Include="Scripts\respond.js" />

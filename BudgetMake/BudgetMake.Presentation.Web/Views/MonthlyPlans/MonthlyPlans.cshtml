@@ -1,4 +1,5 @@
-﻿@model IEnumerable<BudgetMake.Presentation.Web.ViewModel.MonthlyPlanViewModel>
+﻿@using BudgetMake.Presentation.Web.Helpers
+@model IEnumerable<BudgetMake.Presentation.Web.ViewModel.MonthlyPlanViewModel>
 
 <p>
     <div class="form-horizontal">
@@ -67,12 +68,16 @@
         </td>
 
         <td>
-            @Html.ActionLink("Edit", "Edit", new { MonthlyPlanId = item.MonthlyBudgetId  }) |
+            <a href="#" monthlyPlanId=@item.MonthlyBudgetId action="edit">Edit</a>
+            <a href="#" monthlyPlanId=@item.MonthlyBudgetId action="details">Details</a>
+            <a href="#" monthlyPlanId=@item.MonthlyBudgetId action="delete">Delete</a>
+            <a href="#SaveAsTemplate" id="mp_@item.MonthlyBudgetId" action="savetemplate">Save As Template</a> |
+            @Html.ActionLink("Expand", "GetBudgetItems", "BudgetItem", new { MonthlyPlanId = item.MonthlyBudgetId }, null)
+            *****
             @Html.ActionLink("Details", "Details", new { MonthlyPlanId = item.MonthlyBudgetId }) |
             @Html.ActionLink("Delete", "Delete", new { MonthlyPlanId = item.MonthlyBudgetId }) |
 
-            <a action="savetemplate" id="mp_@item.MonthlyBudgetId" href="#SaveAsTemplate">Save As Template</a> |
-            @Html.ActionLink("Expand", "GetBudgetItems", "BudgetItem", new { MonthlyPlanId = item.MonthlyBudgetId }, null)
+
         </td>
     </tr>
     }
@@ -83,6 +88,10 @@
 <div>
     @Html.ActionLink("Up", "GetAnnualPlans", "AnnualBudget")
 </div>
+
+@Html.Hidden("BaseResultData", TempData["OperationResult"])
+
+@Html.bsModal("edit", "Monthly Plan")
 
 <div class="modal fade" id="SaveAsTemplate" role="dialog">
     <div class="modal-dialog">

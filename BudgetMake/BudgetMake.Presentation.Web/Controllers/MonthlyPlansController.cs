@@ -119,7 +119,7 @@ namespace BudgetMake.Presentation.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult Edit(int MonthlyPlanId)
+        public PartialViewResult Edit(int MonthlyPlanId)
         {
             List<BaseResult> results = new List<BaseResult>();
             MonthlyPlanViewModel viewModel = null;
@@ -166,7 +166,7 @@ namespace BudgetMake.Presentation.Web.Controllers
             }
 
             TempData[Consts.OPERATION_RESULT] = JsonConvert.SerializeObject(results);
-            return View(ViewName, viewModel);
+            return PartialView(ViewName, viewModel);
         }
 
         [HttpPost]
