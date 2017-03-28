@@ -425,6 +425,48 @@ namespace BudgetMake.Domain.Application
             return result;
         }
 
+        public BaseResult UpdateMonthlyPlan(MonthlyBudget monthlyBudget)
+        {
+            BaseResult result = null;
+            if (monthlyBudget != null)
+            {
+                try
+                {
+                    dynamic businessLayer = businessLayers[typeof(MonthlyBudget)];
+                    if (businessLayer != null)
+                    {
+                        monthlyBudget.LastModifited = DateTime.Now;
+                        monthlyBudget.EntityState = EntityState.Modified;
+                        // save the budget item entity
+                        businessLayer.Update(monthlyBudget);
+                        // update the monthly plan relevant fields
+                        result = new OperationResult(ResultStatus.Success)
+                        {
+                            Value = monthlyBudget.Id
+                        };
+                    }
+                }
+                catch (Exception Ex)
+                {
+                    _log.Error(string.Format("{0} : Cannot update monthly budget plan.\r\n{1}", this.GetType().Name, Ex.Message), Ex);
+                    result = new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
+                    {
+                        Message = "Cannot update monthly budget plan item.",
+                        Value = Ex.Message
+                    };
+                }
+            }
+            else
+            {
+                result = new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
+                {
+                    Message = "Monthly budget plan cannot be null",
+                    Value = null
+                };
+            }
+            return result;
+        }
+
         #endregion
 
         #region Budget Items
@@ -447,7 +489,7 @@ namespace BudgetMake.Domain.Application
                         {
                             businessLayer.Remove(budgetItem);
                             // update the monthly plan relevant fields
-                            result = monthlyBudgetBL.updateMonthlyPlanPerBudgetItemUpdates(budgetItem, id); 
+                            result = monthlyBudgetBL.updateMonthlyPlanPerBudgetItemUpdates(budgetItem, id);
                         }
                     }
                     catch (Exception Ex)
@@ -500,7 +542,7 @@ namespace BudgetMake.Domain.Application
 
                         businessLayer.Add(budgetItem);
                         // update the monthly plan relevant fields
-                        result = monthlyBudgetBL.updateMonthlyPlanPerBudgetItemUpdates(budgetItem, budgetItem.Id); 
+                        result = monthlyBudgetBL.updateMonthlyPlanPerBudgetItemUpdates(budgetItem, budgetItem.Id);
                     }
                 }
                 catch (Exception Ex)
@@ -556,7 +598,7 @@ namespace BudgetMake.Domain.Application
                                 Message = "Unable to load old budget item",
                                 Value = budgetItem.Id
                             };
-                        } 
+                        }
                     }
                 }
                 catch (Exception Ex)

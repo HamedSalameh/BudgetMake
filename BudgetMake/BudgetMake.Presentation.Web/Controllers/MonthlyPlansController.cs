@@ -1,4 +1,5 @@
 ﻿using BudgetMake.Presentation.Web.Extentions;
+using BudgetMake.Presentation.Web.Helpers;
 using BudgetMake.Presentation.Web.ViewModel;
 using BudgetMake.Shared.Contracts.Domain;
 using BudgetMake.Shared.Contracts.Infra;
@@ -171,8 +172,11 @@ namespace BudgetMake.Presentation.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(MonthlyPlanViewModel monthlyPlan)
+        public JsonResult Edit(MonthlyPlanViewModel monthlyPlan)
         {
+            List<BaseResult> results = new List<BaseResult>();
+            BaseResult result = null;
+
             if (monthlyPlan != null)
             {
                 if (ModelState.IsValid)
@@ -182,29 +186,47 @@ namespace BudgetMake.Presentation.Web.Controllers
                     {
                         try
                         {
-                            application.DefaultUpdateEntity(monthlyBudget);
-                            return RedirectToAction("GetMonthlyPlans", new { AnnualPlanID = monthlyBudget.AnnualBudgetId });  // 200 OK
+                            result = application.UpdateMonthlyPlan(monthlyBudget);
                         }
                         catch (Exception Ex)
                         {
                             HandleException(Ex);
-                            return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
+                            result = new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
+                            {
+                                Message = Ex.Message,
+                                Value = HttpStatusCode.InternalServerError
+                            };
                         }
                     }
                     else
                     {
-                        return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
+                        result = new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
+                        {
+                            Message = Shared.Common.Resources.Errors.General_UnableToMapToModel,
+                            Value = HttpStatusCode.InternalServerError
+                        };
                     }
                 }
                 else
                 {
-                    return View(monthlyPlan);
+                    results = BaseResultHelper.GetModelErrors(ModelState);
                 }
             }
             else
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                result = new ValidationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
+                {
+                    Message = Shared.Common.Resources.Errors.Http_400_BadRequest,
+                    Value = HttpStatusCode.BadRequest
+                };
             }
+
+            if (result != null)
+            {
+                results.Add(result);
+            }
+
+            return Json(results, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
