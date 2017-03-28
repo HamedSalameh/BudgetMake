@@ -11,6 +11,8 @@
 
         @Html.HiddenFor(Model => Model.AnnualBudgetId, new { annualPlanId = "hdnAnnualPlanId" })
         @Html.HiddenFor(Model => Model.MonthlyBudgetId)
+        @Html.HiddenFor(model => model.LastModified)
+        @Html.HiddenFor(model => model.CreationDate)
 
         <div class="form-group">
             @Html.LabelFor(model => model.MonthName, "Month", htmlAttributes: new { @class = "control-label col-md-2" })
