@@ -36,7 +36,14 @@
         });
 
         document.getElementById("btnCreateNewMonthlyPlan").addEventListener("click", function () {
-            location.href = " @Url.Action('CreatePlan', 'MonthlyPlans', new { AnnualPlanId = TempData['AnnualPlan'] })";
+
+            var annualPlanId = $("#AnnualPlanId").val();
+
+            var url = "/MonthlyPlans/CreatePlan";
+            var data = { AnnualPlanId: annualPlanId };
+            var id = "edit";
+
+            modules.ui.OpenPartialViewModal(url, data, id);
         });
 
         document.getElementById("ddlMonthlyPlanTemplates").addEventListener("change", function () {

@@ -31,14 +31,14 @@ namespace BudgetMake.Presentation.Web.Controllers
                 try
                 {
                     // Load plans
-                    IList<MonthlyBudget> monthlyBudgets = application.GetEntities<MonthlyBudget>(m => m.AnnualBudgetId == AnnualPlanID, 
+                    IList<MonthlyBudget> monthlyBudgets = application.GetEntities<MonthlyBudget>(m => m.AnnualBudgetId == AnnualPlanID,
                         mp => mp.Expenses,
                         mp => mp.Cheques,
                         mp => mp.CreditCards,
                         mp => mp.LoansPayments,
                         mp => mp.Salaries,
                         mp => mp.AdditionalIncome);
-                    
+
                     monthlyPlans = monthlyBudgets.Map();
                     TempData["AnnualPlan"] = AnnualPlanID;
 
@@ -51,7 +51,7 @@ namespace BudgetMake.Presentation.Web.Controllers
                     HandleException(Ex);
                     return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
                 }
-                return View("MonthlyPlans", monthlyPlans); 
+                return View("MonthlyPlans", monthlyPlans);
             }
             else
             {
@@ -61,17 +61,17 @@ namespace BudgetMake.Presentation.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult CreatePlan(int? AnnualPlanId)
+        public PartialViewResult CreatePlan(int? AnnualPlanId)
         {
             if (AnnualPlanId != null && AnnualPlanId.Value != 0)
             {
                 MonthlyPlanViewModel model = new MonthlyPlanViewModel();
                 model.AnnualBudgetId = AnnualPlanId.Value;
-                return View(model);
+                return PartialView("CreatePlan", model);
             }
             else
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return PartialView("_badRequest");
             }
 
         }

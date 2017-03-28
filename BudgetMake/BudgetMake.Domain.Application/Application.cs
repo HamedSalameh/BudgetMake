@@ -398,6 +398,8 @@ namespace BudgetMake.Domain.Application
             if (monthlyBudget != null)
             {
                 monthlyBudget.EntityState = EntityState.Added;
+                monthlyBudget.CreationDate = DateTime.Now;
+                monthlyBudget.LastModifited = monthlyBudget.CreationDate;
                 // set related entities to added
                 if (monthlyBudget.Expenses != null && monthlyBudget.Expenses.Count > 0)
                 {
