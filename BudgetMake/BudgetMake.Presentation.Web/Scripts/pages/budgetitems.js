@@ -8,7 +8,7 @@
 
             var url = "/Expense/CreateBudgetItem";
             var data = { MonthlyPlanId: monthlyPlanId };
-            var id = "create";
+            var id = "edit";
 
             modules.ui.OpenPartialViewModal(url, data, id);
         });

@@ -8,6 +8,9 @@ using System.Collections.Generic;
 using System.Net;
 using System.Web.Mvc;
 using GeneralServices;
+using static GeneralServices.Enums;
+using GeneralServices.Helpers;
+using Newtonsoft.Json;
 
 namespace BudgetMake.Presentation.Web.Controllers
 {
@@ -97,33 +100,54 @@ namespace BudgetMake.Presentation.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult Edit(int AnnualPlandId = 0)
+        public PartialViewResult Edit(int AnnualPlandId = 0)
         {
+            List<BaseResult> results = new List<BaseResult>();
+            AnnualPlanViewModel viewModel = null;
+
             if (AnnualPlandId != 0)
             {
-                AnnualPlanViewModel annualPlanVM = null;
                 try
                 {
-                    annualPlanVM = application.GetAnnualBudget(AnnualPlandId).MapToViewModel();
-                    if (annualPlanVM != null)
+                    AnnualBudget annual = application.GetAnnualBudget(AnnualPlandId);
+                    if (annual != null)
                     {
-                        return View(annualPlanVM);
+                        viewModel = MapToViewModel(annual);
+                        ViewName = "EditAnnualPlan";
                     }
                     else
                     {
-                        return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+                        results.Add(new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
+                        {
+                            Message = Shared.Common.Resources.Errors.Http_404_NotFound_404,
+                            Value = HttpStatusCode.NotFound
+                        });
+                        ViewName = sharedView_PageOrResourceNotFound;
                     }
                 }
                 catch (Exception Ex)
                 {
                     HandleException(Ex);
-                    return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
+                    results.Add(new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
+                    {
+                        Message = Ex.Message,
+                        Value = HttpStatusCode.InternalServerError
+                    });
+                    ViewName = sharedView_InternalServerError;
                 }
             }
             else
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                results.Add(new ValidationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
+                {
+                    Message = Shared.Common.Resources.Errors.Http_400_BadRequest,
+                    Value = HttpStatusCode.BadRequest
+                });
+                ViewName = sharedView_BadRequest;
             }
+
+            TempData[Consts.OPERATION_RESULT] = JsonConvert.SerializeObject(results);
+            return PartialView(ViewName, viewModel);
         }
 
         [HttpPost]
@@ -239,7 +263,7 @@ namespace BudgetMake.Presentation.Web.Controllers
 
         protected override AnnualPlanViewModel MapToViewModel(AnnualBudget model)
         {
-            throw new NotImplementedException();
+            return model.MapToViewModel();
         }
 
         protected override AnnualBudget MapToModel(AnnualPlanViewModel ViewModel)

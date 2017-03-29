@@ -1,10 +1,19 @@
-﻿
+﻿@using BudgetMake.Presentation.Web.Helpers
 @model IEnumerable<BudgetMake.Presentation.Web.ViewModel.AnnualPlanViewModel>
 
 <p>
-    @Html.ActionLink("Create New", "CreatePlan")
+    <div class="form-horizontal">
+
+        <div class="form-group">
+            <div class="col-md-2">
+                <input type="button" class="btn btn-default"
+                       value="Create New" id="btnCreateNewAnnualBudgetPlan" />
+            </div>
+        </div>
+    </div>
+
 </p>
-<table class="table">
+<table class="table" id="annualPlans">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.AnnualBudgetId)
@@ -24,11 +33,17 @@
             @Html.DisplayFor(modelItem => item.AnnualBudgetName)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { AnnualPlandId = item.AnnualBudgetId }) |
-            @Html.ActionLink("Delete", "Delete", new { AnnualPlanId = item.AnnualBudgetId }) |
+            <a href="#" annualPlanId=@item.AnnualBudgetId action="edit">Edit</a> |
+            <a href="#" annualPlanId=@item.AnnualBudgetId action="delete">Delete</a> |
+
             @Html.ActionLink("Expand", "GetMonthlyPlans", "MonthlyPlans", new { AnnualPlanID = item.AnnualBudgetId}, null)
         </td>
     </tr>
 }
-
 </table>
+
+@Html.Hidden("BaseResultData", TempData["OperationResult"])
+@Html.bsModal("edit", "Annual Budget")
+
+<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc=" crossorigin="anonymous"></script>
+<script src="~/Scripts/pages/annual/annualplans.js"></script>
