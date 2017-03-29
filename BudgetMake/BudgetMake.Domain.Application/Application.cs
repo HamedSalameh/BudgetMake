@@ -74,7 +74,8 @@ namespace BudgetMake.Domain.Application
             }
             catch (Exception Ex)
             {
-                _log.FatalFormat("Application: cannot build business layers hash table.\r\n{0}", Ex.Message);
+                string errMessage = "Business layers hashtable creation was failed.";
+                _log.Error(string.Format("{0} : {1} {2}", this.GetType().Name, errMessage + Environment.NewLine, Ex.Message), Ex);
                 throw;
             }
         }
@@ -122,7 +123,8 @@ namespace BudgetMake.Domain.Application
                 }
                 catch (Exception Ex)
                 {
-                    _log.ErrorFormat("Unable to save new entity.\r\n", Ex);
+                    string errMessage = "Save new entity failed.";
+                    _log.Error(string.Format("{0} : {1} {2}", this.GetType().Name, errMessage + Environment.NewLine, Ex.Message), Ex);
                 }
             }
             return actionResult;
@@ -159,7 +161,8 @@ namespace BudgetMake.Domain.Application
                 }
                 catch (Exception Ex)
                 {
-                    _log.ErrorFormat("Unable to save new entity.\r\n", Ex);
+                    string errMessage = "Save new entity failed.";
+                    _log.Error(string.Format("{0} : {1} {2}", this.GetType().Name, errMessage + Environment.NewLine, Ex.Message), Ex);
                 }
             }
             return actionResult;
@@ -181,7 +184,7 @@ namespace BudgetMake.Domain.Application
                 }
                 catch (Exception Ex)
                 {
-                    _log.ErrorFormat("{0} : GetById failed to get item, item ID: {1}. {2}", Reflection.GetCallingMethodName(), modelId, Ex.Message);
+                    _log.Error(string.Format("{0} : GetById() failed to get item, item ID: {1}. {2}", this.GetType().Name, modelId, Ex.Message), Ex);
                     throw;
                 }
             }
@@ -204,7 +207,7 @@ namespace BudgetMake.Domain.Application
                 }
                 catch (Exception Ex)
                 {
-                    _log.ErrorFormat("{0} : GetEntities failed. {1}", Reflection.GetCallingMethodName(), Ex.Message);
+                    _log.Error(string.Format("{0} : GetEntities failed. {1}", this.GetType().Name, Ex.Message), Ex);
                     throw;
                 }
             }
@@ -227,7 +230,7 @@ namespace BudgetMake.Domain.Application
                 }
                 catch (Exception Ex)
                 {
-                    _log.ErrorFormat("{0} : GetEntities failed. {1}", Reflection.GetCallingMethodName(), Ex.Message);
+                    _log.Error(string.Format("{0} : GetEntities failed. {1}", this.GetType().Name, Ex.Message), Ex);
                     throw;
                 }
             }
@@ -395,6 +398,8 @@ namespace BudgetMake.Domain.Application
             if (monthlyBudget != null)
             {
                 monthlyBudget.EntityState = EntityState.Added;
+                monthlyBudget.CreationDate = DateTime.Now;
+                monthlyBudget.LastModifited = monthlyBudget.CreationDate;
                 // set related entities to added
                 if (monthlyBudget.Expenses != null && monthlyBudget.Expenses.Count > 0)
                 {
@@ -422,95 +427,129 @@ namespace BudgetMake.Domain.Application
             return result;
         }
 
-        #endregion
-
-        #region Budget Items
-
-        public BaseResult DeleteBudget(Expense budgetItem)
+        public BaseResult UpdateMonthlyPlan(MonthlyBudget monthlyBudget)
         {
             BaseResult result = null;
-            if (budgetItem != null)
+            if (monthlyBudget != null)
             {
                 try
                 {
-                    int id = budgetItem.Id;
-                    budgetItem.EntityState = EntityState.Deleted;
-
-                    expenseBL.Remove(budgetItem);
-
-                    // update the monthly plan relevant fields
-                    MonthlyBudget monthly = null;
-                    monthly = monthlyBudgetBL.GetById(budgetItem.MonthlyBudgetId);
-                    if (monthly != null)
+                    dynamic businessLayer = businessLayers[typeof(MonthlyBudget)];
+                    if (businessLayer != null)
                     {
-                        monthlyBudgetBL.Update(monthly);
-
-                        result = new OperationResult(ResultStatus.Success, Reflection.GetCurrentMethodName())
+                        monthlyBudget.LastModifited = DateTime.Now;
+                        monthlyBudget.EntityState = EntityState.Modified;
+                        // save the budget item entity
+                        businessLayer.Update(monthlyBudget);
+                        // update the monthly plan relevant fields
+                        result = new OperationResult(ResultStatus.Success)
                         {
-                            Value = id
-                        };
-                    }
-                    else
-                    {
-                        result = new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
-                        {
-                            Message = "Unable to update monthly plan",
-                            Value = monthly.Id
+                            Value = monthlyBudget.Id
                         };
                     }
                 }
                 catch (Exception Ex)
                 {
-                    _log.ErrorFormat("Cannot fully delete budget item.\r\n{0}", Ex.Message);
-                    result = new OperationResult(ResultStatus.Exception, "DeleteBudget")
+                    _log.Error(string.Format("{0} : Cannot update monthly budget plan.\r\n{1}", this.GetType().Name, Ex.Message), Ex);
+                    result = new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
                     {
-                        Message = "Cannot delete budget item.",
+                        Message = "Cannot update monthly budget plan item.",
                         Value = Ex.Message
                     };
                 }
-
+            }
+            else
+            {
+                result = new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
+                {
+                    Message = "Monthly budget plan cannot be null",
+                    Value = null
+                };
             }
             return result;
         }
 
-        public BaseResult CreateBudget(Expense budgetItem)
+        #endregion
+
+        #region Budget Items
+
+        public BaseResult DeleteBudget(dynamic budgetItem)
         {
             BaseResult result = null;
-            if (budgetItem != null)
+            Type type = budgetItem.GetType();
+            dynamic businessLayer = businessLayers[type];
+            if (businessLayer != null)
+            {
+                if (budgetItem != null)
+                {
+                    int id = budgetItem.Id;
+                    budgetItem.EntityState = EntityState.Deleted;
+                    // Delete the budget item
+                    try
+                    {
+                        if (businessLayer != null)
+                        {
+                            businessLayer.Remove(budgetItem);
+                            // update the monthly plan relevant fields
+                            result = monthlyBudgetBL.updateMonthlyPlanPerBudgetItemUpdates(budgetItem, id);
+                        }
+                    }
+                    catch (Exception Ex)
+                    {
+                        _log.Error(string.Format("{0} : Delete budget item failed.\r\n{1}", this.GetType().Name, Ex.Message), Ex);
+                        result = new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
+                        {
+                            Message = "Unable to remove budget item",
+                            Value = Ex.Message
+                        };
+                    }
+                }
+                else
+                {
+                    result = new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
+                    {
+                        Message = "Budget item must not be null",
+                        Value = null
+                    };
+                }
+            }
+            else
+            {
+                result = new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
+                {
+                    Message = "Unable to delete budget item due to missing business logic layer",
+                    Value = budgetItem.Id
+                };
+            }
+            return result;
+        }
+
+        public BaseResult CreateBudgetItem(dynamic budgetItem)
+        {
+            BaseResult result = null;
+            Type type = budgetItem.GetType();
+            if (budgetItem != null && budgetItem is BudgetItemBase)
             {
                 try
                 {
-                    budgetItem.EntityState = EntityState.Added;
-                    // save the budget item entity
-                    budgetItem.CreationDate = DateTime.Now;
-                    budgetItem.LastModifited = DateTime.Now;
-
-                    expenseBL.Add(budgetItem);
-                    // update the monthly plan relevant fields
-                    MonthlyBudget monthly = null;
-                    monthly = monthlyBudgetBL.GetById(budgetItem.MonthlyBudgetId);
-                    if (monthly != null)
+                    // try load the relevant business layer
+                    dynamic businessLayer = businessLayers[type];
+                    if (businessLayer != null)
                     {
-                        monthlyBudgetBL.Update(monthly);
+                        // update budget item fields
+                        budgetItem.EntityState = EntityState.Added;
+                        // save the budget item entity
+                        budgetItem.CreationDate = DateTime.Now;
+                        budgetItem.LastModifited = DateTime.Now;
 
-                        result = new OperationResult(ResultStatus.Success, Reflection.GetCurrentMethodName())
-                        {
-                            Value = budgetItem.Id
-                        };
+                        businessLayer.Add(budgetItem);
+                        // update the monthly plan relevant fields
+                        result = monthlyBudgetBL.updateMonthlyPlanPerBudgetItemUpdates(budgetItem, budgetItem.Id);
                     }
-                    else
-                    {
-                        result = new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
-                        {
-                            Message = "Unable to update monthly plan",
-                            Value = monthly.Id
-                        };
-                    }
-
                 }
                 catch (Exception Ex)
                 {
-                    _log.ErrorFormat("Cannot save new budget item.\r\n{0}", Ex.Message);
+                    _log.Error(string.Format("{0} : Cannot save new budget item.\r\n{1}", this.GetType().Name, Ex.Message), Ex);
                     result = new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
                     {
                         Message = "Cannot save new budget item.",
@@ -519,66 +558,68 @@ namespace BudgetMake.Domain.Application
                 }
 
             }
+            else
+            {
+                result = new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
+                {
+                    Message = "Budget item was not created",
+                    Value = null
+                };
+            }
             return result;
         }
 
-        public BaseResult UpdateBudget(Expense budgetItem)
+        public BaseResult UpdateBudgetItem(dynamic budgetItem)
         {
             BaseResult result = null;
-            if (budgetItem != null)
+            Type type = budgetItem.GetType();
+            if (budgetItem != null && budgetItem is BudgetItemBase)
             {
                 try
                 {
-                    // Load entity from DB to get old values
-                    Expense _oldBudget = expenseBL.GetById(budgetItem.Id);
-                    if (_oldBudget != null)
+                    dynamic businessLayer = businessLayers[type];
+                    if (businessLayer != null)
                     {
-                        double budget = _oldBudget.Amount;
-
-                        budgetItem.LastModifited = DateTime.Now;
-                        budgetItem.EntityState = EntityState.Modified;
-                        // save the budget item entity
-                        expenseBL.Update(budgetItem);
-                        // update the monthly plan relevant fields
-                        MonthlyBudget monthly = null;
-                        monthly = monthlyBudgetBL.GetById(budgetItem.MonthlyBudgetId);
-                        if (monthly != null)
+                        // Load entity from DB to get old values
+                        BudgetItemBase _oldBudget = businessLayer.GetById(budgetItem.Id);
+                        if (_oldBudget != null)
                         {
-                            monthlyBudgetBL.Update(monthly);
+                            double budget = _oldBudget.Amount;
 
-                            result = new OperationResult(ResultStatus.Success, Reflection.GetCurrentMethodName())
-                            {
-                                Value = budgetItem.Id
-                            };
+                            budgetItem.LastModifited = DateTime.Now;
+                            budgetItem.EntityState = EntityState.Modified;
+                            // save the budget item entity
+                            businessLayer.Update(budgetItem);
+                            // update the monthly plan relevant fields
+                            result = monthlyBudgetBL.updateMonthlyPlanPerBudgetItemUpdates(budgetItem, budgetItem.Id);
                         }
                         else
                         {
                             result = new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
                             {
-                                Message = "Unable to update monthly plan",
-                                Value = monthly.Id
+                                Message = "Unable to load old budget item",
+                                Value = budgetItem.Id
                             };
                         }
-                    }
-                    else
-                    {
-                        result = new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
-                        {
-                            Message = "Unable to load old budget",
-                            Value = budgetItem.Id
-                        };
                     }
                 }
                 catch (Exception Ex)
                 {
-                    _log.ErrorFormat("Cannot update budget item.\r\n{0}", Ex.Message);
+                    _log.Error(string.Format("{0} : Cannot update budget item.\r\n{1}", this.GetType().Name, Ex.Message), Ex);
                     result = new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
                     {
                         Message = "Cannot update budget item.",
                         Value = Ex.Message
                     };
                 }
-
+            }
+            else
+            {
+                result = new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
+                {
+                    Message = "Budget item was not updated",
+                    Value = null
+                };
             }
             return result;
         }

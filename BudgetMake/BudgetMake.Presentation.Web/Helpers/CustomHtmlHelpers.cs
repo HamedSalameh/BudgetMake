@@ -24,6 +24,7 @@ namespace BudgetMake.Presentation.Web.Helpers
             strHtml.AppendFormat(@"<div class='modal-footer'>");
             strHtml.AppendFormat(@"</div>");
             strHtml.AppendFormat(@"</div>");
+            strHtml.AppendFormat(@"</div>");
             strHtml.Append(@"</div>");
             return MvcHtmlString.Create(strHtml.ToString());
         }

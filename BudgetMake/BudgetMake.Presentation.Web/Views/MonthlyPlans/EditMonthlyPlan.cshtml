@@ -1,23 +1,18 @@
 ﻿@model BudgetMake.Presentation.Web.ViewModel.MonthlyPlanViewModel
 
-@{
-    ViewBag.Title = "Edit";
-}
-
-<h2>Edit</h2>
-
-
-@using (Html.BeginForm())
+@using (Html.BeginForm("EditMonthlyPlan", "MonthlyPlans", FormMethod.Post, new { id = "_InnerForm_EditMonthlyPlan" }))
 {
     @Html.AntiForgeryToken()
     
     <div class="form-horizontal">
-        <h4>MonthlyPlanViewModel</h4>
+        
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-        @Html.HiddenFor(model => model.AnnualBudgetId)
+        @Html.HiddenFor(Model => Model.AnnualBudgetId, new { id = "hdnAnnualPlanId" })
         @Html.HiddenFor(Model => Model.MonthlyBudgetId)
+        @Html.HiddenFor(model => model.LastModified)
+        @Html.HiddenFor(model => model.CreationDate)
 
         <div class="form-group">
             @Html.LabelFor(model => model.MonthName, "Month", htmlAttributes: new { @class = "control-label col-md-2" })
@@ -44,17 +39,18 @@
         </div>
 
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+            <div class="col-md-offset-3 col-md-9">
+                <input type="button" class="btn btn-default"
+                       value="Save" id="btnEditMonthlyPlanItem" />
+                <input type="button" class="btn btn-default"
+                       value="Cancel" id="btnCancel" />
             </div>
         </div>
     </div>
 }
 
-<div>
-    @Html.ActionLink("Back to List", "GetMonthlyPlans", new { AnnualPlanID = Model.AnnualBudgetId })
-</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
 
-<script src="~/Scripts/jquery-1.10.2.min.js"></script>
-<script src="~/Scripts/jquery.validate.min.js"></script>
-<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script src="~/Scripts/pages/month/pv_editmonthlyplan.js"></script>

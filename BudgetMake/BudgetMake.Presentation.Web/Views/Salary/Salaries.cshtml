@@ -20,12 +20,18 @@
 
     @foreach (var item in Model)
     {
-        <tr>
+        <tr data="@item.SalaryId">
             <td>
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Amount)
+                <span class="item-display">
+                    @Html.DisplayFor(modelItem => item.Amount)
+                </span>
+                <span class="item-field" ov=@item.Amount propertyName="Amount">
+                    @Html.EditorFor(modelItem => item.Amount)
+                </span>
+
             </td>
             <td>
                 @Html.DisplayFor(modelteim => item.PaymentDate)
@@ -35,6 +41,8 @@
             </td>
             <td>
                 <a href="#" budgetitemid=@item.SalaryId action="edit">Edit</a>
+                <a href="#" budgetitemid=@item.SalaryId action="delete">Delete</a>
+                <a href="#" budgetitemid=@item.SalaryId action="history">Show History</a>
             </td>
         </tr>
     }

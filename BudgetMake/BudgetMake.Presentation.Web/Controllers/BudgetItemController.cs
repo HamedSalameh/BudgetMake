@@ -120,7 +120,8 @@ namespace BudgetMake.Presentation.Web.Controllers
                     {
                         try
                         {
-                            result = application.CreateBudget(budgetItem);
+                            //result = application.CreateBudget(budgetItem);
+                            result = application.CreateBudgetItem(budgetItem);
                             if (result.Status != ResultStatus.Success)
                             {
                                 ViewBag[Consts.OPERATION_RESULT] = JsonConvert.SerializeObject(result);
@@ -248,22 +249,27 @@ namespace BudgetMake.Presentation.Web.Controllers
             }
         }
 
-        public override IList<ExpenseViewModel> GetViewModelsList(int MonthlyPlanId = 0)
+        protected override IList<ExpenseViewModel> GetViewModelsList(int MonthlyPlanId = 0)
         {
             throw new NotImplementedException();
         }
 
-        public override ExpenseViewModel GetViewModel(Expense model)
+        protected override ExpenseViewModel MapToViewModel(Expense model)
         {
             throw new NotImplementedException();
         }
 
-        public override Expense GetModel(ExpenseViewModel ViewModel)
+        protected override Expense MapToModel(ExpenseViewModel ViewModel)
         {
             throw new NotImplementedException();
         }
 
-        public override BaseResult UpdateModel(Expense model)
+        protected override BaseResult UpdateModel(Expense model)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override BaseResult CreateModel(Expense model)
         {
             throw new NotImplementedException();
         }

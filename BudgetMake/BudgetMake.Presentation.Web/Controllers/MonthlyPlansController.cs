@@ -1,9 +1,11 @@
 ﻿using BudgetMake.Presentation.Web.Extentions;
+using BudgetMake.Presentation.Web.Helpers;
 using BudgetMake.Presentation.Web.ViewModel;
 using BudgetMake.Shared.Contracts.Domain;
 using BudgetMake.Shared.Contracts.Infra;
 using BudgetMake.Shared.DomainModel;
 using GeneralServices;
+using GeneralServices.Helpers;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -29,14 +31,14 @@ namespace BudgetMake.Presentation.Web.Controllers
                 try
                 {
                     // Load plans
-                    IList<MonthlyBudget> monthlyBudgets = application.GetEntities<MonthlyBudget>(m => m.AnnualBudgetId == AnnualPlanID, 
+                    IList<MonthlyBudget> monthlyBudgets = application.GetEntities<MonthlyBudget>(m => m.AnnualBudgetId == AnnualPlanID,
                         mp => mp.Expenses,
                         mp => mp.Cheques,
                         mp => mp.CreditCards,
                         mp => mp.LoansPayments,
                         mp => mp.Salaries,
                         mp => mp.AdditionalIncome);
-                    
+
                     monthlyPlans = monthlyBudgets.Map();
                     TempData["AnnualPlan"] = AnnualPlanID;
 
@@ -49,7 +51,7 @@ namespace BudgetMake.Presentation.Web.Controllers
                     HandleException(Ex);
                     return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
                 }
-                return View("MonthlyPlans", monthlyPlans); 
+                return View("MonthlyPlans", monthlyPlans);
             }
             else
             {
@@ -59,25 +61,28 @@ namespace BudgetMake.Presentation.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult CreatePlan(int? AnnualPlanId)
+        public PartialViewResult CreatePlan(int? AnnualPlanId)
         {
             if (AnnualPlanId != null && AnnualPlanId.Value != 0)
             {
                 MonthlyPlanViewModel model = new MonthlyPlanViewModel();
                 model.AnnualBudgetId = AnnualPlanId.Value;
-                return View(model);
+                return PartialView("CreatePlan", model);
             }
             else
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return PartialView("_badRequest");
             }
 
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreatePlan(MonthlyPlanViewModel monthlyPlan)
+        public JsonResult CreatePlan(MonthlyPlanViewModel monthlyPlan)
         {
+            List<BaseResult> results = new List<BaseResult>();
+            BaseResult result = null;
+
             if (monthlyPlan != null)
             {
                 if (ModelState.IsValid)
@@ -87,70 +92,111 @@ namespace BudgetMake.Presentation.Web.Controllers
                     {
                         try
                         {
-                            BaseResult result = application.CreateMonthlyBudget(budget);
+                            result = application.CreateMonthlyBudget(budget);
                             if (result.Status != ResultStatus.Success)
                             {
                                 ViewBag[Consts.OPERATION_RESULT] = JsonConvert.SerializeObject(result);
-                                return View(monthlyPlan);
                             }
-                            return RedirectToAction("GetMonthlyPlans", new { AnnualPlanID = monthlyPlan.AnnualBudgetId });
                         }
                         catch (Exception Ex)
                         {
                             HandleException(Ex);
-                            return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
+                            result = new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
+                            {
+                                Message = Ex.Message,
+                                Value = HttpStatusCode.InternalServerError
+                            };
                         }
                     }
                     else
                     {
-                        return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
+                        result = new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
+                        {
+                            Message = Shared.Common.Resources.Errors.General_UnableToMapToModel,
+                            Value = HttpStatusCode.InternalServerError
+                        };
                     }
                 }
                 else
                 {
-                    return View(monthlyPlan);
+                    results = BaseResultHelper.GetModelErrors(ModelState);
                 }
             }
             else
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                result = new ValidationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
+                {
+                    Message = Shared.Common.Resources.Errors.Http_400_BadRequest,
+                    Value = HttpStatusCode.BadRequest
+                };
             }
+
+            if (result != null)
+            {
+                results.Add(result);
+            }
+
+            return Json(results, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
-        public ActionResult Edit(int MonthlyPlanId)
+        public PartialViewResult Edit(int MonthlyPlanId)
         {
+            List<BaseResult> results = new List<BaseResult>();
+            MonthlyPlanViewModel viewModel = null;
+
             if (MonthlyPlanId != 0)
             {
-                MonthlyPlanViewModel viewModel = null;
                 try
                 {
-                    viewModel = application.GetMonthlyBudget(MonthlyPlanId).MapToViewModel();
-                    if (viewModel != null)
+                    MonthlyBudget monthly = application.GetMonthlyBudget(MonthlyPlanId);
+                    if (monthly != null)
                     {
-                        return View(viewModel);
+                        viewModel = MapToViewModel(monthly);
+                        ViewName = "EditMonthlyPlan";
                     }
                     else
                     {
-                        return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+                        results.Add(new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
+                        {
+                            Message = Shared.Common.Resources.Errors.Http_404_NotFound_404,
+                            Value = HttpStatusCode.NotFound
+                        });
+                        ViewName = sharedView_PageOrResourceNotFound;
                     }
                 }
                 catch (Exception Ex)
                 {
                     HandleException(Ex);
-                    return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
+                    results.Add(new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
+                    {
+                        Message = Ex.Message,
+                        Value = HttpStatusCode.InternalServerError
+                    });
+                    ViewName = sharedView_InternalServerError;
                 }
             }
             else
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                results.Add(new ValidationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
+                {
+                    Message = Shared.Common.Resources.Errors.Http_400_BadRequest,
+                    Value = HttpStatusCode.BadRequest
+                });
+                ViewName = sharedView_BadRequest;
             }
+
+            TempData[Consts.OPERATION_RESULT] = JsonConvert.SerializeObject(results);
+            return PartialView(ViewName, viewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(MonthlyPlanViewModel monthlyPlan)
+        public JsonResult Edit(MonthlyPlanViewModel monthlyPlan)
         {
+            List<BaseResult> results = new List<BaseResult>();
+            BaseResult result = null;
+
             if (monthlyPlan != null)
             {
                 if (ModelState.IsValid)
@@ -160,103 +206,149 @@ namespace BudgetMake.Presentation.Web.Controllers
                     {
                         try
                         {
-                            application.DefaultUpdateEntity(monthlyBudget);
-                            return RedirectToAction("GetMonthlyPlans", new { AnnualPlanID = monthlyBudget.AnnualBudgetId });  // 200 OK
+                            result = application.UpdateMonthlyPlan(monthlyBudget);
                         }
                         catch (Exception Ex)
                         {
                             HandleException(Ex);
-                            return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
+                            result = new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
+                            {
+                                Message = Ex.Message,
+                                Value = HttpStatusCode.InternalServerError
+                            };
                         }
                     }
                     else
                     {
-                        return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
+                        result = new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
+                        {
+                            Message = Shared.Common.Resources.Errors.General_UnableToMapToModel,
+                            Value = HttpStatusCode.InternalServerError
+                        };
                     }
                 }
                 else
                 {
-                    return View(monthlyPlan);
+                    results = BaseResultHelper.GetModelErrors(ModelState);
                 }
             }
             else
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                result = new ValidationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
+                {
+                    Message = Shared.Common.Resources.Errors.Http_400_BadRequest,
+                    Value = HttpStatusCode.BadRequest
+                };
             }
+
+            if (result != null)
+            {
+                results.Add(result);
+            }
+
+            return Json(results, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
-        public ActionResult Delete(int MonthlyPlanId = 0)
+        public PartialViewResult Delete(int MonthlyPlanId = 0)
         {
+            List<BaseResult> results = new List<BaseResult>();
+            MonthlyPlanViewModel viewModel = null;
+
             if (MonthlyPlanId != 0)
             {
-                MonthlyPlanViewModel viewModel = null;
+                MonthlyBudget model = null;
                 try
                 {
-                    viewModel = application.GetMonthlyBudget(MonthlyPlanId).MapToViewModel();
-                    if (viewModel != null)
+                    model = application.GetMonthlyBudget(MonthlyPlanId);
+                    if (model != null)
                     {
-                        return View(viewModel);
+                        viewModel = MapToViewModel(model);
                     }
                     else
                     {
-                        return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+                        results.Add(new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
+                        {
+                            Message = Shared.Common.Resources.Errors.Http_404_NotFound_404,
+                            Value = HttpStatusCode.NotFound
+                        });
                     }
                 }
                 catch (Exception Ex)
                 {
                     HandleException(Ex);
-                    return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
+                    results.Add(new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
+                    {
+                        Message = Ex.Message,
+                        Value = HttpStatusCode.InternalServerError
+                    });
                 }
             }
             else
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                results.Add(new ValidationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
+                {
+                    Message = Shared.Common.Resources.Errors.Http_400_BadRequest,
+                    Value = HttpStatusCode.BadRequest
+                });
             }
+
+            TempData[Consts.OPERATION_RESULT] = JsonConvert.SerializeObject(results);
+            return PartialView("DeleteMonthlyPlan", viewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int? monthlyPlanId)
+        public JsonResult Delete(int? monthlyPlanId)
         {
+            List<BaseResult> results = new List<BaseResult>();
+            BaseResult result = null;
+
             if (monthlyPlanId != null)
             {
-                if (ModelState.IsValid)
+                try
                 {
                     MonthlyBudget monthlyBudget = application.GetMonthlyBudget(monthlyPlanId.Value);
                     if (monthlyBudget != null)
                     {
-                        try
-                        {
-                            int annualBudgetPlanId = monthlyBudget.AnnualBudgetId;
-                            BaseResult result = application.DeleteMonthlyBudget(monthlyBudget);
-                            if (result.Status != ResultStatus.Success)
-                            {
-                                ViewBag[Consts.OPERATION_RESULT] = JsonConvert.SerializeObject(result);
-                                return View();
-                            }
-                            return RedirectToAction("GetMonthlyPlans", new { AnnualPlanID = annualBudgetPlanId });
-                        }
-                        catch (Exception Ex)
-                        {
-                            HandleException(Ex);
-                            return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
-                        }
+                        int annualBudgetPlanId = monthlyBudget.AnnualBudgetId;
+                        result = application.DeleteMonthlyBudget(monthlyBudget);
                     }
                     else
                     {
-                        return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+                        results.Add(new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
+                        {
+                            Message = Shared.Common.Resources.Errors.Http_404_NotFound_404,
+                            Value = HttpStatusCode.NotFound
+                        });
                     }
                 }
-                else
+                catch (Exception Ex)
                 {
-                    return View();
+                    HandleException(Ex);
+                    results.Add(new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
+                    {
+                        Message = Ex.Message,
+                        Value = HttpStatusCode.InternalServerError
+                    });
                 }
+
             }
             else
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                results.Add(new ValidationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
+                {
+                    Message = Shared.Common.Resources.Errors.Http_400_BadRequest,
+                    Value = HttpStatusCode.BadRequest
+                });
             }
+
+            if (result != null)
+            {
+                results.Add(result);
+            }
+
+            return Json(results, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -306,22 +398,27 @@ namespace BudgetMake.Presentation.Web.Controllers
             return CreateFromTemplate(templateInfo.PlanId);
         }
 
-        public override IList<MonthlyPlanViewModel> GetViewModelsList(int MonthlyPlanId = 0)
+        protected override IList<MonthlyPlanViewModel> GetViewModelsList(int MonthlyPlanId = 0)
         {
             throw new NotImplementedException();
         }
 
-        public override MonthlyPlanViewModel GetViewModel(MonthlyBudget model)
+        protected override MonthlyPlanViewModel MapToViewModel(MonthlyBudget model)
         {
-            throw new NotImplementedException();
+            return model.MapToViewModel();
         }
 
-        public override MonthlyBudget GetModel(MonthlyPlanViewModel ViewModel)
+        protected override MonthlyBudget MapToModel(MonthlyPlanViewModel ViewModel)
         {
             return ViewModel.MapToModel();
         }
 
-        public override BaseResult UpdateModel(MonthlyBudget model)
+        protected override BaseResult UpdateModel(MonthlyBudget model)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override BaseResult CreateModel(MonthlyBudget model)
         {
             throw new NotImplementedException();
         }

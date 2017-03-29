@@ -2,21 +2,20 @@
     "use strict";
 
     var bindEvents = function () {
-        var alertBoxName = "create_alertBox";
+        var alertBoxName = "edit";
 
         $("#btnCancel").on('click', function () {
-            $("#createModal").modal('toggle');
+            $("#editModal").modal('toggle');
         });
 
-        $("#btnCreateExpenseItem").on('click', function () {
+        $("#btnEditMonthlyPlanItem").on('click', function () {
             debugger;
-            var formData = $("#_InnerForm_CreateExpenseItem").serialize();
-            var monthlyPlanId = $("#hdnMonthlyPlanId").val();
-
+            var formData = $("#_InnerForm_EditMonthlyPlan").serialize();
+            var annualPlanId = $("#hdnAnnualPlanId").val();
 
             var asyncCreate = function () {
                 return $.ajax({
-                    url: "/Expense/CreateBudgetItem",
+                    url: "/MonthlyPlans/Edit",
                     data: formData,
                     type: "POST"
                 });
@@ -24,13 +23,13 @@
 
             asyncCreate().done(function (result) {
                 var res = modules.network.ServerResponse.IsSuccess(result);
-                if (res === true) {
+                if (res == true) {
                     // all went ok!
-                    location.href = "/Monthly/" + monthlyPlanId;
+                    location.href = "/Annual/" + annualPlanId;
                 } else {
                     // something went wrong
-                    res = modules.network.ServerResponse.IsFailure(result);
-                    if (res === true) {
+                    var res = modules.network.ServerResponse.IsFailure(result);
+                    if (res == true) {
                         modules.alerts.Warning(alertBoxName, result);
                     } else {
                         modules.alerts.Danger(alertBoxName, result);
@@ -43,7 +42,7 @@
             });
 
         });
-    };
+    }
 
     bindEvents();
 

@@ -18,6 +18,8 @@ namespace BudgetMake.Presentation.Web.Extentions
                     MonthlyBudgetId = monthyBudget.Id,
                     MonthName = monthyBudget.MonthName,
                     Comments = monthyBudget.Comments,
+                    CreationDate = monthyBudget.CreationDate,
+                    LastModified = monthyBudget.LastModifited,
                     CalculatedFields = CalculatedFieldsHelper.CreateCalculatedFieldsObject(monthyBudget)
                 };
             }
@@ -57,7 +59,9 @@ namespace BudgetMake.Presentation.Web.Extentions
                     Comments = monthlyPlanVM.Comments,
                     MonthName = monthlyPlanVM.MonthName,
                     Id = monthlyPlanVM.MonthlyBudgetId,
-                    AnnualBudgetId = monthlyPlanVM.AnnualBudgetId
+                    AnnualBudgetId = monthlyPlanVM.AnnualBudgetId,
+                    LastModifited = monthlyPlanVM.LastModified,
+                    CreationDate = monthlyPlanVM.CreationDate
                 };
             }
             return budget;

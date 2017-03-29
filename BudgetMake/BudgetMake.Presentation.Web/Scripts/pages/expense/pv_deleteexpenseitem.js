@@ -18,7 +18,7 @@
 
             var asyncCreate = function () {
                 return $.ajax({
-                    url: "/Expense/DeleteExpense",
+                    url: "/Expense/DeleteBudget",
                     data: {
                         __RequestVerificationToken: token,
                         budgetItemId: BudgetItemId
@@ -36,9 +36,9 @@
                     // something went wrong
                     var res = modules.network.ServerResponse.IsFailure(result);
                     if (res == true) {
-                        alerts.warning(alertBoxName, result);
+                        modules.alerts.warning(alertBoxName, result);
                     } else {
-                        alerts.danger(alertBoxName, result);
+                        modules.alerts.Danger(alertBoxName, result);
                     }
                 }
 

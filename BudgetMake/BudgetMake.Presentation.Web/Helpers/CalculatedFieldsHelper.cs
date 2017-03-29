@@ -28,7 +28,14 @@ namespace BudgetMake.Presentation.Web.Helpers
             {
                 cf = new CalculatedMonthlyFields();
 
-                cf.TotalIncome = monthly.Salaries.Sum(s => s.Amount) + monthly.AdditionalIncome.Sum(a => a.Amount);
+                if (monthly.Salaries != null)
+                {
+                    cf.TotalIncome = monthly.Salaries.Sum(s => s.Amount);
+                }
+                if (monthly.AdditionalIncome != null)
+                {
+                    cf.TotalIncome += monthly.AdditionalIncome.Sum(a => a.Amount);
+                }
 
                 cf.AllocatedBudget = monthly.Expenses.Sum(e => e.Amount)
                                                 + monthly.Cheques.Sum(c => c.Amount)
@@ -44,7 +51,7 @@ namespace BudgetMake.Presentation.Web.Helpers
 
                 // Used VS Allocated
                 cf.ValueOf_UsedAmountVSAllocatedAmount = cf.UsedBudget - cf.AllocatedBudget;
-                cf.PercentOf_UsedAmountVSAllocatedAmount = (cf.AllocatedBudget > 0) ?  cf.UsedBudget / cf.AllocatedBudget : -999999;
+                cf.PercentOf_UsedAmountVSAllocatedAmount = (cf.AllocatedBudget > 0) ? cf.UsedBudget / cf.AllocatedBudget : -999999;
 
                 // Income VS Allocated
                 cf.ValueOf_IncomeVsAllocatedExpenses = cf.TotalIncome - cf.AllocatedBudget;
@@ -62,7 +69,7 @@ namespace BudgetMake.Presentation.Web.Helpers
                 cf.ValueOf_UsedVsIncome = cf.ValueOf_IncomeVsUsed * (-1);
                 cf.PercentOf_UsedVsIncome = 1 / cf.PercentOf_IncomeVsUsed;
 
-                cf.ValueOf_PredictedEndOfMonthBalance = monthly.OpeningBalance > 0 ? monthly.OpeningBalance + (cf.TotalIncome - cf.UsedBudget)  : 0;
+                cf.ValueOf_PredictedEndOfMonthBalance = monthly.OpeningBalance > 0 ? monthly.OpeningBalance + (cf.TotalIncome - cf.UsedBudget) : 0;
 
                 cf.IsOverAllocation = cf.AllocatedBudget > monthly.BaseBudget;
                 cf.IsUsageOverBudget = cf.UsedBudget > cf.TotalIncome;

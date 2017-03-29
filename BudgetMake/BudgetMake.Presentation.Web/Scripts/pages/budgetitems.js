@@ -6,21 +6,11 @@
 
             var monthlyPlanId = $("#MonthlyPlan").val();
 
-            $.ajax({
-                url: "/Expense/CreateExpenseItem",
-                data: { MonthlyPlanId: monthlyPlanId },
-                type: "GET",
-                success: function (response) {
-                    $("#createFormBody").html(response);
-                    $("#createModal").modal();
-                },
-                failure: function (response) {
-                    console.log("Server call failed: ", response);
-                },
-                error: function (response) {
-                    console.log("Server call returned with error(s): ", response);
-                }
-            });
+            var url = "/Expense/CreateBudgetItem";
+            var data = { MonthlyPlanId: monthlyPlanId };
+            var id = "create";
+
+            modules.ui.OpenPartialViewModal(url, data, id);
         });
     };
 

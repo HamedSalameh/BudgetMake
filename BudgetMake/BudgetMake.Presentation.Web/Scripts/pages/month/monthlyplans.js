@@ -2,6 +2,33 @@
 
     var bindEvents = function () {
 
+        $(document).ready(function () {
+            // check for errors from server
+            modules.network.ServerData.CheckServerData("BaseResultData");
+        });
+
+        $("#plansList").on('click', 'a[action="edit"]', function () {
+
+            var monthlyPlanId = this.getAttribute("monthlyPlanId");
+            var url = "/MonthlyPlans/Edit";
+            var data = { MonthlyPlanId: monthlyPlanId };
+            var id = "edit";
+
+            modules.ui.OpenPartialViewModal(url, data, id);
+
+        });
+
+        $("#plansList").on('click', 'a[action="delete"]', function () {
+
+            var monthlyPlanId = this.getAttribute("monthlyPlanId");
+            var url = "/MonthlyPlans/Delete";
+            var data = { MonthlyPlanId: monthlyPlanId };
+            var id = "edit";
+
+            modules.ui.OpenPartialViewModal(url, data, id);
+
+        });
+
         $("#plansList").on('click', 'a[action="savetemplate"]', function () {
             var monthlyPlanId = this.getAttribute("id");
             document.getElementById("planId").value = monthlyPlanId;
@@ -9,7 +36,14 @@
         });
 
         document.getElementById("btnCreateNewMonthlyPlan").addEventListener("click", function () {
-            location.href = " @Url.Action('CreatePlan', 'MonthlyPlans', new { AnnualPlanId = TempData['AnnualPlan'] })";
+
+            var annualPlanId = $("#AnnualPlanId").val();
+
+            var url = "/MonthlyPlans/CreatePlan";
+            var data = { AnnualPlanId: annualPlanId };
+            var id = "edit";
+
+            modules.ui.OpenPartialViewModal(url, data, id);
         });
 
         document.getElementById("ddlMonthlyPlanTemplates").addEventListener("change", function () {
@@ -81,9 +115,9 @@
                     // something went wrong
                     var res = modules.network.ServerResponse.isFailure(result);
                     if (res == true) {
-                        alerts.warning("alertBox", result.Message);
+                        modules.alerts.Warning("alertBox", result.Message);
                     } else {
-                        alerts.danger("alertBox", result.Message);
+                        modules.alerts.Danger("alertBox", result.Message);
                     }
                 }
 
