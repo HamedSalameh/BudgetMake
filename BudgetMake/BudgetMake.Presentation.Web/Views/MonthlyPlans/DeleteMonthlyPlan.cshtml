@@ -6,8 +6,8 @@
     <hr />
     <dl class="dl-horizontal">
         
-        @Html.HiddenFor(Model => Model.AnnualBudgetId, new { annualPlanId = "hdnAnnualPlanId" })
-        @Html.HiddenFor(Model => Model.MonthlyBudgetId, new { monthlyPlanId = "hdnMonthlyPlanId"})
+        @Html.HiddenFor(Model => Model.AnnualBudgetId, new { id = "hdnAnnualPlanId" })
+        @Html.HiddenFor(Model => Model.MonthlyBudgetId, new { id = "hdnMonthlyPlanId"})
 
         <dt>
             @Html.DisplayNameFor(model => model.MonthlyBudgetId)
@@ -74,3 +74,5 @@
     }
 
 </div>
+
+<script src="~/Scripts/pages/month/pv_deletemonthlyplan.js"></script>

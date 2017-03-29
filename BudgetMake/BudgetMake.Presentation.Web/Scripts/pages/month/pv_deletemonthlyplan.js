@@ -13,7 +13,7 @@
             var MonthlyPlanId = $("#hdnMonthlyPlanId").val();
             var annualPlanId = $("#hdnAnnualPlanId").val();
 
-            var form = $('#__deleteExpenseForm');
+            var form = $('#__deleteMonthlyPlanForm');
             var token = $('input[name="__RequestVerificationToken"]', form).val();
 
             var asyncCreate = function () {

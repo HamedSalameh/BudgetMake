@@ -299,46 +299,56 @@ namespace BudgetMake.Presentation.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int? monthlyPlanId)
+        public JsonResult Delete(int? monthlyPlanId)
         {
+            List<BaseResult> results = new List<BaseResult>();
+            BaseResult result = null;
+
             if (monthlyPlanId != null)
             {
-                if (ModelState.IsValid)
+                try
                 {
                     MonthlyBudget monthlyBudget = application.GetMonthlyBudget(monthlyPlanId.Value);
                     if (monthlyBudget != null)
                     {
-                        try
-                        {
-                            int annualBudgetPlanId = monthlyBudget.AnnualBudgetId;
-                            BaseResult result = application.DeleteMonthlyBudget(monthlyBudget);
-                            if (result.Status != ResultStatus.Success)
-                            {
-                                ViewBag[Consts.OPERATION_RESULT] = JsonConvert.SerializeObject(result);
-                                return View();
-                            }
-                            return RedirectToAction("GetMonthlyPlans", new { AnnualPlanID = annualBudgetPlanId });
-                        }
-                        catch (Exception Ex)
-                        {
-                            HandleException(Ex);
-                            return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
-                        }
+                        int annualBudgetPlanId = monthlyBudget.AnnualBudgetId;
+                        result = application.DeleteMonthlyBudget(monthlyBudget);
                     }
                     else
                     {
-                        return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+                        results.Add(new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
+                        {
+                            Message = Shared.Common.Resources.Errors.Http_404_NotFound_404,
+                            Value = HttpStatusCode.NotFound
+                        });
                     }
                 }
-                else
+                catch (Exception Ex)
                 {
-                    return View();
+                    HandleException(Ex);
+                    results.Add(new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
+                    {
+                        Message = Ex.Message,
+                        Value = HttpStatusCode.InternalServerError
+                    });
                 }
+
             }
             else
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                results.Add(new ValidationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
+                {
+                    Message = Shared.Common.Resources.Errors.Http_400_BadRequest,
+                    Value = HttpStatusCode.BadRequest
+                });
             }
+
+            if (result != null)
+            {
+                results.Add(result);
+            }
+
+            return Json(results, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
