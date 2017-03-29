@@ -31,9 +31,9 @@
                     // something went wrong
                     res = modules.network.ServerResponse.IsFailure(result);
                     if (res === true) {
-                        alerts.warning(alertBoxName, result);
+                        modules.alerts.Warning(alertBoxName, result);
                     } else {
-                        alerts.danger(alertBoxName, result);
+                        modules.alerts.Danger(alertBoxName, result);
                     }
                 }
 

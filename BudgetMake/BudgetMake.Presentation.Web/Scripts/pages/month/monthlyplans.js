@@ -115,9 +115,9 @@
                     // something went wrong
                     var res = modules.network.ServerResponse.isFailure(result);
                     if (res == true) {
-                        alerts.warning("alertBox", result.Message);
+                        modules.alerts.Warning("alertBox", result.Message);
                     } else {
-                        alerts.danger("alertBox", result.Message);
+                        modules.alerts.Danger("alertBox", result.Message);
                     }
                 }
 
