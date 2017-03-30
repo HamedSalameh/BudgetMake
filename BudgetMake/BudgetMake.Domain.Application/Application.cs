@@ -259,6 +259,48 @@ namespace BudgetMake.Domain.Application
             return annualBudget;
         }
 
+        public BaseResult UpdateAnnualPlan(AnnualBudget annualBudget)
+        {
+            BaseResult result = null;
+            if (annualBudget != null)
+            {
+                try
+                {
+                    dynamic businessLayer = businessLayers[typeof(AnnualBudget)];
+                    if (businessLayer != null)
+                    {
+                        annualBudget.LastModifited = DateTime.Now;
+                        annualBudget.EntityState = EntityState.Modified;
+                        // save the budget item entity
+                        businessLayer.Update(annualBudget);
+                        // update the monthly plan relevant fields
+                        result = new OperationResult(ResultStatus.Success)
+                        {
+                            Value = annualBudget.Id
+                        };
+                    }
+                }
+                catch (Exception Ex)
+                {
+                    _log.Error(string.Format("{0} : Cannot update annual budget plan.\r\n{1}", this.GetType().Name, Ex.Message), Ex);
+                    result = new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
+                    {
+                        Message = "Cannot update annual budget plan item.",
+                        Value = Ex.Message
+                    };
+                }
+            }
+            else
+            {
+                result = new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
+                {
+                    Message = "Monthly budget plan cannot be null",
+                    Value = null
+                };
+            }
+            return result;
+        }
+
         public bool DeleteAnnualBudget(AnnualBudget AnnualBudget)
         {
             bool actionResult = false;

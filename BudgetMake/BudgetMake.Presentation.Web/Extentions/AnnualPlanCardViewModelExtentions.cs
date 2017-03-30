@@ -13,6 +13,8 @@ namespace BudgetMake.Presentation.Web.Extentions
                 return new AnnualPlanViewModel
                 {
                     AnnualBudgetId = annual.Id,
+                    CreationDate = annual.CreationDate,
+                    LastModified = annual.LastModifited,
                     AnnualBudgetName = annual.AnnualBudgetName
                 };
             }
@@ -47,6 +49,8 @@ namespace BudgetMake.Presentation.Web.Extentions
                 budget = new AnnualBudget()
                 {
                     Id = annualVM.AnnualBudgetId,
+                    CreationDate = annualVM.CreationDate,
+                    LastModifited = annualVM.LastModified,
                     AnnualBudgetName = annualVM.AnnualBudgetName
                 };
             }

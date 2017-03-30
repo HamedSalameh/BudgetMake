@@ -8,6 +8,8 @@
 
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.AnnualBudgetId)
+        @Html.HiddenFor(model => model.LastModified)
+        @Html.HiddenFor(model => model.CreationDate)
 
         <div class="form-group">
             @Html.LabelFor(model => model.AnnualBudgetName, htmlAttributes: new { @class = "control-label col-md-4" })

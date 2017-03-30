@@ -353,7 +353,7 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\AnnualBudget\AnnualPlans.cshtml" />
     <Content Include="Views\AnnualBudget\CreatePlan.cshtml" />
-    <Content Include="Views\AnnualBudget\Delete.cshtml" />
+    <Content Include="Views\AnnualBudget\DeleteAnnualPlan.cshtml" />
     <Content Include="Views\AnnualBudget\EditAnnualPlan.cshtml" />
     <Content Include="Views\BudgetItem\BudgetItems.cshtml" />
     <Content Include="Views\BudgetItem\Create.cshtml" />

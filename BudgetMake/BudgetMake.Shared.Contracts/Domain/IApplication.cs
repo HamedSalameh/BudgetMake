@@ -17,6 +17,7 @@ namespace BudgetMake.Shared.Contracts.Domain
         IList<Model> GetEntities<Model>(params Expression<Func<Model, object>>[] navigationProperties);
 
         AnnualBudget GetAnnualBudget(int AnnualBudgetId);
+        BaseResult UpdateAnnualPlan(AnnualBudget annualBudget);
         bool DeleteAnnualBudget(AnnualBudget monthlyBudget);
 
         MonthlyBudget GetMonthlyBudget(int monthlyBudgetId);
