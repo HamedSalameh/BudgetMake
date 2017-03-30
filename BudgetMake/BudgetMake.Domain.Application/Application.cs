@@ -259,6 +259,41 @@ namespace BudgetMake.Domain.Application
             return annualBudget;
         }
 
+        public BaseResult CreateAnnualBudget(AnnualBudget annualBudget)
+        {
+            BaseResult result = null;
+            if (annualBudget != null)
+            {
+                annualBudget.EntityState = EntityState.Added;
+                annualBudget.CreationDate = DateTime.Now;
+                annualBudget.LastModifited = annualBudget.CreationDate;
+                // set related entities to added
+                if (annualBudget.MonthlyBudgets != null && annualBudget.MonthlyBudgets.Count > 0)
+                {
+                    annualBudget.MonthlyBudgets.Select(b => { b.Id = 0; b.EntityState = EntityState.Added; return b; }).ToList();
+                }
+                try
+                {
+                    annualBudgetBL.Add(annualBudget);
+
+                    result = new OperationResult(ResultStatus.Success, Reflection.GetCurrentMethodName())
+                    {
+                        Value = annualBudget.Id
+                    };
+                }
+                catch (Exception Ex)
+                {
+                    _log.ErrorFormat("Cannot save new annual plan.\r\n{0}", Ex.Message);
+                    result = new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
+                    {
+                        Message = "Cannot save new annual plan.",
+                        Value = Ex.Message
+                    };
+                }
+            }
+            return result;
+        }
+
         public BaseResult UpdateAnnualPlan(AnnualBudget annualBudget)
         {
             BaseResult result = null;

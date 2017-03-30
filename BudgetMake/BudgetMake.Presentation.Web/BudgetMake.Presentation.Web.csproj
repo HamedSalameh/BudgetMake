@@ -304,6 +304,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\pages\annual\annualplans.js" />
+    <Content Include="Scripts\pages\annual\pv_createannualplan.js" />
     <Content Include="Scripts\pages\annual\pv_editannualbudgetplan.js" />
     <Content Include="Scripts\pages\budgetitems.js" />
     <Content Include="Scripts\pages\expense\pv_createexpenseitem.js" />
@@ -352,7 +353,7 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\AnnualBudget\AnnualPlans.cshtml" />
-    <Content Include="Views\AnnualBudget\CreatePlan.cshtml" />
+    <Content Include="Views\AnnualBudget\CreateAnnualPlan.cshtml" />
     <Content Include="Views\AnnualBudget\DeleteAnnualPlan.cshtml" />
     <Content Include="Views\AnnualBudget\EditAnnualPlan.cshtml" />
     <Content Include="Views\BudgetItem\BudgetItems.cshtml" />
