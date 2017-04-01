@@ -21,9 +21,9 @@
 
         $("#annualPlans").on('click', 'a[action="delete"]', function () {
 
-            var monthlyPlanId = this.getAttribute("annualPlanId");
+            var annualPlanId = this.getAttribute("annualPlanId");
             var url = "/AnnualBudget/Delete";
-            var data = { AnnualPlandId: annualPlanId };
+            var data = { AnnualPlanId: annualPlanId };
             var id = "edit";
 
             modules.ui.OpenPartialViewModal(url, data, id);

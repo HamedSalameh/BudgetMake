@@ -305,6 +305,7 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\pages\annual\annualplans.js" />
     <Content Include="Scripts\pages\annual\pv_createannualplan.js" />
+    <Content Include="Scripts\pages\annual\pv_deleteannualplan.js" />
     <Content Include="Scripts\pages\annual\pv_editannualbudgetplan.js" />
     <Content Include="Scripts\pages\budgetitems.js" />
     <Content Include="Scripts\pages\expense\pv_createexpenseitem.js" />
