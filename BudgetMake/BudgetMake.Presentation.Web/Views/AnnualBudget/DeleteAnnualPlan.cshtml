@@ -8,8 +8,9 @@
 
 <h3>Are you sure you want to delete this?</h3>
 <div>
-    <h4>AnnualPlanViewModel</h4>
-    <hr />
+    
+    @Html.HiddenFor(Model => Model.AnnualBudgetId, new { id = "hdnAnnualPlanId" })
+
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.AnnualBudgetId)
@@ -43,3 +44,9 @@
         </div>
     }
 </div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<script src="~/Scripts/pages/annual/pv_deleteannualplan.js"></script>

@@ -19,7 +19,7 @@ namespace BudgetMake.Shared.Contracts.Domain
         AnnualBudget GetAnnualBudget(int AnnualBudgetId);
         BaseResult CreateAnnualBudget(AnnualBudget annualBudget);
         BaseResult UpdateAnnualPlan(AnnualBudget annualBudget);
-        bool DeleteAnnualBudget(AnnualBudget monthlyBudget);
+        BaseResult DeleteAnnualBudget(AnnualBudget monthlyBudget);
 
         MonthlyBudget GetMonthlyBudget(int monthlyBudgetId);
         BaseResult DeleteMonthlyBudget(MonthlyBudget monthlyBudget);

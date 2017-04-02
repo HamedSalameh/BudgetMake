@@ -20,7 +20,7 @@
                     url: "/AnnualBudget/Delete",
                     data: {
                         __RequestVerificationToken: token,
-                        monthlyPlanId: MonthlyPlanId
+                        AnnualPlanId: annualPlanId
                     },
                     type: "POST"
                 });
@@ -28,13 +28,13 @@
 
             asyncCreate().done(function (result) {
                 var res = modules.network.ServerResponse.IsSuccess(result);
-                if (res == true) {
+                if (res === true) {
                     // all went ok!
                     location.href = "/AnnualPlans";
                 } else {
                     // something went wrong
-                    var res = modules.network.ServerResponse.IsFailure(result);
-                    if (res == true) {
+                    res = modules.network.ServerResponse.IsFailure(result);
+                    if (res === true) {
                         modules.alerts.Warning(alertBoxName, result);
                     } else {
                         modules.alerts.Danger(alertBoxName, result);
@@ -47,7 +47,7 @@
             });
 
         });
-    }
+    };
 
     bindEvents();
 

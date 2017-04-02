@@ -285,40 +285,56 @@ namespace BudgetMake.Presentation.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int? AnnualPlanId)
+        public JsonResult Delete(int? AnnualPlanId)
         {
+            List<BaseResult> results = new List<BaseResult>();
+            BaseResult result = null;
+
             if (AnnualPlanId != null)
             {
-                if (ModelState.IsValid)
+                try
                 {
                     AnnualBudget annualBudget = application.GetAnnualBudget(AnnualPlanId.Value);
                     if (annualBudget != null)
                     {
-                        try
-                        {
-                            application.DeleteAnnualBudget(annualBudget);
-                            return RedirectToAction("GetAnnualPlans");
-                        }
-                        catch (Exception Ex)
-                        {
-                            HandleException(Ex);
-                            return new HttpStatusCodeResult(HttpStatusCode.InternalServerError);
-                        }
+                        int annualBudgetPlanId = annualBudget.Id;
+                        result = application.DeleteAnnualBudget(annualBudget);
                     }
                     else
                     {
-                        return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+                        results.Add(new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
+                        {
+                            Message = Shared.Common.Resources.Errors.Http_404_NotFound_404,
+                            Value = HttpStatusCode.NotFound
+                        });
                     }
                 }
-                else
+                catch (Exception Ex)
                 {
-                    return View();
+                    HandleException(Ex);
+                    results.Add(new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
+                    {
+                        Message = Ex.Message,
+                        Value = HttpStatusCode.InternalServerError
+                    });
                 }
+
             }
             else
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                results.Add(new ValidationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
+                {
+                    Message = Shared.Common.Resources.Errors.Http_400_BadRequest,
+                    Value = HttpStatusCode.BadRequest
+                });
             }
+
+            if (result != null)
+            {
+                results.Add(result);
+            }
+
+            return Json(results, JsonRequestBehavior.AllowGet);
         }
 
         protected override IList<AnnualPlanViewModel> GetViewModelsList(int MonthlyPlanId = 0)

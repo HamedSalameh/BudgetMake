@@ -336,9 +336,9 @@ namespace BudgetMake.Domain.Application
             return result;
         }
 
-        public bool DeleteAnnualBudget(AnnualBudget AnnualBudget)
+        public BaseResult DeleteAnnualBudget(AnnualBudget AnnualBudget)
         {
-            bool actionResult = false;
+            BaseResult result = null;
             if (AnnualBudget != null)
             {
                 AnnualBudget.EntityState = EntityState.Deleted;
@@ -357,6 +357,7 @@ namespace BudgetMake.Domain.Application
                         // Handle cases of unable to delete monthly plans
                         // TODO HERE
 
+                        _log.Error(string.Format("Cannot delete related monthly plan.\r\n{0}", Ex.Message), Ex);
                         throw;
                     }
                 }
@@ -366,16 +367,27 @@ namespace BudgetMake.Domain.Application
                 try
                 {
                     annualBudgetBL.Remove(AnnualBudget);
+                    var id = AnnualBudget.Id;
+                    result =
+                       new OperationResult(ResultStatus.Success, "DeleteMonthlyBudget")
+                       {
+                           Value = id
+                       };
+
                 }
                 catch (Exception Ex)
                 {
-                    _log.ErrorFormat("{0} : Unable to delete annual plan(s). {1}", Reflection.GetCurrentMethodName(), Ex.Message);
-                    throw;
+                    _log.Error(string.Format("Cannot fully annual monthly plan.\r\n{0}", Ex.Message), Ex);
+                    result =
+                        new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
+                        {
+                            Message = "Cannot delete annual plan.",
+                            Value = Ex.Message
+                        };
                 }
-                actionResult = true;
             }
 
-            return actionResult;
+            return result;
         }
 
         #endregion
@@ -392,53 +404,69 @@ namespace BudgetMake.Domain.Application
                     int id = monthlyBudget.Id;
                     monthlyBudget.EntityState = EntityState.Deleted;
 
-                    // Delete annual budget and all it's related child entities
-                    foreach (Expense bi in monthlyBudget.Expenses)
-                    {
-                        // Delete budget item
-                        try
-                        {
-                            DeleteBudget(bi);
-                        }
-                        catch (Exception Ex)
-                        {
-                            _log.ErrorFormat("{0} : Unable to delete related budget item (ID: {1}). {2}", Reflection.GetCurrentMethodName(), bi.Id, Ex.Message);
-                            // Handle cases of unable to delete budget items
-                            // TODO HERE
-
-                            // BaseResult object
-                            result =
-                                new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
-                                {
-                                    Message = string.Format("Unable to delete related budget item (ID: {0})", bi.Id),
-                                    Value = Ex.Message
-                                };
-
-                            throw;
-                        }
-                    }
+                    // Delete monthly budget and all it's related child entities
+                    // TODO : HANDLE ALL OTHER BUDGET ITEMS
+                    // TODO : HANDLE ALL OTHER BUDGET ITEMS
+                    // TODO : HANDLE ALL OTHER BUDGET ITEMS
+                    result = removeBudgetItems(monthlyBudget.Expenses.ToList(), result);
+                    // TODO : HANDLE ALL OTHER BUDGET ITEMS
+                    // TODO : HANDLE ALL OTHER BUDGET ITEMS
+                    // TODO : HANDLE ALL OTHER BUDGET ITEMS
                     // remove the relation to the old entities
                     monthlyBudget.Expenses = null;
                     // delete the main entity from the database
                     monthlyBudgetBL.Remove(monthlyBudget);
 
                     result =
-                        new OperationResult(ResultStatus.Success, "DeleteMonthlyBudget")
+                        new OperationResult(ResultStatus.Success, Reflection.GetCurrentMethodName())
                         {
                             Value = id
                         };
                 }
                 catch (Exception Ex)
                 {
-                    _log.ErrorFormat("Cannot fully delete monthly plan.\r\n{0}", Ex.Message);
+                    _log.Error(string.Format("Cannot fully delete monthly plan.\r\n{0}", Ex.Message), Ex);
                     result =
-                        new OperationResult(ResultStatus.Exception, "DeleteMonthlyBudget")
+                        new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
                         {
                             Message = "Cannot delete monthly plan.",
                             Value = Ex.Message
                         };
                 }
             }
+            return result;
+        }
+
+        private BaseResult removeBudgetItems(List<Expense> budgetItems, BaseResult result)
+        {
+            if (budgetItems != null && budgetItems.Count > 0)
+            {
+                foreach (BudgetItemBase bi in budgetItems)
+                {
+                    try
+                    {
+                        // Delete budget item
+                        DeleteBudget(bi);
+                    }
+                    catch (Exception Ex)
+                    {
+                        _log.Error(string.Format("{0} : Unable to delete related budget item (ID: {1}). {2}", Reflection.GetCurrentMethodName(), bi.Id, Ex.Message), Ex);
+                        // Handle cases of unable to delete budget items
+                        // TODO HERE
+
+                        // BaseResult object
+                        result =
+                            new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
+                            {
+                                Message = string.Format("Unable to delete related budget item (ID: {0})", bi.Id),
+                                Value = Ex.Message
+                            };
+
+                        throw;
+                    }
+                }
+            }
+
             return result;
         }
 
