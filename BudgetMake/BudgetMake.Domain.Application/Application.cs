@@ -405,13 +405,68 @@ namespace BudgetMake.Domain.Application
                     monthlyBudget.EntityState = EntityState.Deleted;
 
                     // Delete monthly budget and all it's related child entities
-                    // TODO : HANDLE ALL OTHER BUDGET ITEMS
-                    // TODO : HANDLE ALL OTHER BUDGET ITEMS
-                    // TODO : HANDLE ALL OTHER BUDGET ITEMS
-                    result = removeBudgetItems(monthlyBudget.Expenses.ToList(), result);
-                    // TODO : HANDLE ALL OTHER BUDGET ITEMS
-                    // TODO : HANDLE ALL OTHER BUDGET ITEMS
-                    // TODO : HANDLE ALL OTHER BUDGET ITEMS
+                    if (monthlyBudget.AdditionalIncome != null && monthlyBudget.AdditionalIncome.Count > 0)
+                    {
+                        var additionalIncomeList = monthlyBudget.AdditionalIncome.ToList<BudgetItemBase>();
+                        result = removeBudgetItems(additionalIncomeList);
+
+                        if (result.Status == ResultStatus.Success)
+                        {
+                            monthlyBudget.AdditionalIncome = null;
+                        }
+                    }
+
+                    if (monthlyBudget.Salaries != null && monthlyBudget.Salaries.Count > 0)
+                    {
+                        var salariesList = monthlyBudget.Salaries.ToList<BudgetItemBase>();
+                        result = removeBudgetItems(salariesList);
+
+                        if (result.Status == ResultStatus.Success)
+                        {
+                            monthlyBudget.Salaries = null;
+                        }
+                    }
+
+                    if (monthlyBudget.Expenses != null && monthlyBudget.Expenses.Count > 0)
+                    {
+                        var budgetItems = monthlyBudget.Expenses.ToList<BudgetItemBase>();
+                        result = removeBudgetItems(budgetItems);
+                        if (result.Status == ResultStatus.Success)
+                        {
+                            monthlyBudget.Expenses = null;
+                        }
+                    }
+
+                    if (monthlyBudget.Cheques != null && monthlyBudget.Cheques.Count > 0)
+                    {
+                        var budgetItems = monthlyBudget.Cheques.ToList<BudgetItemBase>();
+                        result = removeBudgetItems(budgetItems);
+                        if (result.Status == ResultStatus.Success)
+                        {
+                            monthlyBudget.Cheques = null;
+                        }
+                    }
+
+                    if (monthlyBudget.CreditCards != null && monthlyBudget.CreditCards.Count > 0)
+                    {
+                        var budgetItems = monthlyBudget.CreditCards.ToList<BudgetItemBase>();
+                        result = removeBudgetItems(budgetItems);
+                        if (result.Status == ResultStatus.Success)
+                        {
+                            monthlyBudget.CreditCards = null;
+                        }
+                    }
+
+                    if (monthlyBudget.LoansPayments != null && monthlyBudget.LoansPayments.Count > 0)
+                    {
+                        var budgetItems = monthlyBudget.LoansPayments.ToList<BudgetItemBase>();
+                        result = removeBudgetItems(budgetItems);
+                        if (result.Status == ResultStatus.Success)
+                        {
+                            monthlyBudget.LoansPayments = null;
+                        }
+                    }
+
                     // remove the relation to the old entities
                     monthlyBudget.Expenses = null;
                     // delete the main entity from the database
@@ -437,8 +492,14 @@ namespace BudgetMake.Domain.Application
             return result;
         }
 
-        private BaseResult removeBudgetItems(List<Expense> budgetItems, BaseResult result)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="budgetItems"></param>
+        /// <returns></returns>
+        private BaseResult removeBudgetItems(List<BudgetItemBase> budgetItems)
         {
+            BaseResult result = null;
             if (budgetItems != null && budgetItems.Count > 0)
             {
                 foreach (BudgetItemBase bi in budgetItems)
@@ -446,7 +507,7 @@ namespace BudgetMake.Domain.Application
                     try
                     {
                         // Delete budget item
-                        DeleteBudget(bi);
+                        result = DeleteBudget(bi);
                     }
                     catch (Exception Ex)
                     {
