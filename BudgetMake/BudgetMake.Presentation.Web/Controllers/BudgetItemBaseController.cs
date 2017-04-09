@@ -28,6 +28,10 @@ namespace BudgetMake.Presentation.Web.Controllers
             }
             set
             {
+                if (string.IsNullOrEmpty(value))
+                {
+                    throw new Exception("Partial view name must not be null or empty.");
+                }
                 partialViewNameFor_ItemsList = value;
             }
         }
@@ -39,6 +43,10 @@ namespace BudgetMake.Presentation.Web.Controllers
             }
             set
             {
+                if (string.IsNullOrEmpty(value))
+                {
+                    throw new Exception("Partial view name must not be null or empty.");
+                }
                 partialViewNameFor_CreateItem = value;
             }
         }
@@ -50,6 +58,10 @@ namespace BudgetMake.Presentation.Web.Controllers
             }
             set
             {
+                if (string.IsNullOrEmpty(value))
+                {
+                    throw new Exception("Partial view name must not be null or empty.");
+                }
                 partialViewNameFor_EditItem = value;
             }
         }
@@ -61,6 +73,10 @@ namespace BudgetMake.Presentation.Web.Controllers
             }
             set
             {
+                if (string.IsNullOrEmpty(value))
+                {
+                    throw new Exception("Partial view name must not be null or empty.");
+                }
                 partialViewNameFor_DeleteItem = value;
             }
         }
