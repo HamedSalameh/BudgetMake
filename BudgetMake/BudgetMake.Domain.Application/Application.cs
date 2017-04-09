@@ -251,7 +251,7 @@ namespace BudgetMake.Domain.Application
                 }
                 catch (Exception Ex)
                 {
-                    _log.ErrorFormat("{0} : Failed to get annual budget by Id {1} : \r\n{2}", Reflection.GetCurrentMethodName(), AnnualBudgetId, Ex.Message);
+                    _log.Error(string.Format("{0} : Failed to get annual budget by Id {1} : \r\n{2}", Reflection.GetCurrentMethodName(), AnnualBudgetId, Ex.Message), Ex);
                     throw;
                 }
             }
@@ -283,7 +283,7 @@ namespace BudgetMake.Domain.Application
                 }
                 catch (Exception Ex)
                 {
-                    _log.ErrorFormat("Cannot save new annual plan.\r\n{0}", Ex.Message);
+                    _log.Error(string.Format("Cannot save new annual plan.\r\n{0}", Ex.Message), Ex);
                     result = new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
                     {
                         Message = "Cannot save new annual plan.",
@@ -353,7 +353,7 @@ namespace BudgetMake.Domain.Application
                     }
                     catch (Exception Ex)
                     {
-                        _log.ErrorFormat("{0} : Unable to delete related monthly plan (ID: {1}). {2}", Reflection.GetCurrentMethodName(), mb.Id, Ex.Message);
+                        _log.Error(string.Format("{0} : Unable to delete related monthly plan (ID: {1}). {2}", Reflection.GetCurrentMethodName(), mb.Id, Ex.Message), Ex);
                         // Handle cases of unable to delete monthly plans
                         // TODO HERE
 
@@ -550,7 +550,7 @@ namespace BudgetMake.Domain.Application
                 }
                 catch (Exception Ex)
                 {
-                    _log.ErrorFormat("{0} : Get monthly plan failed. {1}", Reflection.GetCurrentMethodName(), Ex.Message);
+                    _log.Error(string.Format("{0} : Get monthly plan failed. {1}", Reflection.GetCurrentMethodName(), Ex.Message), Ex);
                     throw;
                 }
             }
@@ -582,7 +582,7 @@ namespace BudgetMake.Domain.Application
                 }
                 catch (Exception Ex)
                 {
-                    _log.ErrorFormat("Cannot save new monthly plan.\r\n{0}", Ex.Message);
+                    _log.Error(string.Format("Cannot save new monthly plan.\r\n{0}", Ex.Message), Ex);
                     result = new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
                     {
                         Message = "Cannot save new monthly plan.",
@@ -959,7 +959,7 @@ namespace BudgetMake.Domain.Application
             }
             catch (Exception Ex)
             {
-                _log.ErrorFormat("Unable to create monthly budget from template.\r\n{0}", Ex);
+                _log.Error(string.Format("Unable to create monthly budget from template.\r\n{0}", Ex), Ex);
 
                 result = new OperationResult(ResultStatus.Exception, "CreateFromTemplate")
                 {
