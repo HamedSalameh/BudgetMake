@@ -396,6 +396,9 @@ namespace BudgetMake.Domain.Application
 
         public BaseResult DeleteMonthlyBudget(MonthlyBudget monthlyBudget)
         {
+            List<BaseResult> results = new List<BaseResult>();
+            List<BaseResult> partialResults = new List<BaseResult>();
+            bool partialResultsContainsError = false;
             BaseResult result = null;
             if (monthlyBudget != null)
             {
@@ -408,9 +411,18 @@ namespace BudgetMake.Domain.Application
                     if (monthlyBudget.AdditionalIncome != null && monthlyBudget.AdditionalIncome.Count > 0)
                     {
                         var additionalIncomeList = monthlyBudget.AdditionalIncome.ToList<BudgetItemBase>();
-                        result = removeBudgetItems(additionalIncomeList);
+                        partialResults = removeBudgetItems(additionalIncomeList);
 
-                        if (result.Status == ResultStatus.Success)
+                        if (partialResults != null && partialResults.Count > 0)
+                        {
+                            partialResultsContainsError = partialResults.Where(pr => pr.Status != ResultStatus.Success).Any();
+                        }
+
+                        if (partialResultsContainsError)
+                        {
+                            results.AddRange(partialResults);
+                        }
+                        else
                         {
                             monthlyBudget.AdditionalIncome = null;
                         }
@@ -419,19 +431,39 @@ namespace BudgetMake.Domain.Application
                     if (monthlyBudget.Salaries != null && monthlyBudget.Salaries.Count > 0)
                     {
                         var salariesList = monthlyBudget.Salaries.ToList<BudgetItemBase>();
-                        result = removeBudgetItems(salariesList);
+                        partialResults = removeBudgetItems(salariesList);
 
-                        if (result.Status == ResultStatus.Success)
+                        if (partialResults != null && partialResults.Count > 0)
+                        {
+                            partialResultsContainsError = partialResults.Where(pr => pr.Status != ResultStatus.Success).Any();
+                        }
+
+                        if (partialResultsContainsError)
+                        {
+                            results.AddRange(partialResults);
+                        }
+                        else
                         {
                             monthlyBudget.Salaries = null;
                         }
+
                     }
 
                     if (monthlyBudget.Expenses != null && monthlyBudget.Expenses.Count > 0)
                     {
                         var budgetItems = monthlyBudget.Expenses.ToList<BudgetItemBase>();
-                        result = removeBudgetItems(budgetItems);
-                        if (result.Status == ResultStatus.Success)
+                        partialResults = removeBudgetItems(budgetItems);
+
+                        if (partialResults != null && partialResults.Count > 0)
+                        {
+                            partialResultsContainsError = partialResults.Where(pr => pr.Status != ResultStatus.Success).Any();
+                        }
+
+                        if (partialResultsContainsError)
+                        {
+                            results.AddRange(partialResults);
+                        }
+                        else
                         {
                             monthlyBudget.Expenses = null;
                         }
@@ -440,8 +472,18 @@ namespace BudgetMake.Domain.Application
                     if (monthlyBudget.Cheques != null && monthlyBudget.Cheques.Count > 0)
                     {
                         var budgetItems = monthlyBudget.Cheques.ToList<BudgetItemBase>();
-                        result = removeBudgetItems(budgetItems);
-                        if (result.Status == ResultStatus.Success)
+                        partialResults = removeBudgetItems(budgetItems);
+
+                        if (partialResults != null && partialResults.Count > 0)
+                        {
+                            partialResultsContainsError = partialResults.Where(pr => pr.Status != ResultStatus.Success).Any();
+                        }
+
+                        if (partialResultsContainsError)
+                        {
+                            results.AddRange(partialResults);
+                        }
+                        else
                         {
                             monthlyBudget.Cheques = null;
                         }
@@ -450,8 +492,18 @@ namespace BudgetMake.Domain.Application
                     if (monthlyBudget.CreditCards != null && monthlyBudget.CreditCards.Count > 0)
                     {
                         var budgetItems = monthlyBudget.CreditCards.ToList<BudgetItemBase>();
-                        result = removeBudgetItems(budgetItems);
-                        if (result.Status == ResultStatus.Success)
+                        partialResults = removeBudgetItems(budgetItems);
+
+                        if (partialResults != null && partialResults.Count > 0)
+                        {
+                            partialResultsContainsError = partialResults.Where(pr => pr.Status != ResultStatus.Success).Any();
+                        }
+
+                        if (partialResultsContainsError)
+                        {
+                            results.AddRange(partialResults);
+                        }
+                        else
                         {
                             monthlyBudget.CreditCards = null;
                         }
@@ -460,8 +512,18 @@ namespace BudgetMake.Domain.Application
                     if (monthlyBudget.LoansPayments != null && monthlyBudget.LoansPayments.Count > 0)
                     {
                         var budgetItems = monthlyBudget.LoansPayments.ToList<BudgetItemBase>();
-                        result = removeBudgetItems(budgetItems);
-                        if (result.Status == ResultStatus.Success)
+                        partialResults = removeBudgetItems(budgetItems);
+
+                        if (partialResults != null && partialResults.Count > 0)
+                        {
+                            partialResultsContainsError = partialResults.Where(pr => pr.Status != ResultStatus.Success).Any();
+                        }
+
+                        if (partialResultsContainsError)
+                        {
+                            results.AddRange(partialResults);
+                        }
+                        else
                         {
                             monthlyBudget.LoansPayments = null;
                         }
@@ -469,14 +531,24 @@ namespace BudgetMake.Domain.Application
 
                     // remove the relation to the old entities
                     monthlyBudget.Expenses = null;
-                    // delete the main entity from the database
-                    monthlyBudgetBL.Remove(monthlyBudget);
+                    // If there were no errors, try delete the monthly plan object
+                    if (partialResultsContainsError == false)
+                    {
+                        monthlyBudgetBL.Remove(monthlyBudget);
 
-                    result =
-                        new OperationResult(ResultStatus.Success, Reflection.GetCurrentMethodName())
+                        result = new OperationResult(ResultStatus.Success, Reflection.GetCurrentMethodName())
                         {
                             Value = id
                         };
+                    }
+                    else
+                    {
+                        result = new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
+                        {
+                            Value = results
+                        };
+                    }
+
                 }
                 catch (Exception Ex)
                 {
@@ -489,6 +561,7 @@ namespace BudgetMake.Domain.Application
                         };
                 }
             }
+
             return result;
         }
 
@@ -497,13 +570,15 @@ namespace BudgetMake.Domain.Application
         /// </summary>
         /// <param name="budgetItems"></param>
         /// <returns></returns>
-        private BaseResult removeBudgetItems(List<BudgetItemBase> budgetItems)
+        private List<BaseResult> removeBudgetItems(List<BudgetItemBase> budgetItems)
         {
+            List<BaseResult> results = new List<BaseResult>();
             BaseResult result = null;
             if (budgetItems != null && budgetItems.Count > 0)
             {
                 foreach (BudgetItemBase bi in budgetItems)
                 {
+                    result = null;
                     try
                     {
                         // Delete budget item
@@ -523,12 +598,13 @@ namespace BudgetMake.Domain.Application
                                 Value = Ex.Message
                             };
 
-                        throw;
                     }
+
+                    results.Add(result);
                 }
             }
 
-            return result;
+            return results;
         }
 
         public MonthlyBudget GetMonthlyBudget(int monthlyBudgetId)
@@ -653,12 +729,9 @@ namespace BudgetMake.Domain.Application
                     // Delete the budget item
                     try
                     {
-                        if (businessLayer != null)
-                        {
-                            businessLayer.Remove(budgetItem);
-                            // update the monthly plan relevant fields
-                            result = monthlyBudgetBL.updateMonthlyPlanPerBudgetItemUpdates(budgetItem, id);
-                        }
+                        businessLayer.Remove(budgetItem);
+                        // update the monthly plan relevant fields
+                        result = monthlyBudgetBL.updateMonthlyPlanPerBudgetItemUpdates(budgetItem, id);
                     }
                     catch (Exception Ex)
                     {
