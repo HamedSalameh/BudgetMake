@@ -35,7 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="GeneralServices">
-      <HintPath>..\..\..\Repos\Shared\GeneralServices.dll</HintPath>
+      <HintPath>..\..\..\..\Shared\GeneralServices.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
