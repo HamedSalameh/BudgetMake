@@ -933,8 +933,20 @@ namespace BudgetMake.Domain.Application
             budget = GetMonthlyBudget(MonthlyPlanId.Value);
             if (budget != null)
             {
-                var serializer = new JavaScriptSerializer();
-                string templateJson = serializer.Serialize(budget);
+                string templateJson = string.Empty;
+                try
+                {
+                    var serializer = new JavaScriptSerializer();
+                    templateJson = serializer.Serialize(budget);
+
+                }
+                catch (Exception Ex)
+                {
+                    Result = new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName()){
+                        Message = "Unable to build JSON template from monthly plan",
+                        Value = Ex
+                    };
+                }
 
                 if (string.IsNullOrEmpty(templateJson) == false)
                 {
@@ -948,14 +960,25 @@ namespace BudgetMake.Domain.Application
                         TemplateName = TemplateName,
                         Template = templateJson
                     };
-                    bool result = DefaultAddEntity(template);
-                    if (result)
+                    bool result = false;
+                    try
                     {
-                        Result = new OperationResult(ResultStatus.Success, Reflection.GetCurrentMethodName());
+                        result = DefaultAddEntity(template);
+                        if (result)
+                        {
+                            Result = new OperationResult(ResultStatus.Success, Reflection.GetCurrentMethodName());
+                        }
+                        else
+                        {
+                            Result = new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName());
+                        }
                     }
-                    else
+                    catch (Exception Ex)
                     {
-                        Result = new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName());
+                        Result = new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName()){
+                            Message = "Unable to save monthly plan template",
+                            Value = Ex
+                        };
                     }
                 }
             }
