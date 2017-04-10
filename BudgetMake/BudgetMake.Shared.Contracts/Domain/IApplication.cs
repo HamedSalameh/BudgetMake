@@ -31,7 +31,7 @@ namespace BudgetMake.Shared.Contracts.Domain
         BaseResult UpdateBudgetItem(dynamic budgetItem);
 
         MonthlyPlanTemplate GetTemplate(int MonthlyPlanTemplateId);
-        bool DeleteTemplate(MonthlyPlanTemplate MonthlyPlanTemplate);
+        BaseResult DeleteTemplate(MonthlyPlanTemplate MonthlyPlanTemplate);
 
         BaseResult SaveMonthlyPlanAsTemplate(int? MonthlyPlanId, string TemplateName);
         BaseResult SaveMonthlyPlanAsTemplate(MonthlyPlanTemplateInfo templateInfo);
