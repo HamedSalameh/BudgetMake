@@ -364,20 +364,23 @@ namespace BudgetMake.Domain.Application
                     {
                         _log.Error(string.Format("{0} : Unable to delete related monthly plan (ID: {1}). {2}", Reflection.GetCurrentMethodName(), mb.Id, Ex.Message), Ex);
                         // Handle cases of unable to delete monthly plans
-                        // TODO HERE
-
-                        _log.Error(string.Format("Cannot delete related monthly plan.\r\n{0}", Ex.Message), Ex);
-                        throw;
+                        partialResultsContainsError = true;
+                        results.Add(new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
+                        {
+                            Message = "Unable to delete a related monthly plan",
+                            Value = Ex.Message
+                        });
                     }
                 }
                 if (partialResultsContainsError == false)
                 {
-                    // remove the relation to the old entities
-                    AnnualBudget.MonthlyBudgets = null;
-                    // delete the main entity from the database
                     try
                     {
+                        // delete the main entity from the database
                         annualBudgetBL.Remove(AnnualBudget);
+                        // remove the relation to the old entities
+                        AnnualBudget.MonthlyBudgets = null;
+
                         var id = AnnualBudget.Id;
                         result =
                            new OperationResult(ResultStatus.Success, "DeleteMonthlyBudget")
@@ -412,183 +415,6 @@ namespace BudgetMake.Domain.Application
         #endregion
 
         #region Monthly Budgets
-
-        public BaseResult DeleteMonthlyBudget(MonthlyBudget monthlyBudget)
-        {
-            List<BaseResult> results = new List<BaseResult>();
-            List<BaseResult> partialResults = new List<BaseResult>();
-            bool partialResultsContainsError = false;
-            BaseResult result = null;
-            if (monthlyBudget != null)
-            {
-                try
-                {
-                    int id = monthlyBudget.Id;
-                    monthlyBudget.EntityState = EntityState.Deleted;
-
-                    // Delete monthly budget and all it's related child entities
-                    if (monthlyBudget.AdditionalIncome != null && monthlyBudget.AdditionalIncome.Count > 0)
-                    {
-                        var additionalIncomeList = monthlyBudget.AdditionalIncome.ToList<BudgetItemBase>();
-                        partialResults = removeBudgetItems(additionalIncomeList);
-
-                        if (partialResults != null && partialResults.Count > 0)
-                        {
-                            partialResultsContainsError = partialResults.Where(pr => pr.Status != ResultStatus.Success).Any();
-                        }
-
-                        if (partialResultsContainsError)
-                        {
-                            results.AddRange(partialResults);
-                        }
-                        else
-                        {
-                            monthlyBudget.AdditionalIncome = null;
-                        }
-                    }
-
-                    if (monthlyBudget.Salaries != null && monthlyBudget.Salaries.Count > 0)
-                    {
-                        var salariesList = monthlyBudget.Salaries.ToList<BudgetItemBase>();
-                        partialResults = removeBudgetItems(salariesList);
-
-                        if (partialResults != null && partialResults.Count > 0)
-                        {
-                            partialResultsContainsError = partialResults.Where(pr => pr.Status != ResultStatus.Success).Any();
-                        }
-
-                        if (partialResultsContainsError)
-                        {
-                            results.AddRange(partialResults);
-                        }
-                        else
-                        {
-                            monthlyBudget.Salaries = null;
-                        }
-
-                    }
-
-                    if (monthlyBudget.Expenses != null && monthlyBudget.Expenses.Count > 0)
-                    {
-                        var budgetItems = monthlyBudget.Expenses.ToList<BudgetItemBase>();
-                        partialResults = removeBudgetItems(budgetItems);
-
-                        if (partialResults != null && partialResults.Count > 0)
-                        {
-                            partialResultsContainsError = partialResults.Where(pr => pr.Status != ResultStatus.Success).Any();
-                        }
-
-                        if (partialResultsContainsError)
-                        {
-                            results.AddRange(partialResults);
-                        }
-                        else
-                        {
-                            monthlyBudget.Expenses = null;
-                        }
-                    }
-
-                    if (monthlyBudget.Cheques != null && monthlyBudget.Cheques.Count > 0)
-                    {
-                        var budgetItems = monthlyBudget.Cheques.ToList<BudgetItemBase>();
-                        partialResults = removeBudgetItems(budgetItems);
-
-                        if (partialResults != null && partialResults.Count > 0)
-                        {
-                            partialResultsContainsError = partialResults.Where(pr => pr.Status != ResultStatus.Success).Any();
-                        }
-
-                        if (partialResultsContainsError)
-                        {
-                            results.AddRange(partialResults);
-                        }
-                        else
-                        {
-                            monthlyBudget.Cheques = null;
-                        }
-                    }
-
-                    if (monthlyBudget.CreditCards != null && monthlyBudget.CreditCards.Count > 0)
-                    {
-                        var budgetItems = monthlyBudget.CreditCards.ToList<BudgetItemBase>();
-                        partialResults = removeBudgetItems(budgetItems);
-
-                        if (partialResults != null && partialResults.Count > 0)
-                        {
-                            partialResultsContainsError = partialResults.Where(pr => pr.Status != ResultStatus.Success).Any();
-                        }
-
-                        if (partialResultsContainsError)
-                        {
-                            results.AddRange(partialResults);
-                        }
-                        else
-                        {
-                            monthlyBudget.CreditCards = null;
-                        }
-                    }
-
-                    if (monthlyBudget.LoansPayments != null && monthlyBudget.LoansPayments.Count > 0)
-                    {
-                        var budgetItems = monthlyBudget.LoansPayments.ToList<BudgetItemBase>();
-                        partialResults = removeBudgetItems(budgetItems);
-
-                        if (partialResults != null && partialResults.Count > 0)
-                        {
-                            partialResultsContainsError = partialResults.Where(pr => pr.Status != ResultStatus.Success).Any();
-                        }
-
-                        if (partialResultsContainsError)
-                        {
-                            results.AddRange(partialResults);
-                        }
-                        else
-                        {
-                            monthlyBudget.LoansPayments = null;
-                        }
-                    }
-
-                    // remove the relation to the old entities
-                    monthlyBudget.Expenses = null;
-                    // If there were no errors, try delete the monthly plan object
-                    if (partialResultsContainsError == false)
-                    {
-                        monthlyBudgetBL.Remove(monthlyBudget);
-
-                        result = new OperationResult(ResultStatus.Success, Reflection.GetCurrentMethodName())
-                        {
-                            Value = id
-                        };
-                    }
-                    else
-                    {
-                        result = new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
-                        {
-                            Value = results
-                        };
-                    }
-
-                }
-                catch (Exception Ex)
-                {
-                    _log.Error(string.Format("Cannot fully delete monthly plan.\r\n{0}", Ex.Message), Ex);
-                    result =
-                        new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
-                        {
-                            Message = "Cannot delete monthly plan.",
-                            Value = Ex.Message
-                        };
-                }
-            }
-
-            return result;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="budgetItems"></param>
-        /// <returns></returns>
         private List<BaseResult> removeBudgetItems(List<BudgetItemBase> budgetItems)
         {
             List<BaseResult> results = new List<BaseResult>();
@@ -727,6 +553,176 @@ namespace BudgetMake.Domain.Application
             return result;
         }
 
+        public BaseResult DeleteMonthlyBudget(MonthlyBudget monthlyBudget)
+        {
+            List<BaseResult> results = new List<BaseResult>();
+            List<BaseResult> partialResults = new List<BaseResult>();
+            bool partialResultsContainsError = false;
+            BaseResult result = null;
+            if (monthlyBudget != null)
+            {
+                try
+                {
+                    int id = monthlyBudget.Id;
+                    monthlyBudget.EntityState = EntityState.Deleted;
+
+                    // Delete monthly budget and all it's related child entities
+                    if (monthlyBudget.AdditionalIncome != null && monthlyBudget.AdditionalIncome.Count > 0)
+                    {
+                        var additionalIncomeList = monthlyBudget.AdditionalIncome.ToList<BudgetItemBase>();
+                        partialResults = removeBudgetItems(additionalIncomeList);
+
+                        if (partialResults != null && partialResults.Count > 0)
+                        {
+                            partialResultsContainsError = partialResults.Where(pr => pr.Status != ResultStatus.Success).Any();
+                        }
+
+                        if (partialResultsContainsError)
+                        {
+                            results.AddRange(partialResults);
+                        }
+                        else
+                        {
+                            monthlyBudget.AdditionalIncome = null;
+                        }
+                    }
+
+                    if (monthlyBudget.Salaries != null && monthlyBudget.Salaries.Count > 0)
+                    {
+                        var salariesList = monthlyBudget.Salaries.ToList<BudgetItemBase>();
+                        partialResults = removeBudgetItems(salariesList);
+
+                        if (partialResults != null && partialResults.Count > 0)
+                        {
+                            partialResultsContainsError = partialResults.Where(pr => pr.Status != ResultStatus.Success).Any();
+                        }
+
+                        if (partialResultsContainsError)
+                        {
+                            results.AddRange(partialResults);
+                        }
+                        else
+                        {
+                            monthlyBudget.Salaries = null;
+                        }
+
+                    }
+
+                    if (monthlyBudget.Expenses != null && monthlyBudget.Expenses.Count > 0)
+                    {
+                        var budgetItems = monthlyBudget.Expenses.ToList<BudgetItemBase>();
+                        partialResults = removeBudgetItems(budgetItems);
+
+                        if (partialResults != null && partialResults.Count > 0)
+                        {
+                            partialResultsContainsError = partialResults.Where(pr => pr.Status != ResultStatus.Success).Any();
+                        }
+
+                        if (partialResultsContainsError)
+                        {
+                            results.AddRange(partialResults);
+                        }
+                        else
+                        {
+                            monthlyBudget.Expenses = null;
+                        }
+                    }
+
+                    if (monthlyBudget.Cheques != null && monthlyBudget.Cheques.Count > 0)
+                    {
+                        var budgetItems = monthlyBudget.Cheques.ToList<BudgetItemBase>();
+                        partialResults = removeBudgetItems(budgetItems);
+
+                        if (partialResults != null && partialResults.Count > 0)
+                        {
+                            partialResultsContainsError = partialResults.Where(pr => pr.Status != ResultStatus.Success).Any();
+                        }
+
+                        if (partialResultsContainsError)
+                        {
+                            results.AddRange(partialResults);
+                        }
+                        else
+                        {
+                            monthlyBudget.Cheques = null;
+                        }
+                    }
+
+                    if (monthlyBudget.CreditCards != null && monthlyBudget.CreditCards.Count > 0)
+                    {
+                        var budgetItems = monthlyBudget.CreditCards.ToList<BudgetItemBase>();
+                        partialResults = removeBudgetItems(budgetItems);
+
+                        if (partialResults != null && partialResults.Count > 0)
+                        {
+                            partialResultsContainsError = partialResults.Where(pr => pr.Status != ResultStatus.Success).Any();
+                        }
+
+                        if (partialResultsContainsError)
+                        {
+                            results.AddRange(partialResults);
+                        }
+                        else
+                        {
+                            monthlyBudget.CreditCards = null;
+                        }
+                    }
+
+                    if (monthlyBudget.LoansPayments != null && monthlyBudget.LoansPayments.Count > 0)
+                    {
+                        var budgetItems = monthlyBudget.LoansPayments.ToList<BudgetItemBase>();
+                        partialResults = removeBudgetItems(budgetItems);
+
+                        if (partialResults != null && partialResults.Count > 0)
+                        {
+                            partialResultsContainsError = partialResults.Where(pr => pr.Status != ResultStatus.Success).Any();
+                        }
+
+                        if (partialResultsContainsError)
+                        {
+                            results.AddRange(partialResults);
+                        }
+                        else
+                        {
+                            monthlyBudget.LoansPayments = null;
+                        }
+                    }
+
+                    // If there were no errors, try delete the monthly plan object
+                    if (partialResultsContainsError == false)
+                    {
+                        monthlyBudgetBL.Remove(monthlyBudget);
+                        // remove the relation to the old entities
+                        monthlyBudget.Expenses = null;
+
+                        result = new OperationResult(ResultStatus.Success, Reflection.GetCurrentMethodName())
+                        {
+                            Value = id
+                        };
+                    }
+                    else
+                    {
+                        result = new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
+                        {
+                            Value = results
+                        };
+                    }
+
+                }
+                catch (Exception Ex)
+                {
+                    _log.Error(string.Format("Cannot fully delete monthly plan.\r\n{0}", Ex.Message), Ex);
+                    result =
+                        new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
+                        {
+                            Message = "Cannot delete monthly plan.",
+                            Value = Ex.Message
+                        };
+                }
+            }
+
+            return result;
+        }
         #endregion
 
         #region Budget Items
@@ -885,33 +881,48 @@ namespace BudgetMake.Domain.Application
 
         public MonthlyPlanTemplate GetTemplate(int MonthlyPlanTemplateId)
         {
-            MonthlyPlanTemplate budget = null;
+            MonthlyPlanTemplate template = null;
 
             if (MonthlyPlanTemplateId != 0)
             {
                 try
                 {
-                    budget = monthlyTemplateBL.GetById(MonthlyPlanTemplateId);
+                    template = monthlyTemplateBL.GetById(MonthlyPlanTemplateId);
                 }
                 catch (Exception Ex)
                 {
                     _log.Error("Exception occured : \r\n", Ex);
+                    throw;
                 }
             }
-            return budget;
+            return template;
         }
 
-        public bool DeleteTemplate(MonthlyPlanTemplate MonthlyPlanTemplate)
+        public BaseResult DeleteTemplate(MonthlyPlanTemplate MonthlyPlanTemplate)
         {
-            bool actionResult = false;
+            BaseResult result = null;
+
             if (MonthlyPlanTemplate != null)
             {
-                MonthlyPlanTemplate.EntityState = EntityState.Deleted;
+                try
+                {
+                    MonthlyPlanTemplate.EntityState = EntityState.Deleted;
 
-                monthlyTemplateBL.Remove(MonthlyPlanTemplate);
-                actionResult = true;
+                    monthlyTemplateBL.Remove(MonthlyPlanTemplate);
+
+                    result = new OperationResult(ResultStatus.Success);
+                }
+                catch (Exception Ex)
+                {
+                    result =
+                        new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
+                        {
+                            Message = "Unable to delete monthly plan template",
+                            Value = Ex
+                        };
+                }
             }
-            return actionResult;
+            return result;
         }
 
         public BaseResult SaveMonthlyPlanAsTemplate(int? MonthlyPlanId, string TemplateName)
@@ -940,17 +951,17 @@ namespace BudgetMake.Domain.Application
                     bool result = DefaultAddEntity(template);
                     if (result)
                     {
-                        Result = new OperationResult(ResultStatus.Success, "SaveMonthlyPlanAsTemplate");
+                        Result = new OperationResult(ResultStatus.Success, Reflection.GetCurrentMethodName());
                     }
                     else
                     {
-                        Result = new OperationResult(ResultStatus.Failure, "SaveMonthlyPlanAsTemplate");
+                        Result = new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName());
                     }
                 }
             }
             else
             {
-                Result = new OperationResult(ResultStatus.Failure, "SaveMonthlyPlanAsTemplate")
+                Result = new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
                 {
                     Message = string.Format("Unable to create template based on monthly pland id {0}, the template was not found in the database.", MonthlyPlanId),
                     Value = HttpStatusCode.NoContent
