@@ -338,7 +338,10 @@ namespace BudgetMake.Domain.Application
 
         public BaseResult DeleteAnnualBudget(AnnualBudget AnnualBudget)
         {
+            List<BaseResult> results = new List<BaseResult>();
             BaseResult result = null;
+            bool partialResultsContainsError = false;
+
             if (AnnualBudget != null)
             {
                 AnnualBudget.EntityState = EntityState.Deleted;
@@ -349,7 +352,13 @@ namespace BudgetMake.Domain.Application
                     // delete monthly budget
                     try
                     {
-                        DeleteMonthlyBudget(mb);
+                        var partialResult = DeleteMonthlyBudget(mb);
+
+                        if(partialResult.Status != ResultStatus.Success)
+                        {
+                            partialResultsContainsError = true;
+                            results.AddRange(partialResult.Value as List<BaseResult>);
+                        }
                     }
                     catch (Exception Ex)
                     {
@@ -361,29 +370,39 @@ namespace BudgetMake.Domain.Application
                         throw;
                     }
                 }
-                // remove the relation to the old entities
-                AnnualBudget.MonthlyBudgets = null;
-                // delete the main entity from the database
-                try
+                if (partialResultsContainsError == false)
                 {
-                    annualBudgetBL.Remove(AnnualBudget);
-                    var id = AnnualBudget.Id;
-                    result =
-                       new OperationResult(ResultStatus.Success, "DeleteMonthlyBudget")
-                       {
-                           Value = id
-                       };
+                    // remove the relation to the old entities
+                    AnnualBudget.MonthlyBudgets = null;
+                    // delete the main entity from the database
+                    try
+                    {
+                        annualBudgetBL.Remove(AnnualBudget);
+                        var id = AnnualBudget.Id;
+                        result =
+                           new OperationResult(ResultStatus.Success, "DeleteMonthlyBudget")
+                           {
+                               Value = id
+                           };
 
+                    }
+                    catch (Exception Ex)
+                    {
+                        _log.Error(string.Format("Cannot fully annual monthly plan.\r\n{0}", Ex.Message), Ex);
+                        result =
+                            new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
+                            {
+                                Message = "Cannot delete annual plan.",
+                                Value = Ex.Message
+                            };
+                    }
                 }
-                catch (Exception Ex)
+                else
                 {
-                    _log.Error(string.Format("Cannot fully annual monthly plan.\r\n{0}", Ex.Message), Ex);
-                    result =
-                        new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
-                        {
-                            Message = "Cannot delete annual plan.",
-                            Value = Ex.Message
-                        };
+                    result = new OperationResult(ResultStatus.Failure, Reflection.GetCurrentMethodName())
+                    {
+                        Value = results
+                    };
                 }
             }
 
@@ -587,9 +606,6 @@ namespace BudgetMake.Domain.Application
                     catch (Exception Ex)
                     {
                         _log.Error(string.Format("{0} : Unable to delete related budget item (ID: {1}). {2}", Reflection.GetCurrentMethodName(), bi.Id, Ex.Message), Ex);
-                        // Handle cases of unable to delete budget items
-                        // TODO HERE
-
                         // BaseResult object
                         result =
                             new OperationResult(ResultStatus.Exception, Reflection.GetCurrentMethodName())
