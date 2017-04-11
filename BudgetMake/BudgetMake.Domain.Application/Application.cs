@@ -449,6 +449,136 @@ namespace BudgetMake.Domain.Application
             return results;
         }
 
+        private List<BaseResult> RemoveMonthlyPlanBudgetItems(MonthlyBudget monthlyBudget)
+        {
+            List<BaseResult> results = new List<BaseResult>();
+            List<BaseResult> partialResults = new List<BaseResult>();
+            bool partialResultsContainsError = false;
+            // Delete monthly budget and all it's related child entities
+            if (monthlyBudget.AdditionalIncome != null && monthlyBudget.AdditionalIncome.Count > 0)
+            {
+                var additionalIncomeList = monthlyBudget.AdditionalIncome.ToList<BudgetItemBase>();
+                partialResults = removeBudgetItems(additionalIncomeList);
+
+                if (partialResults != null && partialResults.Count > 0)
+                {
+                    partialResultsContainsError = partialResults.Where(pr => pr.Status != ResultStatus.Success).Any();
+                }
+
+                if (partialResultsContainsError)
+                {
+                    results.AddRange(partialResults);
+                }
+                else
+                {
+                    monthlyBudget.AdditionalIncome = null;
+                }
+            }
+
+            if (monthlyBudget.Salaries != null && monthlyBudget.Salaries.Count > 0)
+            {
+                var salariesList = monthlyBudget.Salaries.ToList<BudgetItemBase>();
+                partialResults = removeBudgetItems(salariesList);
+
+                if (partialResults != null && partialResults.Count > 0)
+                {
+                    partialResultsContainsError = partialResults.Where(pr => pr.Status != ResultStatus.Success).Any();
+                }
+
+                if (partialResultsContainsError)
+                {
+                    results.AddRange(partialResults);
+                }
+                else
+                {
+                    monthlyBudget.Salaries = null;
+                }
+
+            }
+
+            if (monthlyBudget.Expenses != null && monthlyBudget.Expenses.Count > 0)
+            {
+                var budgetItems = monthlyBudget.Expenses.ToList<BudgetItemBase>();
+                partialResults = removeBudgetItems(budgetItems);
+
+                if (partialResults != null && partialResults.Count > 0)
+                {
+                    partialResultsContainsError = partialResults.Where(pr => pr.Status != ResultStatus.Success).Any();
+                }
+
+                if (partialResultsContainsError)
+                {
+                    results.AddRange(partialResults);
+                }
+                else
+                {
+                    monthlyBudget.Expenses = null;
+                }
+            }
+
+            if (monthlyBudget.Cheques != null && monthlyBudget.Cheques.Count > 0)
+            {
+                var budgetItems = monthlyBudget.Cheques.ToList<BudgetItemBase>();
+                partialResults = removeBudgetItems(budgetItems);
+
+                if (partialResults != null && partialResults.Count > 0)
+                {
+                    partialResultsContainsError = partialResults.Where(pr => pr.Status != ResultStatus.Success).Any();
+                }
+
+                if (partialResultsContainsError)
+                {
+                    results.AddRange(partialResults);
+                }
+                else
+                {
+                    monthlyBudget.Cheques = null;
+                }
+            }
+
+            if (monthlyBudget.CreditCards != null && monthlyBudget.CreditCards.Count > 0)
+            {
+                var budgetItems = monthlyBudget.CreditCards.ToList<BudgetItemBase>();
+                partialResults = removeBudgetItems(budgetItems);
+
+                if (partialResults != null && partialResults.Count > 0)
+                {
+                    partialResultsContainsError = partialResults.Where(pr => pr.Status != ResultStatus.Success).Any();
+                }
+
+                if (partialResultsContainsError)
+                {
+                    results.AddRange(partialResults);
+                }
+                else
+                {
+                    monthlyBudget.CreditCards = null;
+                }
+            }
+
+            if (monthlyBudget.LoansPayments != null && monthlyBudget.LoansPayments.Count > 0)
+            {
+                var budgetItems = monthlyBudget.LoansPayments.ToList<BudgetItemBase>();
+                partialResults = removeBudgetItems(budgetItems);
+
+                if (partialResults != null && partialResults.Count > 0)
+                {
+                    partialResultsContainsError = partialResults.Where(pr => pr.Status != ResultStatus.Success).Any();
+                }
+
+                if (partialResultsContainsError)
+                {
+                    results.AddRange(partialResults);
+                }
+                else
+                {
+                    monthlyBudget.LoansPayments = null;
+                }
+            }
+
+            return results;
+        }
+
         public MonthlyBudget GetMonthlyBudget(int monthlyBudgetId)
         {
             MonthlyBudget monthlyBudget = null;
@@ -565,129 +695,10 @@ namespace BudgetMake.Domain.Application
                 {
                     int id = monthlyBudget.Id;
                     monthlyBudget.EntityState = EntityState.Deleted;
-
-                    // Delete monthly budget and all it's related child entities
-                    if (monthlyBudget.AdditionalIncome != null && monthlyBudget.AdditionalIncome.Count > 0)
-                    {
-                        var additionalIncomeList = monthlyBudget.AdditionalIncome.ToList<BudgetItemBase>();
-                        partialResults = removeBudgetItems(additionalIncomeList);
-
-                        if (partialResults != null && partialResults.Count > 0)
-                        {
-                            partialResultsContainsError = partialResults.Where(pr => pr.Status != ResultStatus.Success).Any();
-                        }
-
-                        if (partialResultsContainsError)
-                        {
-                            results.AddRange(partialResults);
-                        }
-                        else
-                        {
-                            monthlyBudget.AdditionalIncome = null;
-                        }
-                    }
-
-                    if (monthlyBudget.Salaries != null && monthlyBudget.Salaries.Count > 0)
-                    {
-                        var salariesList = monthlyBudget.Salaries.ToList<BudgetItemBase>();
-                        partialResults = removeBudgetItems(salariesList);
-
-                        if (partialResults != null && partialResults.Count > 0)
-                        {
-                            partialResultsContainsError = partialResults.Where(pr => pr.Status != ResultStatus.Success).Any();
-                        }
-
-                        if (partialResultsContainsError)
-                        {
-                            results.AddRange(partialResults);
-                        }
-                        else
-                        {
-                            monthlyBudget.Salaries = null;
-                        }
-
-                    }
-
-                    if (monthlyBudget.Expenses != null && monthlyBudget.Expenses.Count > 0)
-                    {
-                        var budgetItems = monthlyBudget.Expenses.ToList<BudgetItemBase>();
-                        partialResults = removeBudgetItems(budgetItems);
-
-                        if (partialResults != null && partialResults.Count > 0)
-                        {
-                            partialResultsContainsError = partialResults.Where(pr => pr.Status != ResultStatus.Success).Any();
-                        }
-
-                        if (partialResultsContainsError)
-                        {
-                            results.AddRange(partialResults);
-                        }
-                        else
-                        {
-                            monthlyBudget.Expenses = null;
-                        }
-                    }
-
-                    if (monthlyBudget.Cheques != null && monthlyBudget.Cheques.Count > 0)
-                    {
-                        var budgetItems = monthlyBudget.Cheques.ToList<BudgetItemBase>();
-                        partialResults = removeBudgetItems(budgetItems);
-
-                        if (partialResults != null && partialResults.Count > 0)
-                        {
-                            partialResultsContainsError = partialResults.Where(pr => pr.Status != ResultStatus.Success).Any();
-                        }
-
-                        if (partialResultsContainsError)
-                        {
-                            results.AddRange(partialResults);
-                        }
-                        else
-                        {
-                            monthlyBudget.Cheques = null;
-                        }
-                    }
-
-                    if (monthlyBudget.CreditCards != null && monthlyBudget.CreditCards.Count > 0)
-                    {
-                        var budgetItems = monthlyBudget.CreditCards.ToList<BudgetItemBase>();
-                        partialResults = removeBudgetItems(budgetItems);
-
-                        if (partialResults != null && partialResults.Count > 0)
-                        {
-                            partialResultsContainsError = partialResults.Where(pr => pr.Status != ResultStatus.Success).Any();
-                        }
-
-                        if (partialResultsContainsError)
-                        {
-                            results.AddRange(partialResults);
-                        }
-                        else
-                        {
-                            monthlyBudget.CreditCards = null;
-                        }
-                    }
-
-                    if (monthlyBudget.LoansPayments != null && monthlyBudget.LoansPayments.Count > 0)
-                    {
-                        var budgetItems = monthlyBudget.LoansPayments.ToList<BudgetItemBase>();
-                        partialResults = removeBudgetItems(budgetItems);
-
-                        if (partialResults != null && partialResults.Count > 0)
-                        {
-                            partialResultsContainsError = partialResults.Where(pr => pr.Status != ResultStatus.Success).Any();
-                        }
-
-                        if (partialResultsContainsError)
-                        {
-                            results.AddRange(partialResults);
-                        }
-                        else
-                        {
-                            monthlyBudget.LoansPayments = null;
-                        }
-                    }
-
+                    // Remove all budget item by category of this budget plan (e.g, Expenses, Cheques, Salaries, etc... )
+                    results = RemoveMonthlyPlanBudgetItems(monthlyBudget);
+                    // Check if there result contains errors
+                    partialResultsContainsError = results.Where(br => br.Status != ResultStatus.Success).Any();
                     // If there were no errors, try delete the monthly plan object
                     if (partialResultsContainsError == false)
                     {
