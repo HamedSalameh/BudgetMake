@@ -6,7 +6,5 @@ namespace BudgetMake.Presentation.Web.ViewModel
     {
         [Display(Name ="ID", ResourceType = typeof(Shared.Common.Resources.General))]
         public int BudgetItemId { get; set; }
-
-        public int MonthlyBudgetId { get; set; }
     }
 }

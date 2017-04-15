@@ -316,6 +316,7 @@
     <Content Include="Scripts\pages\month\pv_createmonthlyplan.js" />
     <Content Include="Scripts\pages\month\pv_deletemonthlyplan.js" />
     <Content Include="Scripts\pages\month\pv_editmonthlyplan.js" />
+    <Content Include="Scripts\pages\salary\pv_createsalaryitem.js" />
     <Content Include="Scripts\pages\salary\pv_deletesalaryitem.js" />
     <Content Include="Scripts\pages\salary\pv_editsalaryitem.js" />
     <Content Include="Scripts\pages\salary\pv_salaries.js" />
@@ -379,6 +380,7 @@
     <Content Include="Views\Shared\_EntityHistoryDetails.cshtml" />
     <Content Include="Views\Salary\EditSalaryItem.cshtml" />
     <Content Include="Views\Salary\DeleteSalaryItem.cshtml" />
+    <Content Include="Views\Salary\CreateSalaryItem.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

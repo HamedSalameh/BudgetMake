@@ -26,6 +26,8 @@ namespace BudgetMake.Presentation.Web.ViewModel
         [Display(Name = "BudgetItem_Comments", ResourceType = typeof(Shared.Common.Resources.General))]
         public string Comments { get; set; }
 
+        public int MonthlyBudgetId { get; set; }
+
         public CalculatedBudgetItemFields CalculatedFields { get; set; }
     }
 }

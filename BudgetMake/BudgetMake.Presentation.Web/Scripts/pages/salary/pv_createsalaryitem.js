@@ -1,0 +1,50 @@
+﻿(function () {
+    "use strict";
+
+    var bindEvents = function () {
+        var alertBoxName = "create_alertBox";
+
+        $("#btnCancel").on('click', function () {
+            $("#createModal").modal('toggle');
+        });
+
+        $("#btnCreateSalaryItem").on('click', function () {
+            debugger;
+            var formData = $("#_InnerForm_CreateSalaryItem").serialize();
+            var monthlyPlanId = $("#hdnMonthlyPlanId").val();
+
+
+            var asyncCreate = function () {
+                return $.ajax({
+                    url: "/Salary/CreateBudgetItem",
+                    data: formData,
+                    type: "POST"
+                });
+            };
+
+            asyncCreate().done(function (result) {
+                var res = modules.network.ServerResponse.IsSuccess(result);
+                if (res === true) {
+                    // all went ok!
+                    location.href = "/Monthly/" + monthlyPlanId;
+                } else {
+                    // something went wrong
+                    res = modules.network.ServerResponse.IsFailure(result);
+                    if (res === true) {
+                        modules.alerts.Warning(alertBoxName, result);
+                    } else {
+                        modules.alerts.Danger(alertBoxName, result);
+                    }
+                }
+
+            }).fail(function (result) {
+                // general ajax failure
+                console.log(result);
+            });
+
+        });
+    };
+
+    bindEvents();
+
+})();

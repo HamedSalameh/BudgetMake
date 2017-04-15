@@ -8,8 +8,6 @@ namespace BudgetMake.Presentation.Web.ViewModel
         [Display(Name = "ID", ResourceType = typeof(Shared.Common.Resources.General))]
         public int ChequeId { get; set; }
 
-        public int MonthlyBudgetId { get; set; }
-
         [Display(Name = "BudgetItem_PaymentDate", ResourceType = typeof(Shared.Common.Resources.General))]
         public virtual DateTime PaymentDate { get; set; }
 
