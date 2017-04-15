@@ -23,7 +23,7 @@ function xdataObject(xsrfToken, dataObj) {
     this.__RequestVerificationToken = xsrfToken;
 
     // Handle the 3 simple types, and null or undefined
-    if (null == dataObj || "object" != typeof dataObj) {
+    if (null === dataObj || "object" != typeof dataObj) {
         return dataObj;
     }
 

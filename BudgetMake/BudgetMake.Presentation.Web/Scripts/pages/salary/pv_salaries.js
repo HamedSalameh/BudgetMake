@@ -22,6 +22,25 @@
 
         });
 
+        $("#salariesList").on('click', 'a[action="delete"]', function () {
+
+            var budgetItemId = this.getAttribute("budgetItemId");
+            var url = "/Salary/DeleteBudgetItem";
+            var data = { budgetItemId: budgetItemId };
+            var partialViewContainerId = "edit";
+
+            modules.ui.OpenPartialViewModal(url, data, partialViewContainerId);
+        });
+
+        $("#expensesList").on('click', 'a[action="history"]', function () {
+            var BudgetItemId = this.getAttribute("budgetItemId");
+            var url = "/Salary/EntityHistory";
+            var data = { budgetItemId: BudgetItemId };
+            var partialViewContainerId = "edit";
+
+            modules.ui.OpenPartialViewModal(url, data, partialViewContainerId);
+        });
+
         $("#salariesList").on('click', 'span.item-display', function (event) {
             $(event.currentTarget)
                 .hide()

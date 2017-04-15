@@ -15,6 +15,8 @@ namespace BudgetMake.Presentation.Web.Controllers
         {
             PartialViewNameFor_ItemsList = "Salaries";
             PartialViewNameFor_EditItem = "EditSalaryItem";
+            PartialViewNameFor_DeleteItem = "DeleteSalaryItem";
+            PartialViewNameFor_CreateItem = "CreateSalaryItem";
         }
 
         protected override SalaryViewModel MapToViewModel(Salary model)
