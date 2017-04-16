@@ -238,6 +238,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\BudgetItemBaseController.cs" />
     <Compile Include="Controllers\BudgetItemController.cs" />
+    <Compile Include="Controllers\CreditCardController.cs" />
     <Compile Include="Controllers\ExpenseController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MonthlyPlansController.cs" />
@@ -385,6 +386,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\BEBase\" />
+    <Folder Include="Views\CreditCard\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

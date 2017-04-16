@@ -23,6 +23,28 @@
 
             modules.ui.OpenPartialViewModal(url, data, id);
         });
+
+        $("#btnCreateNewChequeItem").on('click', function () {
+
+            var monthlyPlanId = $("#MonthlyPlan").val();
+
+            var url = "/Cheque/CreateBudgetItem";
+            var data = { MonthlyPlanId: monthlyPlanId };
+            var id = "edit";
+
+            modules.ui.OpenPartialViewModal(url, data, id);
+        });
+
+        $("#btnCreateNewCreditCardItem").on('click', function () {
+
+            var monthlyPlanId = $("#MonthlyPlan").val();
+
+            var url = "/CreditCard/CreateBudgetItem";
+            var data = { MonthlyPlanId: monthlyPlanId };
+            var id = "edit";
+
+            modules.ui.OpenPartialViewModal(url, data, id);
+        });
     };
 
     bindEvents();
