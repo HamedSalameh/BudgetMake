@@ -11,10 +11,10 @@ namespace BudgetMake.Presentation.Web.Controllers
     {
         public CreditCardController(IApplication Application, ILocalLogger Log) : base(Application, Log)
         {
-            PartialViewNameFor_ItemsList = "Expenses";
-            PartialViewNameFor_CreateItem = "CreateExpenseItem";
-            PartialViewNameFor_EditItem = "EditExpenseItem";
-            PartialViewNameFor_DeleteItem = "DeleteExpenseItem";
+            PartialViewNameFor_ItemsList = "CreditCards";
+            PartialViewNameFor_CreateItem = "CreateCreditCardItem";
+            PartialViewNameFor_EditItem = "EditCreditCardItem";
+            PartialViewNameFor_DeleteItem = "DeleteCreditCardItem";
         }
 
         protected override IList<CreditCardViewModel> GetViewModelsList(int MonthlyPlanId)

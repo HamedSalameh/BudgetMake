@@ -1,6 +1,7 @@
-﻿@model BudgetMake.Presentation.Web.ViewModel.SalaryViewModel
+﻿@model BudgetMake.Presentation.Web.ViewModel.CreditCardViewModel
 
-@using (Html.BeginForm("Create", "BudgetItem", FormMethod.Post, new { id = "_InnerForm_CreateSalaryItem" }))
+
+@using (Html.BeginForm("Create", "BudgetItem", FormMethod.Post, new { id = "_InnerForm_CreateCreditCardItem" }))
 {
     @Html.AntiForgeryToken()
 
@@ -54,7 +55,7 @@
         <div class="form-group">
             <div class="col-md-offset-3 col-md-9">
                 <input type="button" class="btn btn-default"
-                       value="Create" id="btnCreateSalaryItem" />
+                       value="Create" id="btnCreateCreditCardItem" />
                 <input type="button" class="btn btn-default"
                        value="Cancel" id="btnCancel" />
             </div>
@@ -66,4 +67,4 @@
     @Scripts.Render("~/bundles/jqueryval")
 }
 
-<script src="~/Scripts/pages/salary/pv_createsalaryitem.js"></script>
+<script src="~/Scripts/pages/creditcard/pv_createccitem.js"></script>

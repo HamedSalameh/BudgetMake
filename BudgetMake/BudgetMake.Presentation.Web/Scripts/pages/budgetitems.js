@@ -8,7 +8,7 @@
 
             var url = "/Expense/CreateBudgetItem";
             var data = { MonthlyPlanId: monthlyPlanId };
-            var id = "edit";
+            var id = "interaction";
 
             modules.ui.OpenPartialViewModal(url, data, id);
         });
@@ -19,7 +19,7 @@
 
             var url = "/Salary/CreateBudgetItem";
             var data = { MonthlyPlanId: monthlyPlanId };
-            var id = "edit";
+            var id = "interaction";
 
             modules.ui.OpenPartialViewModal(url, data, id);
         });
@@ -30,7 +30,7 @@
 
             var url = "/Cheque/CreateBudgetItem";
             var data = { MonthlyPlanId: monthlyPlanId };
-            var id = "edit";
+            var id = "interaction";
 
             modules.ui.OpenPartialViewModal(url, data, id);
         });
@@ -41,7 +41,7 @@
 
             var url = "/CreditCard/CreateBudgetItem";
             var data = { MonthlyPlanId: monthlyPlanId };
-            var id = "edit";
+            var id = "interaction";
 
             modules.ui.OpenPartialViewModal(url, data, id);
         });

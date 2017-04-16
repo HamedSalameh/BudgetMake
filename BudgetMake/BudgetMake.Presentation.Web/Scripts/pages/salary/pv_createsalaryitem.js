@@ -2,10 +2,10 @@
     "use strict";
 
     var bindEvents = function () {
-        var alertBoxName = "create_alertBox";
+        var alertBoxName = "interaction_alertBox";
 
         $("#btnCancel").on('click', function () {
-            $("#createModal").modal('toggle');
+            $("#interactionModal").modal('toggle');
         });
 
         $("#btnCreateSalaryItem").on('click', function () {
