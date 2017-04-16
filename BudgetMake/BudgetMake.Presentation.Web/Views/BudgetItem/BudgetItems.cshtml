@@ -3,17 +3,44 @@
     @Html.ActionLink("Create New", "Create", new { MonthlyPlanId = TempData["MonthlyPlan"] })
 </p>
 
+<style>
+
+    .monthlyMenu {
+        display: inline-block;
+        padding: 0.2em;
+    }
+
+</style>
+
 <div class="form-horizontal">
 
     <div class="form-group">
-        <div class="col-md-2">
-            <input type="button" class="btn btn-default"
-                   value="Add Expense" id="btnCreateNewExpenseItem" />
-        </div>
-        <div class="col-md-2">
+        
+        <div class="monthlyMenu">
             <input type="button" class="btn btn-default"
                    value="Add Salary" id="btnCreateNewSalaryItem" />
         </div>
+
+        <div class="monthlyMenu">
+            <input type="button" class="btn btn-default"
+                   value="Add Loan Payment" id="btnCreateNewLoanPaymentItem" />
+        </div>
+
+        <div class="monthlyMenu">
+            <input type="button" class="btn btn-default"
+                   value="Add Credit Card" id="btnCreateNewCreditCardItem" />
+        </div>
+
+        <div class="monthlyMenu">
+            <input type="button" class="btn btn-default"
+                   value="Add Cheque" id="btnCreateNewChequeItem" />
+        </div>
+
+        <div class="monthlyMenu">
+            <input type="button" class="btn btn-default"
+                   value="Add Expense" id="btnCreateNewExpenseItem" />
+        </div>
+
     </div>
 </div>
 

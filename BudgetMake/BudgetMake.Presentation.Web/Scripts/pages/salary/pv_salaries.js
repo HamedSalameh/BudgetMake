@@ -32,7 +32,7 @@
             modules.ui.OpenPartialViewModal(url, data, partialViewContainerId);
         });
 
-        $("#expensesList").on('click', 'a[action="history"]', function () {
+        $("#salariesList").on('click', 'a[action="history"]', function () {
             var BudgetItemId = this.getAttribute("budgetItemId");
             var url = "/Salary/EntityHistory";
             var data = { budgetItemId: BudgetItemId };

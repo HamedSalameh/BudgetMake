@@ -101,9 +101,16 @@ namespace BudgetMake.Presentation.Web.Controllers
         [HttpGet]
         public ActionResult Create(int? MonthlyPlanId)
         {
-            ExpenseViewModel viewModel = new ExpenseViewModel();
-            viewModel.MonthlyBudgetId = MonthlyPlanId.Value;
-            return View(viewModel);
+            if (MonthlyPlanId != null)
+            {
+                ExpenseViewModel viewModel = new ExpenseViewModel();
+                viewModel.MonthlyBudgetId = MonthlyPlanId.Value;
+                return View(viewModel);
+            }
+            else
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
         }
 
         [HttpPost]
