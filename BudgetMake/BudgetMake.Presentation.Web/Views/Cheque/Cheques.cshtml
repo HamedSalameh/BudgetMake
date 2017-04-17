@@ -1,0 +1,76 @@
+﻿@using BudgetMake.Presentation.Web.Helpers
+@model IEnumerable<BudgetMake.Presentation.Web.ViewModel.ChequeViewModel>
+
+<style>
+    .item-display {
+        display: normal;
+    }
+
+    .item-field {
+        display: none;
+    }
+</style>
+
+<div id="chequesListAlertBox">
+
+</div>
+
+
+<table class="table" id="chequesList">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Amount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PaymentDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Comments)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Payee)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr data="@item.ChequeId">
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                <span class="item-display">
+                    @Html.DisplayFor(modelItem => item.Amount)
+                </span>
+                <span class="item-field" ov=@item.Amount propertyName="Amount">
+                    @Html.EditorFor(modelItem => item.Amount)
+                </span>
+
+            </td>
+            <td>
+                @Html.DisplayFor(modelteim => item.PaymentDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Comments)
+            </td>
+            <th>
+                @Html.DisplayFor(modelItem => item.Payee)
+            </th>
+            <td>
+                <a href="#" budgetitemid=@item.ChequeId action="edit">Edit</a>
+                <a href="#" budgetitemid=@item.ChequeId action="delete">Delete</a>
+                <a href="#" budgetitemid=@item.ChequeId action="history">Show History</a>
+            </td>
+        </tr>
+    }
+
+</table>
+
+@Html.Hidden("BaseResultData", TempData["OperationResult"])
+
+<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc=" crossorigin="anonymous"></script>
+<script src="~/Scripts/pages/cheque/pv_cheques.js"></script>

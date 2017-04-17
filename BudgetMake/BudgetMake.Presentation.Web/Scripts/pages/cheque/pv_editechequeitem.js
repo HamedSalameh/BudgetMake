@@ -8,21 +8,15 @@
             $("#interactionModal").modal('toggle');
         });
 
-        $("#btnDeleteCreditCardItem").on('click', function () {
+        $("#btnEditCreditCardItem").on('click', function () {
             debugger;
-            var BudgetItemId = $("#BudgetItemId").val();
-            var MonthlyPlanId = $("#MonthlyPlanId").val();
-
-            var form = $('#__deleteCreditCardForm');
-            var token = $('input[name="__RequestVerificationToken"]', form).val();
+            var formData = $("#_InnerForm_EditExpenseItem").serialize();
+            var monthlyPlanId = $("#hdnMonthlyPlanId").val();
 
             var asyncCreate = function () {
                 return $.ajax({
-                    url: "/CreditCard/DeleteBudget",
-                    data: {
-                        __RequestVerificationToken: token,
-                        budgetItemId: BudgetItemId
-                    },
+                    url: "/Expense/EditBudgetItem",
+                    data: formData,
                     type: "POST"
                 });
             };
@@ -31,12 +25,12 @@
                 var res = modules.network.ServerResponse.IsSuccess(result);
                 if (res == true) {
                     // all went ok!
-                    location.href = "/Monthly/" + MonthlyPlanId;
+                    location.href = "/Monthly/" + monthlyPlanId;
                 } else {
                     // something went wrong
                     var res = modules.network.ServerResponse.IsFailure(result);
                     if (res == true) {
-                        modules.alerts.warning(alertBoxName, result);
+                        modules.alerts.Warning(alertBoxName, result);
                     } else {
                         modules.alerts.Danger(alertBoxName, result);
                     }

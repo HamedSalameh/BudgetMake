@@ -310,6 +310,10 @@
     <Content Include="Scripts\pages\annual\pv_deleteannualplan.js" />
     <Content Include="Scripts\pages\annual\pv_editannualbudgetplan.js" />
     <Content Include="Scripts\pages\budgetitems.js" />
+    <Content Include="Scripts\pages\cheque\pv_createchequeitem.js" />
+    <Content Include="Scripts\pages\cheque\pv_cheques.js" />
+    <Content Include="Scripts\pages\cheque\pv_deletechequeitem.js" />
+    <Content Include="Scripts\pages\cheque\pv_editechequeitem.js" />
     <Content Include="Scripts\pages\creditcard\pv_createccitem.js" />
     <Content Include="Scripts\pages\creditcard\pv_deleteccitem.js" />
     <Content Include="Scripts\pages\creditcard\pv_editeccitem.js" />
@@ -391,12 +395,14 @@
     <Content Include="Views\CreditCard\DeleteCreditCardItem.cshtml" />
     <Content Include="Views\CreditCard\EditCreditCardItem.cshtml" />
     <Content Include="Views\CreditCard\CreditCards.cshtml" />
+    <Content Include="Views\Cheque\CreateChequeItem.cshtml" />
+    <Content Include="Views\Cheque\Cheques.cshtml" />
+    <Content Include="Views\Cheque\DeleteChequeItem.cshtml" />
+    <Content Include="Views\Cheque\EditChequeItem.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Scripts\pages\cheque\" />
     <Folder Include="Views\BEBase\" />
-    <Folder Include="Views\Cheque\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

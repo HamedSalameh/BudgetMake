@@ -8,17 +8,17 @@
             $("#interactionModal").modal('toggle');
         });
 
-        $("#btnDeleteCreditCardItem").on('click', function () {
+        $("#btnDeleteChequeItem").on('click', function () {
             debugger;
             var BudgetItemId = $("#BudgetItemId").val();
             var MonthlyPlanId = $("#MonthlyPlanId").val();
 
-            var form = $('#__deleteCreditCardForm');
+            var form = $('#__deleteExpenseForm');
             var token = $('input[name="__RequestVerificationToken"]', form).val();
 
             var asyncCreate = function () {
                 return $.ajax({
-                    url: "/CreditCard/DeleteBudget",
+                    url: "/Cheque/DeleteBudget",
                     data: {
                         __RequestVerificationToken: token,
                         budgetItemId: BudgetItemId

@@ -1,4 +1,4 @@
-﻿@model BudgetMake.Presentation.Web.ViewModel.CreditCardViewModel
+﻿@model BudgetMake.Presentation.Web.ViewModel.SalaryViewModel
 
 @{
     ViewBag.Title = "Delete";
@@ -8,7 +8,7 @@
     <hr />
     <dl class="dl-horizontal">
 
-        @Html.Hidden("BudgetItemId", Model.CreditCardId);
+        @Html.Hidden("BudgetItemId", Model.SalaryId);
         @Html.Hidden("MonthlyPlanId", Model.MonthlyBudgetId);
 
         <dt>
@@ -53,7 +53,7 @@
 
     </dl>
 
-    @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__deleteCreditCardForm" }))
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "__deleteSalaryForm" }))
     {
         @Html.AntiForgeryToken()
 
@@ -68,4 +68,4 @@
     }
 </div>
 
-<script src="~/Scripts/pages/creditcard/pv_deleteccitem.js"></script>
+<script src="~/Scripts/pages/salary/pv_deletesalaryitem.js"></script>
