@@ -9,9 +9,11 @@ namespace BudgetMake.Presentation.Web.ViewModel
         public int ChequeId { get; set; }
 
         [Display(Name = "BudgetItem_PaymentDate", ResourceType = typeof(Shared.Common.Resources.General))]
+        [Required]
         public virtual DateTime PaymentDate { get; set; }
 
         [Display(Name = "BudgetItem_Payee", ResourceType = typeof(Shared.Common.Resources.General))]
+        [Required]
         public virtual string Payee { get; set; }
     }
 }

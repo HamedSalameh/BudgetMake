@@ -17,6 +17,7 @@ namespace BudgetMake.Presentation.Web.ViewModel
 
         [Display(Name = "BudgetItem_Amount", ResourceType = typeof(Shared.Common.Resources.General))]
         [PositiveNumber("General_NegativeValue", "General_NaN", typeof(Shared.Common.Resources.Errors))]
+        [Required]
         public double Amount { get; set; }
 
         [Display(Name = "BudgetItem_AmountUsed", ResourceType = typeof(Shared.Common.Resources.General))]

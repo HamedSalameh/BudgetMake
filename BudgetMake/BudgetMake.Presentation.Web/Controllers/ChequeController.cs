@@ -11,10 +11,10 @@ namespace BudgetMake.Presentation.Web.Controllers
     {
         public ChequeController(IApplication Application, ILocalLogger Log) : base(Application, Log)
         {
-            PartialViewNameFor_ItemsList = "Expenses";
-            PartialViewNameFor_CreateItem = "CreateExpenseItem";
-            PartialViewNameFor_EditItem = "EditExpenseItem";
-            PartialViewNameFor_DeleteItem = "DeleteExpenseItem";
+            PartialViewNameFor_ItemsList = "Cheques";
+            PartialViewNameFor_CreateItem = "CreateChequeItem";
+            PartialViewNameFor_EditItem = "EditChequeItem";
+            PartialViewNameFor_DeleteItem = "DeleteChequeItem";
         }
 
         protected override IList<ChequeViewModel> GetViewModelsList(int MonthlyPlanId)
