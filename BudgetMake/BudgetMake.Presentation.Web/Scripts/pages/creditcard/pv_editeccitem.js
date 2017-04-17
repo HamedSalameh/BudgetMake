@@ -10,12 +10,12 @@
 
         $("#btnEditCreditCardItem").on('click', function () {
             debugger;
-            var formData = $("#_InnerForm_EditExpenseItem").serialize();
+            var formData = $("#_InnerForm_EditCreditCardItem").serialize();
             var monthlyPlanId = $("#hdnMonthlyPlanId").val();
 
             var asyncCreate = function () {
                 return $.ajax({
-                    url: "/Expense/EditBudgetItem",
+                    url: "/CreditCard/EditBudgetItem",
                     data: formData,
                     type: "POST"
                 });
