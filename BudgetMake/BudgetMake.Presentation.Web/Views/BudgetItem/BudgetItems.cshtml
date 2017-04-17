@@ -46,7 +46,7 @@
 </div>
 
 <div>
-    @{ Html.RenderAction("GetLoanPayments", "BudgetItem", new { MonthlyPlanId = TempData["MonthlyPlan"] }); }
+    
 </div>
 
 <div>
@@ -54,7 +54,7 @@
 </div>
 
 <div>
-    @{ Html.RenderAction("GetCheques", "BudgetItem", new { MonthlyPlanId = TempData["MonthlyPlan"] }); }
+    @{ Html.RenderAction("GetBudgetItemsList", "Cheque", new { MonthlyPlanId = TempData["MonthlyPlan"] }); }
 </div>
 
 <div>
