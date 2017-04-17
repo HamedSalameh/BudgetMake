@@ -8,14 +8,14 @@
             $("#interactionModal").modal('toggle');
         });
 
-        $("#btnEditCreditCardItem").on('click', function () {
+        $("#btnEditChequeItem").on('click', function () {
             debugger;
-            var formData = $("#_InnerForm_EditExpenseItem").serialize();
+            var formData = $("#_InnerForm_EditChequeItem").serialize();
             var monthlyPlanId = $("#hdnMonthlyPlanId").val();
 
             var asyncCreate = function () {
                 return $.ajax({
-                    url: "/Expense/EditBudgetItem",
+                    url: "/Cheque/EditBudgetItem",
                     data: formData,
                     type: "POST"
                 });

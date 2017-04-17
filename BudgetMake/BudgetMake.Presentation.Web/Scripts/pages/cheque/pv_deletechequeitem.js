@@ -13,7 +13,7 @@
             var BudgetItemId = $("#BudgetItemId").val();
             var MonthlyPlanId = $("#MonthlyPlanId").val();
 
-            var form = $('#__deleteExpenseForm');
+            var form = $('#__deleteChequeForm');
             var token = $('input[name="__RequestVerificationToken"]', form).val();
 
             var asyncCreate = function () {
