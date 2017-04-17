@@ -8,7 +8,7 @@
             $("#interactionModal").modal('toggle');
         });
 
-        $("#btnEditExpenseItem").on('click', function () {
+        $("#btnEditCreditCardItem").on('click', function () {
             debugger;
             var formData = $("#_InnerForm_EditExpenseItem").serialize();
             var monthlyPlanId = $("#hdnMonthlyPlanId").val();

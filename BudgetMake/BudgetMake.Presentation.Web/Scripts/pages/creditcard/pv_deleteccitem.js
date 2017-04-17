@@ -8,7 +8,7 @@
             $("#interactionModal").modal('toggle');
         });
 
-        $("#btnDeleteExpenseItem").on('click', function () {
+        $("#btnDeleteCreditCardItem").on('click', function () {
             debugger;
             var BudgetItemId = $("#BudgetItemId").val();
             var MonthlyPlanId = $("#MonthlyPlanId").val();
