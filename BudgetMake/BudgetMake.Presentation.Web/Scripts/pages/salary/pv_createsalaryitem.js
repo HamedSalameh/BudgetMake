@@ -8,14 +8,15 @@
             $("#interactionModal").modal('toggle');
         });
 
-        $("#btnEditExpenseItem").on('click', function () {
+        $("#btnCreateSalaryItem").on('click', function () {
             debugger;
-            var formData = $("#_InnerForm_EditExpenseItem").serialize();
+            var formData = $("#_InnerForm_CreateSalaryItem").serialize();
             var monthlyPlanId = $("#hdnMonthlyPlanId").val();
+
 
             var asyncCreate = function () {
                 return $.ajax({
-                    url: "/Expense/EditBudgetItem",
+                    url: "/Salary/CreateBudgetItem",
                     data: formData,
                     type: "POST"
                 });
@@ -23,13 +24,13 @@
 
             asyncCreate().done(function (result) {
                 var res = modules.network.ServerResponse.IsSuccess(result);
-                if (res == true) {
+                if (res === true) {
                     // all went ok!
                     location.href = "/Monthly/" + monthlyPlanId;
                 } else {
                     // something went wrong
-                    var res = modules.network.ServerResponse.IsFailure(result);
-                    if (res == true) {
+                    res = modules.network.ServerResponse.IsFailure(result);
+                    if (res === true) {
                         modules.alerts.Warning(alertBoxName, result);
                     } else {
                         modules.alerts.Danger(alertBoxName, result);
@@ -42,7 +43,7 @@
             });
 
         });
-    }
+    };
 
     bindEvents();
 

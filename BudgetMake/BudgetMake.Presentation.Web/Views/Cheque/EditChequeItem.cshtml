@@ -1,13 +1,13 @@
-﻿@model BudgetMake.Presentation.Web.ViewModel.SalaryViewModel
+﻿@model BudgetMake.Presentation.Web.ViewModel.ChequeViewModel
 
 
-@using (Html.BeginForm("EditBudgetItem", "Salary", FormMethod.Post, new { id = "_InnerForm_EditSalaryItem" }))
+@using (Html.BeginForm("EditBudgetItem", "Salary", FormMethod.Post, new { id = "_InnerForm_EditChequeItem" }))
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
 
-        @Html.HiddenFor(model => model.SalaryId)
+        @Html.HiddenFor(model => model.ChequeId)
         @Html.HiddenFor(model => model.MonthlyBudgetId)
         @Html.HiddenFor(model => model.LastModified)
         @Html.HiddenFor(model => model.CreationDate)
@@ -59,7 +59,7 @@
         <div class="form-group">
             <div class="col-md-offset-3 col-md-9">
                 <input type="button" class="btn btn-default"
-                       value="Save" id="btnEditSalaryItem" />
+                       value="Save" id="btnEditChequeItem" />
                 <input type="button" class="btn btn-default"
                        value="Cancel" id="btnCancel" />
             </div>
@@ -71,4 +71,4 @@
     @Scripts.Render("~/bundles/jqueryval")
 }
 
-<script src="~/Scripts/pages/salary/pv_editsalaryitem.js"></script>
+<script src="~/Scripts/pages/cheque/pv_editechequeitem.js"></script>

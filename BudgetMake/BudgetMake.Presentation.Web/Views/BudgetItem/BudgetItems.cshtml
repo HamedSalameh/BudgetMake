@@ -1,15 +1,43 @@
 ﻿@using BudgetMake.Presentation.Web.Helpers
-<p>
-    @Html.ActionLink("Create New", "Create", new { MonthlyPlanId = TempData["MonthlyPlan"] })
-</p>
+
+<style>
+
+    .monthlyMenu {
+        display: inline-block;
+        padding: 0.2em;
+    }
+
+</style>
 
 <div class="form-horizontal">
 
     <div class="form-group">
-        <div class="col-md-2">
+        
+        <div class="monthlyMenu">
             <input type="button" class="btn btn-default"
-                   value="Create New Expense Item" id="btnCreateNewExpenseItem" />
+                   value="Add Salary" id="btnCreateNewSalaryItem" />
         </div>
+
+        <div class="monthlyMenu">
+            <input type="button" class="btn btn-default"
+                   value="Add Loan Payment" id="btnCreateNewLoanPaymentItem" />
+        </div>
+
+        <div class="monthlyMenu">
+            <input type="button" class="btn btn-default"
+                   value="Add Credit Card" id="btnCreateNewCreditCardItem" />
+        </div>
+
+        <div class="monthlyMenu">
+            <input type="button" class="btn btn-default"
+                   value="Add Cheque" id="btnCreateNewChequeItem" />
+        </div>
+
+        <div class="monthlyMenu">
+            <input type="button" class="btn btn-default"
+                   value="Add Expense" id="btnCreateNewExpenseItem" />
+        </div>
+
     </div>
 </div>
 
@@ -18,15 +46,15 @@
 </div>
 
 <div>
-    @{ Html.RenderAction("GetLoanPayments", "BudgetItem", new { MonthlyPlanId = TempData["MonthlyPlan"] }); }
+    
 </div>
 
 <div>
-    @{ Html.RenderAction("GetCreditCards", "BudgetItem", new { MonthlyPlanId = TempData["MonthlyPlan"] }); }
+    @{ Html.RenderAction("GetBudgetItemsList", "CreditCard", new { MonthlyPlanId = TempData["MonthlyPlan"] }); }
 </div>
 
 <div>
-    @{ Html.RenderAction("GetCheques", "BudgetItem", new { MonthlyPlanId = TempData["MonthlyPlan"] }); }
+    @{ Html.RenderAction("GetBudgetItemsList", "Cheque", new { MonthlyPlanId = TempData["MonthlyPlan"] }); }
 </div>
 
 <div>
@@ -38,7 +66,7 @@
 
 @Html.Hidden("MonthlyPlan", TempData["MonthlyPlan"]);
 
-@Html.bsModal("create", "Create new budget item")
+@Html.bsModal("interaction", "Create new budget item")
 
 <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc=" crossorigin="anonymous"></script>
 <script src="~/Scripts/pages/budgetitems.js"></script>

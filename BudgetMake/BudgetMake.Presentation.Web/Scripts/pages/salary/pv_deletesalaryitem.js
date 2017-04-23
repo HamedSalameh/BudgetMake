@@ -8,15 +8,21 @@
             $("#interactionModal").modal('toggle');
         });
 
-        $("#btnEditExpenseItem").on('click', function () {
+        $("#btnDeleteSalaryItem").on('click', function () {
             debugger;
-            var formData = $("#_InnerForm_EditExpenseItem").serialize();
-            var monthlyPlanId = $("#hdnMonthlyPlanId").val();
+            var BudgetItemId = $("#BudgetItemId").val();
+            var MonthlyPlanId = $("#MonthlyPlanId").val();
+
+            var form = $('#__deleteSalaryForm');
+            var token = $('input[name="__RequestVerificationToken"]', form).val();
 
             var asyncCreate = function () {
                 return $.ajax({
-                    url: "/Expense/EditBudgetItem",
-                    data: formData,
+                    url: "/Salary/DeleteBudget",
+                    data: {
+                        __RequestVerificationToken: token,
+                        budgetItemId: BudgetItemId
+                    },
                     type: "POST"
                 });
             };
@@ -25,12 +31,12 @@
                 var res = modules.network.ServerResponse.IsSuccess(result);
                 if (res == true) {
                     // all went ok!
-                    location.href = "/Monthly/" + monthlyPlanId;
+                    location.href = "/Monthly/" + MonthlyPlanId;
                 } else {
                     // something went wrong
                     var res = modules.network.ServerResponse.IsFailure(result);
                     if (res == true) {
-                        modules.alerts.Warning(alertBoxName, result);
+                        modules.alerts.warning(alertBoxName, result);
                     } else {
                         modules.alerts.Danger(alertBoxName, result);
                     }

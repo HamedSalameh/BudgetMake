@@ -15,7 +15,7 @@ namespace BudgetMake.Presentation.Web.Extentions
                 {
                     Id = model.MonthlyPlanId,
                     TemplateName = model.TemplateName,
-                    Template = model.Template,
+                    Template = model.Template
                 };
             }
             return template;

@@ -1,7 +1,6 @@
 ﻿(function () {
     'use strict';
 
-    var alertBoxName = "expensesListAlertBox";
     var monthlyPlanId = $("#MonthlyPlan").val();
 
     var bindEvents = function () {
@@ -16,7 +15,7 @@
             var BudgetItemId = this.getAttribute("budgetItemId");
             var url = "/Expense/EditBudgetItem";
             var data = { budgetItemId: BudgetItemId };
-            var id = "edit";
+            var id = "interaction";
 
             modules.ui.OpenPartialViewModal(url, data, id);
 
@@ -27,7 +26,7 @@
             var BudgetItemId = this.getAttribute("budgetItemId");
             var url = "/Expense/DeleteBudgetItem";
             var data = { budgetItemId: BudgetItemId };
-            var id = "edit";
+            var id = "interaction";
 
             modules.ui.OpenPartialViewModal(url, data, id);
 
@@ -37,7 +36,7 @@
             var BudgetItemId = this.getAttribute("budgetItemId");
             var url = "/Expense/EntityHistory";
             var data = { budgetItemId: BudgetItemId };
-            var modalNameForPartialView = "edit";
+            var modalNameForPartialView = "interaction";
 
             modules.ui.OpenPartialViewModal(url, data, modalNameForPartialView);
         });

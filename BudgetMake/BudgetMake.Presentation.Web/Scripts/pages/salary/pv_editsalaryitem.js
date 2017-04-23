@@ -2,10 +2,10 @@
     "use strict";
 
     var bindEvents = function () {
-        var alertBoxName = "edit";
+        var alertBoxName = "interaction_alertBox";
 
         $("#btnCancel").on('click', function () {
-            $("#editModal").modal('toggle');
+            $("#interactionModal").modal('toggle');
         });
 
         $("#btnEditSalaryItem").on('click', function () {

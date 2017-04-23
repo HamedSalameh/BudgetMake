@@ -20,7 +20,9 @@ namespace BudgetMake.Presentation.Web.Extentions
                     Description = Cheque.Description,
                     MonthlyBudgetId = Cheque.MonthlyBudgetId,
                     Payee = Cheque.Payee,
-                    PaymentDate = Cheque.PaymentDate
+                    PaymentDate = Cheque.PaymentDate,
+                    CreationDate = Cheque.CreationDate,
+                    LastModified = Cheque.LastModifited
                 };
             }
 
@@ -41,7 +43,9 @@ namespace BudgetMake.Presentation.Web.Extentions
                     Id = viewModel.ChequeId,
                     MonthlyBudgetId = viewModel.MonthlyBudgetId,
                     Payee = viewModel.Payee,
-                    PaymentDate = viewModel.PaymentDate
+                    PaymentDate = viewModel.PaymentDate,
+                    CreationDate = viewModel.CreationDate,
+                    LastModifited = viewModel.LastModified
                 };
             }
 

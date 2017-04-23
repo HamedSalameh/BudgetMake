@@ -20,7 +20,9 @@ namespace BudgetMake.Presentation.Web.Extentions
                     Description = CreditCard.Description,
                     MonthlyBudgetId = CreditCard.MonthlyBudgetId,
                     PaymentDate = CreditCard.PaymentDate,
-                    CardType = CreditCard.CardType
+                    CardType = CreditCard.CardType,
+                    CreationDate = CreditCard.CreationDate,
+                    LastModified = CreditCard.LastModifited
                 };
             }
 
@@ -41,7 +43,9 @@ namespace BudgetMake.Presentation.Web.Extentions
                     Id = viewModel.CreditCardId,
                     MonthlyBudgetId = viewModel.MonthlyBudgetId,
                     PaymentDate = viewModel.PaymentDate,
-                    CardType = viewModel.CardType
+                    CardType = viewModel.CardType,
+                    CreationDate = viewModel.CreationDate,
+                    LastModifited = viewModel.LastModified
                 };
             }
 

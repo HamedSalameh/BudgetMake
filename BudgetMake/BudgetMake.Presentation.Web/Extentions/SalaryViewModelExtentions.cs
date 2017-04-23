@@ -18,7 +18,9 @@ namespace BudgetMake.Presentation.Web.Extentions
                     Description = SalaryVM.Description,
                     Id = SalaryVM.SalaryId,
                     MonthlyBudgetId = SalaryVM.MonthlyBudgetId,
-                    PaymentDate = SalaryVM.PaymentDate
+                    PaymentDate = SalaryVM.PaymentDate,
+                    CreationDate = SalaryVM.CreationDate,
+                    LastModifited = SalaryVM.LastModified
                 };
             }
             return salary;
@@ -37,7 +39,9 @@ namespace BudgetMake.Presentation.Web.Extentions
                     Description = Salary.Description,
                     MonthlyBudgetId = Salary.MonthlyBudgetId,
                     PaymentDate = Salary.PaymentDate,
-                    SalaryId = Salary.Id
+                    SalaryId = Salary.Id,
+                    CreationDate = Salary.CreationDate,
+                    LastModified = Salary.LastModifited
                 };
             }
 

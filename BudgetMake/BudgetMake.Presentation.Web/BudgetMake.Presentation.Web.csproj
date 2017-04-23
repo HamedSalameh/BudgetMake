@@ -238,6 +238,8 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\BudgetItemBaseController.cs" />
     <Compile Include="Controllers\BudgetItemController.cs" />
+    <Compile Include="Controllers\ChequeController.cs" />
+    <Compile Include="Controllers\CreditCardController.cs" />
     <Compile Include="Controllers\ExpenseController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MonthlyPlansController.cs" />
@@ -308,6 +310,14 @@
     <Content Include="Scripts\pages\annual\pv_deleteannualplan.js" />
     <Content Include="Scripts\pages\annual\pv_editannualbudgetplan.js" />
     <Content Include="Scripts\pages\budgetitems.js" />
+    <Content Include="Scripts\pages\cheque\pv_createchequeitem.js" />
+    <Content Include="Scripts\pages\cheque\pv_cheques.js" />
+    <Content Include="Scripts\pages\cheque\pv_deletechequeitem.js" />
+    <Content Include="Scripts\pages\cheque\pv_editechequeitem.js" />
+    <Content Include="Scripts\pages\creditcard\pv_createccitem.js" />
+    <Content Include="Scripts\pages\creditcard\pv_deleteccitem.js" />
+    <Content Include="Scripts\pages\creditcard\pv_editeccitem.js" />
+    <Content Include="Scripts\pages\creditcard\pv_creditcards.js" />
     <Content Include="Scripts\pages\expense\pv_createexpenseitem.js" />
     <Content Include="Scripts\pages\expense\pv_deleteexpenseitem.js" />
     <Content Include="Scripts\pages\expense\pv_editexpenseitem.js" />
@@ -316,6 +326,8 @@
     <Content Include="Scripts\pages\month\pv_createmonthlyplan.js" />
     <Content Include="Scripts\pages\month\pv_deletemonthlyplan.js" />
     <Content Include="Scripts\pages\month\pv_editmonthlyplan.js" />
+    <Content Include="Scripts\pages\salary\pv_createsalaryitem.js" />
+    <Content Include="Scripts\pages\salary\pv_deletesalaryitem.js" />
     <Content Include="Scripts\pages\salary\pv_editsalaryitem.js" />
     <Content Include="Scripts\pages\salary\pv_salaries.js" />
     <Content Include="Scripts\respond.js" />
@@ -377,6 +389,16 @@
     <Content Include="Views\Shared\_EntityHistory.cshtml" />
     <Content Include="Views\Shared\_EntityHistoryDetails.cshtml" />
     <Content Include="Views\Salary\EditSalaryItem.cshtml" />
+    <Content Include="Views\Salary\DeleteSalaryItem.cshtml" />
+    <Content Include="Views\Salary\CreateSalaryItem.cshtml" />
+    <Content Include="Views\CreditCard\CreateCreditCardItem.cshtml" />
+    <Content Include="Views\CreditCard\DeleteCreditCardItem.cshtml" />
+    <Content Include="Views\CreditCard\EditCreditCardItem.cshtml" />
+    <Content Include="Views\CreditCard\CreditCards.cshtml" />
+    <Content Include="Views\Cheque\CreateChequeItem.cshtml" />
+    <Content Include="Views\Cheque\Cheques.cshtml" />
+    <Content Include="Views\Cheque\DeleteChequeItem.cshtml" />
+    <Content Include="Views\Cheque\EditChequeItem.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

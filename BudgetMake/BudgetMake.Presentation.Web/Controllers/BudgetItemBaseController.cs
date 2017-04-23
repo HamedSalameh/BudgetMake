@@ -13,7 +13,7 @@ using static GeneralServices.Enums;
 
 namespace BudgetMake.Presentation.Web.Controllers
 {
-    public abstract class BudgetItemBaseController<Model, ViewModel> : BaseController<Model, ViewModel> where Model : class
+    public abstract class BudgetItemBaseController<Model, ViewModel> : BaseController<Model, ViewModel> where Model : class where ViewModel : BudgetItemViewModelBase, new()
     {
         private string partialViewNameFor_ItemsList { get; set; }
         private string partialViewNameFor_CreateItem { get; set; }
@@ -28,6 +28,10 @@ namespace BudgetMake.Presentation.Web.Controllers
             }
             set
             {
+                if (string.IsNullOrEmpty(value))
+                {
+                    throw new Exception("Partial view name must not be null or empty.");
+                }
                 partialViewNameFor_ItemsList = value;
             }
         }
@@ -39,6 +43,10 @@ namespace BudgetMake.Presentation.Web.Controllers
             }
             set
             {
+                if (string.IsNullOrEmpty(value))
+                {
+                    throw new Exception("Partial view name must not be null or empty.");
+                }
                 partialViewNameFor_CreateItem = value;
             }
         }
@@ -50,6 +58,10 @@ namespace BudgetMake.Presentation.Web.Controllers
             }
             set
             {
+                if (string.IsNullOrEmpty(value))
+                {
+                    throw new Exception("Partial view name must not be null or empty.");
+                }
                 partialViewNameFor_EditItem = value;
             }
         }
@@ -61,6 +73,10 @@ namespace BudgetMake.Presentation.Web.Controllers
             }
             set
             {
+                if (string.IsNullOrEmpty(value))
+                {
+                    throw new Exception("Partial view name must not be null or empty.");
+                }
                 partialViewNameFor_DeleteItem = value;
             }
         }
@@ -126,7 +142,7 @@ namespace BudgetMake.Presentation.Web.Controllers
 
             if (monthlyPlanId != 0)
             {
-                ExpenseViewModel viewModel = new ExpenseViewModel();
+                ViewModel viewModel = new ViewModel();
                 viewModel.MonthlyBudgetId = monthlyPlanId;
                 return PartialView(PartialViewNameFor_CreateItem, viewModel);
             }

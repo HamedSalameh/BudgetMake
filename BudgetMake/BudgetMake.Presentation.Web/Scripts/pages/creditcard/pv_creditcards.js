@@ -10,10 +10,10 @@
             modules.network.ServerData.CheckServerData("BaseResultData");
         });
 
-        $("#salariesList").on('click', 'a[action="edit"]', function () {
+        $("#creditCardsList").on('click', 'a[action="edit"]', function () {
 
             var BudgetItemId = this.getAttribute("budgetItemId");
-            var url = "/Salary/EditBudgetItem";
+            var url = "/CreditCard/EditBudgetItem";
             var data = { budgetItemId: BudgetItemId };
             var id = "interaction";
 
@@ -21,26 +21,27 @@
 
         });
 
-        $("#salariesList").on('click', 'a[action="delete"]', function () {
+        $("#creditCardsList").on('click', 'a[action="delete"]', function () {
 
-            var budgetItemId = this.getAttribute("budgetItemId");
-            var url = "/Salary/DeleteBudgetItem";
-            var data = { budgetItemId: budgetItemId };
-            var partialViewContainerId = "interaction";
-
-            modules.ui.OpenPartialViewModal(url, data, partialViewContainerId);
-        });
-
-        $("#salariesList").on('click', 'a[action="history"]', function () {
             var BudgetItemId = this.getAttribute("budgetItemId");
-            var url = "/Salary/EntityHistory";
+            var url = "/CreditCard/DeleteBudgetItem";
             var data = { budgetItemId: BudgetItemId };
-            var partialViewContainerId = "interaction";
+            var id = "interaction";
 
-            modules.ui.OpenPartialViewModal(url, data, partialViewContainerId);
+            modules.ui.OpenPartialViewModal(url, data, id);
+
         });
 
-        $("#salariesList").on('click', 'span.item-display', function (event) {
+        $("#creditCardsList").on('click', 'a[action="history"]', function () {
+            var BudgetItemId = this.getAttribute("budgetItemId");
+            var url = "/CreditCard/EntityHistory";
+            var data = { budgetItemId: BudgetItemId };
+            var modalNameForPartialView = "interaction";
+
+            modules.ui.OpenPartialViewModal(url, data, modalNameForPartialView);
+        });
+
+        $("#creditCardsList").on('click', 'span.item-display', function (event) {
             $(event.currentTarget)
                 .hide()
                 .next('span.item-field')
@@ -71,7 +72,7 @@
             // handle the save event
             modules.ui.ToggleDisplayEdit(event, 'span', 'item-display');
             // Get anti forgery token from page
-            var token = modules.security.GetAntiForgeryToken("salariesList");
+            var token = modules.security.GetAntiForgeryToken("CreditCardsList");
 
             var _biAmount = $display.html();
             var _biId = $display.parent().parent().attr('data');
@@ -87,7 +88,7 @@
             // Create data object with XSRF token included
             var xDataObj = new xdataObject(token, formData);
             // Call server with xDataObj
-            modules.network.ServerCall("/Salary/QuickEditBudgetItem", "POST", xDataObj, redirect, showAlert);
+            modules.network.ServerCall("/CreditCard/QuickEditBudgetItem", "POST", xDataObj, redirect, showAlert);
         });
 
         var redirect = function (url) {
@@ -98,7 +99,7 @@
         };
 
         var showAlert = function () {
-
+            
         }
 
     };

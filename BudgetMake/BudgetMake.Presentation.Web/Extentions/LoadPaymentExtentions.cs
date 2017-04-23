@@ -20,7 +20,9 @@ namespace BudgetMake.Presentation.Web.Extentions
                     Description = LoanPayment.Description,
                     MonthlyBudgetId = LoanPayment.MonthlyBudgetId,
                     PaymentDate = LoanPayment.PaymentDate,
-                    LoanId = LoanPayment.LoanId
+                    LoanId = LoanPayment.LoanId,
+                    CreationDate = LoanPayment.CreationDate,
+                    LastModified = LoanPayment.LastModifited
                 };
             }
 
@@ -41,7 +43,9 @@ namespace BudgetMake.Presentation.Web.Extentions
                     Id = viewModel.LoanPaymentId,
                     MonthlyBudgetId = viewModel.MonthlyBudgetId,
                     PaymentDate = viewModel.PaymentDate,
-                    LoanId = viewModel.LoanId
+                    LoanId = viewModel.LoanId,
+                    CreationDate = viewModel.CreationDate,
+                    LastModifited = viewModel.LastModified
                 };
             }
 
